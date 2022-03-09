@@ -84,12 +84,11 @@ class MainWindow(QMainWindow):
     # ----- Password Dashboard -----
     def update_table(self):
         """Inserts the data from the database into the passwords table."""
-        data = [
-            self.ui.editTitle.text(),
-            self.ui.editUsername.text(),
-            self.ui.editUrl.text(),
-            "".join(["*" for i in range(len(self.ui.editPassword.text()))]),
-        ]
+        data = list(
+            db.getDataFromTable(
+                "Password", raiseConversionError=True, omitID=False
+            )
+        )[1:][0]
 
         total_rows = self.ui.tablePasswords.rowCount()
         self.ui.tablePasswords.setRowCount(total_rows + 1)

@@ -142,7 +142,7 @@ class Ui_MainWindow(object):
 
         self.label = QLabel(self.frameSidebar)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(20, 30, 121, 41))
+        self.label.setGeometry(QRect(20, 20, 121, 61))
         font1 = QFont()
         font1.setFamilies([u"Roboto Medium"])
         font1.setPointSize(12)
