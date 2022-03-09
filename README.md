@@ -3,7 +3,7 @@
   <br>
   <a href="https://www.flaticon.com/free-icons/safe-box" title="safe box icons">Safe box icons created by Arkinasi - Flaticon</a>
   <br>
-  Markdownify
+  Password Vault
   <br>
 </h1>
 
