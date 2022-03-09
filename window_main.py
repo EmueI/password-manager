@@ -84,42 +84,51 @@ class MainWindow(QMainWindow):
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetSecurity)
 
     # ----- Password Dashboard -----
-    # ! ------ To be modified ------ !
     def update_table(self):
         """Inserts the data from the 'Add New' form into the passwords table."""
-        title_input = self.ui.editTitle.text()
-        username_input = self.ui.editUsername.text()
-        url_input = self.ui.editUrl.text()
-        password_input = "".join(["*" for i in self.ui.editPassword.text()])
-
-        data = [title_input, username_input, url_input, password_input]
-        total_rows = self.ui.tablePasswords.rowCount()
+        data = [
+            self.ui.editTitle.text(),
+            self.ui.editUsername.text(),
+            self.ui.editUrl.text(),
+            "".join(["*" for i in self.ui.editPassword.text()]),
+        ]
 
         for i in range(3):
             self.ui.tablePasswords.setItem(
                 total_rows, i, QTableWidgetItem(data[i])
             )
 
+        total_rows = self.ui.tablePasswords.rowCount()
+
         print(f"Total rows: {total_rows}")
 
     # ----- Add New -----
-    # !  ------ To be modified ------ !
     def update_db(self):
-        """Inserts the data from the passwords table into the database."""
-        # self.db.insertIntoTable(
-        #     tableName="Password",
-        #     insertList=[
-        #         title_input,
-        #         url_input,
-        #         username_input,
-        #         password_input,
-        #         is_password_compromised,
-        #     ],
-        #     commit=True,
-        # )
-
-        # is_password_compromised = self.is_password_compromised(password)
-        pass
+        """Inserts the data from the 'Add New' form into the database."""
+        if not self.db.checkTableExist("Password"):
+            self.db.createTable(
+                "Password",
+                [
+                    ["title", "TEXT"],
+                    ["url", "TEXT"],
+                    ["username", "TEXT"],
+                    ["password", "TEXT"],
+                    ["compromised", "INT"],
+                ],
+                makeSecure=True,
+                commit=True,
+            )
+        self.db.insertIntoTable(
+            tableName="Password",
+            insertList=[
+                self.ui.editTitle.text(),
+                self.ui.editUrl.text(),
+                self.ui.editUsername.text(),
+                self.ui.editPassword.text(),
+                self.is_password_compromised(self.ui.editPassword.text()),
+            ],
+            commit=True,
+        )
 
     def delete_password(self, id):
         pass

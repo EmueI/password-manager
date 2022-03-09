@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         self.dlg_incorrect_password.setIcon(QMessageBox.Warning)
         # --------------------------------------------------
 
+        # ---- Connecting user actions to the appropriate functions. ---
         self.ui.buttonSubmit.clicked.connect(self.log_in)
         self.ui.editPassword1.returnPressed.connect(self.log_in)
         self.ui.buttonPasswordToggle1.setCheckable(True)
@@ -66,6 +67,7 @@ class MainWindow(QMainWindow):
         self.ui.editPassword2.returnPressed.connect(self.log_in)
         self.ui.buttonPasswordToggle2.setCheckable(True)
         self.ui.buttonPasswordToggle2.clicked.connect(self.password_toggle2)
+        # ---------------------------------------------------------------
 
         if exists("Password_Vault.db"):
             self.setFixedHeight(255)
@@ -124,18 +126,6 @@ class MainWindow(QMainWindow):
                 dataBasePath="Password_Vault.db",
                 checkSameThread=True,
                 password=(self.ui.editPassword1.text()),
-            )
-            self.db.createTable(
-                "Password",
-                [
-                    ["title", "TEXT"],
-                    ["url", "TEXT"],
-                    ["username", "TEXT"],
-                    ["password", "TEXT"],
-                    ["compromised", "INT"],
-                ],
-                makeSecure=True,
-                commit=True,
             )
             keyring.set_password(
                 "Password Vault",
