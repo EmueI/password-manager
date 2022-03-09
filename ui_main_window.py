@@ -15,11 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QFrame,
-    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
-    QLabel, QLineEdit, QMainWindow, QPushButton,
-    QSizePolicy, QSlider, QSpinBox, QStackedWidget,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
+    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
+    QLineEdit, QMainWindow, QPushButton, QSizePolicy,
+    QSlider, QSpinBox, QStackedWidget, QTableWidget,
+    QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -183,51 +183,9 @@ class Ui_MainWindow(object):
         self.editSearch.setFont(font)
         self.editSearch.setFrame(True)
         self.editSearch.setClearButtonEnabled(True)
-        self.tablePasswords = QTableWidget(self.framePasswordDashboard)
-        if (self.tablePasswords.columnCount() < 4):
-            self.tablePasswords.setColumnCount(4)
-        __qtablewidgetitem = QTableWidgetItem()
-        self.tablePasswords.setHorizontalHeaderItem(0, __qtablewidgetitem)
-        __qtablewidgetitem1 = QTableWidgetItem()
-        self.tablePasswords.setHorizontalHeaderItem(1, __qtablewidgetitem1)
-        __qtablewidgetitem2 = QTableWidgetItem()
-        self.tablePasswords.setHorizontalHeaderItem(2, __qtablewidgetitem2)
-        __qtablewidgetitem3 = QTableWidgetItem()
-        self.tablePasswords.setHorizontalHeaderItem(3, __qtablewidgetitem3)
-        self.tablePasswords.setObjectName(u"tablePasswords")
-        self.tablePasswords.setGeometry(QRect(40, 113, 403, 192))
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.tablePasswords.sizePolicy().hasHeightForWidth())
-        self.tablePasswords.setSizePolicy(sizePolicy1)
-        self.tablePasswords.setMinimumSize(QSize(403, 0))
-        self.tablePasswords.setMaximumSize(QSize(403, 16777215))
-        font3 = QFont()
-        font3.setFamilies([u"Roboto"])
-        font3.setPointSize(8)
-        font3.setUnderline(False)
-        self.tablePasswords.setFont(font3)
-        self.tablePasswords.setFocusPolicy(Qt.ClickFocus)
-        self.tablePasswords.setContextMenuPolicy(Qt.NoContextMenu)
-        self.tablePasswords.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.tablePasswords.setAutoScroll(False)
-        self.tablePasswords.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.tablePasswords.setTabKeyNavigation(False)
-        self.tablePasswords.setProperty("showDropIndicator", False)
-        self.tablePasswords.setDragDropOverwriteMode(False)
-        self.tablePasswords.setAlternatingRowColors(False)
-        self.tablePasswords.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.tablePasswords.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.tablePasswords.setShowGrid(True)
-        self.tablePasswords.setGridStyle(Qt.SolidLine)
-        self.tablePasswords.setSortingEnabled(False)
-        self.tablePasswords.setWordWrap(False)
-        self.tablePasswords.horizontalHeader().setCascadingSectionResizes(False)
-        self.tablePasswords.verticalHeader().setVisible(False)
         self.frame_4 = QFrame(self.framePasswordDashboard)
         self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setGeometry(QRect(40, 323, 241, 31))
+        self.frame_4.setGeometry(QRect(40, 400, 241, 31))
         self.frame_4.setFont(font)
         self.frame_4.setFrameShape(QFrame.NoFrame)
         self.frame_4.setFrameShadow(QFrame.Raised)
@@ -238,11 +196,11 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.buttonDelete = QPushButton(self.frame_4)
         self.buttonDelete.setObjectName(u"buttonDelete")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        sizePolicy2.setHorizontalStretch(25)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.buttonDelete.sizePolicy().hasHeightForWidth())
-        self.buttonDelete.setSizePolicy(sizePolicy2)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(25)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.buttonDelete.sizePolicy().hasHeightForWidth())
+        self.buttonDelete.setSizePolicy(sizePolicy1)
         self.buttonDelete.setMinimumSize(QSize(0, 27))
         self.buttonDelete.setFont(font)
         self.buttonDelete.setCursor(QCursor(Qt.PointingHandCursor))
@@ -255,8 +213,8 @@ class Ui_MainWindow(object):
 
         self.buttonCopy = QPushButton(self.frame_4)
         self.buttonCopy.setObjectName(u"buttonCopy")
-        sizePolicy2.setHeightForWidth(self.buttonCopy.sizePolicy().hasHeightForWidth())
-        self.buttonCopy.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.buttonCopy.sizePolicy().hasHeightForWidth())
+        self.buttonCopy.setSizePolicy(sizePolicy1)
         self.buttonCopy.setMinimumSize(QSize(0, 27))
         self.buttonCopy.setFont(font)
         self.buttonCopy.setCursor(QCursor(Qt.PointingHandCursor))
@@ -269,8 +227,8 @@ class Ui_MainWindow(object):
 
         self.buttonEdit = QPushButton(self.frame_4)
         self.buttonEdit.setObjectName(u"buttonEdit")
-        sizePolicy2.setHeightForWidth(self.buttonEdit.sizePolicy().hasHeightForWidth())
-        self.buttonEdit.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.buttonEdit.sizePolicy().hasHeightForWidth())
+        self.buttonEdit.setSizePolicy(sizePolicy1)
         self.buttonEdit.setMinimumSize(QSize(0, 27))
         self.buttonEdit.setFont(font)
         self.buttonEdit.setCursor(QCursor(Qt.PointingHandCursor))
@@ -281,6 +239,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.buttonEdit, 0, 1, 1, 1)
 
+        self.tablePasswords = QTableWidget(self.framePasswordDashboard)
+        self.tablePasswords.setObjectName(u"tablePasswords")
+        self.tablePasswords.setGeometry(QRect(40, 110, 401, 271))
+        font3 = QFont()
+        font3.setPointSize(9)
+        self.tablePasswords.setFont(font3)
 
         self.verticalLayout_3.addWidget(self.framePasswordDashboard)
 
@@ -540,14 +504,6 @@ class Ui_MainWindow(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"Password Manager", None))
         self.labelHeading_4.setText(QCoreApplication.translate("MainWindow", u"Password Dashboard", None))
         self.editSearch.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search", None))
-        ___qtablewidgetitem = self.tablePasswords.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Title", None));
-        ___qtablewidgetitem1 = self.tablePasswords.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"URL", None));
-        ___qtablewidgetitem2 = self.tablePasswords.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Username", None));
-        ___qtablewidgetitem3 = self.tablePasswords.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Password", None));
         self.buttonDelete.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
         self.buttonCopy.setText(QCoreApplication.translate("MainWindow", u"Copy", None))
         self.buttonEdit.setText(QCoreApplication.translate("MainWindow", u"Edit", None))

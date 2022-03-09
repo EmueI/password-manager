@@ -52,11 +52,11 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
 
         # ----- Password Dashboard -----
+        self.ui.tablePasswords.setColumnCount(4)
         self.ui.tablePasswords.setHorizontalHeaderLabels(
             ["Title", "URL", "Username", "Password"]
         )
-        self.ui.tablePasswords.setColumnWidth(1, 100)
-
+        
         # ----- Add New -----
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
