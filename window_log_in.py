@@ -1,15 +1,17 @@
-import keyring
-from PySide6.QtGui import QIcon
-from PySide6.QtCore import QRect, Signal
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QLineEdit
-from pysqlitecipher.sqlitewrapper import SqliteCipher
 from os.path import exists
+from keyring import set_password as keyring_set_password
+from pysqlitecipher.sqlitewrapper import SqliteCipher
+
+from PySide6.QtCore import QRect, Signal
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QLineEdit
 
 from ui_log_in import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
     logged_in = Signal()
+    keyring_set_password("Password Vault", "user", "")
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -59,16 +61,6 @@ class MainWindow(QMainWindow):
         self.dlg_incorrect_password.setIcon(QMessageBox.Warning)
         # --------------------------------------------------
 
-        # ---- Connecting user actions to the appropriate functions. ---
-        self.ui.buttonSubmit.clicked.connect(self.log_in)
-        self.ui.editPassword1.returnPressed.connect(self.log_in)
-        self.ui.buttonPasswordToggle1.setCheckable(True)
-        self.ui.buttonPasswordToggle1.clicked.connect(self.password_toggle1)
-        self.ui.editPassword2.returnPressed.connect(self.log_in)
-        self.ui.buttonPasswordToggle2.setCheckable(True)
-        self.ui.buttonPasswordToggle2.clicked.connect(self.password_toggle2)
-        # ---------------------------------------------------------------
-
         if exists("Password_Vault.db"):
             self.setFixedHeight(255)
             self.ui.labelHeading.setText("Enter Master Password")
@@ -81,6 +73,16 @@ class MainWindow(QMainWindow):
             self.ui.frameMainPwd2.hide()
             self.ui.buttonSubmit.setText("Unlock")
             self.ui.buttonSubmit.setGeometry(QRect(40, 185, 250, 27))
+
+        # ---- Connecting user actions to the appropriate functions.
+        self.ui.buttonSubmit.clicked.connect(self.log_in)
+        self.ui.editPassword1.returnPressed.connect(self.log_in)
+        self.ui.buttonPasswordToggle1.setCheckable(True)
+        self.ui.buttonPasswordToggle1.clicked.connect(self.password_toggle1)
+        self.ui.editPassword2.returnPressed.connect(self.log_in)
+        self.ui.buttonPasswordToggle2.setCheckable(True)
+        self.ui.buttonPasswordToggle2.clicked.connect(self.password_toggle2)
+        # -----------------------------------------------------------
 
     def log_in(self):
         if exists("Password_Vault.db"):
@@ -127,7 +129,7 @@ class MainWindow(QMainWindow):
                 checkSameThread=True,
                 password=(self.ui.editPassword1.text()),
             )
-            keyring.set_password(
+            keyring_set_password(
                 "Password Vault",
                 "user",
                 self.ui.editPassword1.text(),

@@ -1,21 +1,23 @@
-import string
-import secrets
-import keyring
-from PySide6.QtWidgets import QMainWindow, QTableWidgetItem
-from pyperclip import copy
+from keyring import get_password as keyring_get_password
+from os.path import exists
 from pwnedpasswords import check as pwned_check
 from pysqlitecipher.sqlitewrapper import SqliteCipher
+from pyperclip import copy
+from secrets import choice as secrets_choice
+from string import ascii_uppercase, ascii_lowercase, digits
+
+from PySide6.QtWidgets import QMainWindow, QTableWidgetItem
 
 from ui_main_window import Ui_MainWindow
-from window_log_in import MainWindow as LogInWindow
 
 
 class MainWindow(QMainWindow):
-    db = SqliteCipher(
-        dataBasePath="Password_Vault.db",
-        checkSameThread=True,
-        password=keyring.get_password("Password Vault", "user"),
-    )
+    if not exists("Password_Vault.db"):
+        db = SqliteCipher(
+            dataBasePath="Password_Vault.db",
+            checkSameThread=True,
+            password=keyring_get_password("Password Vault", "user"),
+        )
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -93,12 +95,12 @@ class MainWindow(QMainWindow):
             "".join(["*" for i in self.ui.editPassword.text()]),
         ]
 
+        total_rows = self.ui.tablePasswords.rowCount()
+
         for i in range(3):
             self.ui.tablePasswords.setItem(
                 total_rows, i, QTableWidgetItem(data[i])
             )
-
-        total_rows = self.ui.tablePasswords.rowCount()
 
         print(f"Total rows: {total_rows}")
 
@@ -156,11 +158,11 @@ class MainWindow(QMainWindow):
         characters = ""
 
         if self.ui.checkBoxUpper.isChecked():
-            characters += string.ascii_uppercase
+            characters += ascii_uppercase
         if self.ui.checkBoxLower.isChecked():
-            characters += string.ascii_lowercase
+            characters += ascii_lowercase
         if self.ui.checkBoxDigits.isChecked():
-            characters += string.digits
+            characters += digits
         if self.ui.checkBoxSymbols.isChecked():
             characters += "!$%@#"
 
@@ -168,7 +170,7 @@ class MainWindow(QMainWindow):
 
         try:
             random_pwd = "".join(
-                secrets.choice(characters) for i in range(len)
+                secrets_choice(characters) for i in range(len)
             )
             self.ui.labelGeneratedPwd.setText(random_pwd)
         except:

@@ -1,8 +1,9 @@
-from qdarktheme import load_stylesheet
-from PySide6.QtWidgets import QApplication, QStackedLayout
 from functools import partial
-from sys import exit
 from os import system
+from qdarktheme import load_stylesheet
+from sys import exit as sys_exit
+
+from PySide6.QtWidgets import QApplication, QStackedLayout
 
 system("pyside6-uic main_window.ui > ui_main_window.py")
 from window_log_in import MainWindow as LogInWindow
@@ -28,7 +29,7 @@ def main():
     log_in_window.logged_in.connect(
         lambda w=main_window: layout.setCurrentWidget(w)
     )
-    exit(app.exec())
+    sys_exit(app.exec())
 
 
 if __name__ == "__main__":

@@ -215,7 +215,7 @@ class Ui_MainWindow(object):
         self.tablePasswords.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.tablePasswords.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContentsOnFirstShow)
         self.tablePasswords.setAutoScroll(False)
-        self.tablePasswords.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tablePasswords.setEditTriggers(QAbstractItemView.CurrentChanged)
         self.tablePasswords.setTabKeyNavigation(False)
         self.tablePasswords.setProperty("showDropIndicator", False)
         self.tablePasswords.setDragDropOverwriteMode(False)
