@@ -1,4 +1,3 @@
-from functools import partial
 from os import system
 from qdarktheme import load_stylesheet
 from sys import exit as sys_exit

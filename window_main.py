@@ -31,6 +31,10 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
 
         # ----- Password Dashboard -----
+        self.ui.tablePasswords.setHorizontalHeaderLabels(
+            ["Title", "URL", "Username", "Password"]
+        )
+        self.ui.tablePasswords.setColumnWidth(1, 100)
 
         # ----- Add New -----
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
@@ -89,20 +93,6 @@ class MainWindow(QMainWindow):
             checkSameThread=True,
             password=keyring_get_password("Password Manager", "user"),
         )
-        if not self.db.checkTableExist("Password"):
-            self.db.createTable(
-                "Password",
-                [
-                    ["title", "TEXT"],
-                    ["url", "TEXT"],
-                    ["username", "TEXT"],
-                    ["password", "TEXT"],
-                    ["compromised", "INT"],
-                ],
-                makeSecure=True,
-                commit=True,
-            )
-
         data = self.db.getDataFromTable(
             "Password", raiseConversionError=True, omitID=True
         )[1:][0]
@@ -122,6 +112,19 @@ class MainWindow(QMainWindow):
             checkSameThread=True,
             password=keyring_get_password("Password Manager", "user"),
         )
+        if not self.db.checkTableExist("Password"):
+            self.db.createTable(
+                "Password",
+                [
+                    ["title", "TEXT"],
+                    ["url", "TEXT"],
+                    ["username", "TEXT"],
+                    ["password", "TEXT"],
+                    ["compromised", "INT"],
+                ],
+                makeSecure=True,
+                commit=True,
+            )
         self.db.insertIntoTable(
             tableName="Password",
             insertList=[
@@ -133,6 +136,7 @@ class MainWindow(QMainWindow):
             ],
             commit=True,
         )
+        self.clear_pwd_form()
 
     def delete_password(self, id):
         pass

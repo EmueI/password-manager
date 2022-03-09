@@ -15,12 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QCheckBox,
-    QFrame, QGridLayout, QGroupBox, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QMainWindow,
-    QPushButton, QSizePolicy, QSlider, QSpinBox,
-    QStackedWidget, QTableWidget, QTableWidgetItem, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QFrame,
+    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QMainWindow, QPushButton,
+    QSizePolicy, QSlider, QSpinBox, QStackedWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -211,11 +210,9 @@ class Ui_MainWindow(object):
         self.tablePasswords.setFont(font3)
         self.tablePasswords.setFocusPolicy(Qt.ClickFocus)
         self.tablePasswords.setContextMenuPolicy(Qt.NoContextMenu)
-        self.tablePasswords.setFrameShape(QFrame.Box)
-        self.tablePasswords.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.tablePasswords.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.tablePasswords.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.tablePasswords.setAutoScroll(False)
-        self.tablePasswords.setEditTriggers(QAbstractItemView.CurrentChanged)
+        self.tablePasswords.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tablePasswords.setTabKeyNavigation(False)
         self.tablePasswords.setProperty("showDropIndicator", False)
         self.tablePasswords.setDragDropOverwriteMode(False)
@@ -226,6 +223,7 @@ class Ui_MainWindow(object):
         self.tablePasswords.setGridStyle(Qt.SolidLine)
         self.tablePasswords.setSortingEnabled(False)
         self.tablePasswords.setWordWrap(False)
+        self.tablePasswords.horizontalHeader().setCascadingSectionResizes(False)
         self.tablePasswords.verticalHeader().setVisible(False)
         self.frame_4 = QFrame(self.framePasswordDashboard)
         self.frame_4.setObjectName(u"frame_4")
@@ -527,7 +525,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.buttonTabPasswords.setDefault(False)
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
