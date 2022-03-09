@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.setFixedWidth(320)
-        self.setFixedHeight(360)
+        self.setFixedHeight(380)
 
         self.ui.editPassword1.setFocus()
 
@@ -68,17 +68,17 @@ class MainWindow(QMainWindow):
         self.ui.buttonPasswordToggle2.clicked.connect(self.password_toggle2)
 
         if exists("Password_Vault.db"):
-            self.setFixedHeight(245)
+            self.setFixedHeight(255)
             self.ui.labelHeading.setText("Enter Master Password")
             self.ui.labelSubHeading.setText(
                 "Enter your master password to gain access to your vault."
             )
             self.ui.labelPassword1.hide()
-            self.ui.framePassword1.setGeometry(QRect(35, 120, 250, 31))
             self.ui.labelPassword1Sub.hide()
-            self.ui.layoutEntry2.hide()
+            self.ui.frameMainPwd1.setGeometry(QRect(40, 130, 250, 31))
+            self.ui.frameMainPwd2.hide()
             self.ui.buttonSubmit.setText("Unlock")
-            self.ui.buttonSubmit.setGeometry(QRect(35, 170, 250, 25))
+            self.ui.buttonSubmit.setGeometry(QRect(40, 185, 250, 27))
 
     def log_in(self):
         if exists("Password_Vault.db"):
@@ -125,25 +125,24 @@ class MainWindow(QMainWindow):
                 checkSameThread=True,
                 password=(self.ui.editPassword1.text()),
             )
-            if not self.db.checkTableExist("Password"):
-                self.db.createTable(
-                    "Password",
-                    [
-                        ["title", "TEXT"],
-                        ["url", "TEXT"],
-                        ["username", "TEXT"],
-                        ["password", "TEXT"],
-                        ["compromised", "INT"],
-                    ],
-                    makeSecure=True,
-                    commit=True,
-                )
-            self.dlg_password_created.exec()
+            self.db.createTable(
+                "Password",
+                [
+                    ["title", "TEXT"],
+                    ["url", "TEXT"],
+                    ["username", "TEXT"],
+                    ["password", "TEXT"],
+                    ["compromised", "INT"],
+                ],
+                makeSecure=True,
+                commit=True,
+            )
             keyring.set_password(
                 "Password Vault",
                 "user",
                 self.ui.editPassword1.text(),
             )
+            self.dlg_password_created.exec()
             self.logged_in.emit()
 
     def enter_master_password(self):

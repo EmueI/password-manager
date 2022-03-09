@@ -13,7 +13,7 @@ from window_log_in import MainWindow as LogInWindow
 class MainWindow(QMainWindow):
     db = SqliteCipher(
         dataBasePath="Password_Vault.db",
-        checkSameThread=False,
+        checkSameThread=True,
         password=keyring.get_password("Password Vault", "user"),
     )
 

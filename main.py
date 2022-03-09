@@ -26,7 +26,7 @@ def main():
     layout.setCurrentWidget(log_in_window)
 
     log_in_window.logged_in.connect(
-        lambda: layout.setCurrentWidget(main_window)
+        lambda w=main_window: layout.setCurrentWidget(w)
     )
     exit(app.exec())
 
