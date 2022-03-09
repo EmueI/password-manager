@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
 
         # -------- Creating the error dialogue boxes. --------
         self.dlg_password_short = QMessageBox(self)
-        self.dlg_password_short.setWindowTitle("Password vault")
+        self.dlg_password_short.setWindowTitle("Password Vault")
         self.dlg_password_short.setText(
             "The master password must contain at least 8 characters."
         )
@@ -37,19 +37,19 @@ class MainWindow(QMainWindow):
         self.dlg_password_short.setIcon(QMessageBox.Warning)
 
         self.dlg_passwords_not_match = QMessageBox(self)
-        self.dlg_passwords_not_match.setWindowTitle("Password vault")
+        self.dlg_passwords_not_match.setWindowTitle("Password Vault")
         self.dlg_passwords_not_match.setText("Master passwords do not match.")
         self.dlg_passwords_not_match.setStandardButtons(QMessageBox.Ok)
         self.dlg_passwords_not_match.setIcon(QMessageBox.Warning)
 
         self.dlg_empty_password = QMessageBox(self)
-        self.dlg_empty_password.setWindowTitle("Password vault")
+        self.dlg_empty_password.setWindowTitle("Password Vault")
         self.dlg_empty_password.setText("Make sure to fill both boxes.")
         self.dlg_empty_password.setStandardButtons(QMessageBox.Ok)
         self.dlg_empty_password.setIcon(QMessageBox.Warning)
 
         self.dlg_password_created = QMessageBox(self)
-        self.dlg_password_created.setWindowTitle("Password vault")
+        self.dlg_password_created.setWindowTitle("Password Vault")
         self.dlg_password_created.setText(
             "Your master password has been created successfully."
         )
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
         self.dlg_password_created.setIcon(QMessageBox.Information)
 
         self.dlg_incorrect_password = QMessageBox(self)
-        self.dlg_incorrect_password.setWindowTitle("Password vault")
+        self.dlg_incorrect_password.setWindowTitle("Password Vault")
         self.dlg_incorrect_password.setText(
             "Incorrect master password. Please try again."
         )

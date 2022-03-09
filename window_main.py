@@ -6,7 +6,7 @@ from pyperclip import copy
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
 
-from PySide6.QtWidgets import QMainWindow, QTableWidgetItem
+from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
 
 from ui_main_window import Ui_MainWindow
 
@@ -22,17 +22,13 @@ class MainWindow(QMainWindow):
 
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
-        self.ui.buttonPasswords.setStyleSheet("background-color: lightgray")
+        self.ui.buttonPasswords.setStyleSheet("background-color: #3d3d3d")
         self.ui.buttonPasswords.clicked.connect(self.show_passwords)
         self.ui.buttonAddNew.clicked.connect(self.show_add_new)
         self.ui.buttonGenerate.clicked.connect(self.show_generate)
         self.ui.buttonSecurity.clicked.connect(self.show_security)
 
         # ----- Password Dashboard -----
-        self.ui.tablePasswords.setColumnWidth(1, 100)
-        self.ui.tablePasswords.setColumnWidth(2, 100)
-        self.ui.tablePasswords.setColumnWidth(3, 100)
-        self.ui.tablePasswords.setColumnWidth(4, 100)
 
         # ----- Add New -----
         self.ui.buttonAddPassword.clicked.connect(self.update_table)
@@ -40,11 +36,11 @@ class MainWindow(QMainWindow):
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
 
         # ----- Generate Password -----
-        self.dlg_empty_password = QMessageBox(self)
-        self.dlg_empty_password.setWindowTitle("Password vault")
-        self.dlg_empty_password.setText("Make sure to fill both boxes.")
-        self.dlg_empty_password.setStandardButtons(QMessageBox.Ok)
-        self.dlg_empty_password.setIcon(QMessageBox.Warning)
+        self.dlg_none_selected = QMessageBox(self)
+        self.dlg_none_selected.setWindowTitle("Password Vault")
+        self.dlg_none_selected.setText("Choose at least one option.")
+        self.dlg_none_selected.setStandardButtons(QMessageBox.Ok)
+        self.dlg_none_selected.setIcon(QMessageBox.Warning)
 
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
         self.ui.spinBox.valueChanged.connect(self.update_slider)
@@ -54,7 +50,7 @@ class MainWindow(QMainWindow):
     # ----- Side-Menu -----
     def show_passwords(self):
         """Highlights the 'Passwords' tab."""
-        self.ui.buttonPasswords.setStyleSheet("background-color: lightgray")
+        self.ui.buttonPasswords.setStyleSheet("background-color: #3d3d3d")
         self.ui.buttonAddNew.setStyleSheet("")
         self.ui.buttonGenerate.setStyleSheet("")
         self.ui.buttonSecurity.setStyleSheet("")
@@ -63,7 +59,7 @@ class MainWindow(QMainWindow):
     def show_add_new(self):
         """Highlights the 'Add New' tab."""
         self.ui.buttonPasswords.setStyleSheet("")
-        self.ui.buttonAddNew.setStyleSheet("background-color: lightgray")
+        self.ui.buttonAddNew.setStyleSheet("background-color: #3d3d3d")
         self.ui.buttonGenerate.setStyleSheet("")
         self.ui.buttonSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetAdd)
@@ -72,7 +68,7 @@ class MainWindow(QMainWindow):
         """Highlights the 'Generate Passwords' tab."""
         self.ui.buttonPasswords.setStyleSheet("")
         self.ui.buttonAddNew.setStyleSheet("")
-        self.ui.buttonGenerate.setStyleSheet("background-color: lightgray")
+        self.ui.buttonGenerate.setStyleSheet("background-color: #3d3d3d")
         self.ui.buttonSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetGenerate)
 
@@ -81,7 +77,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonPasswords.setStyleSheet("")
         self.ui.buttonAddNew.setStyleSheet("")
         self.ui.buttonGenerate.setStyleSheet("")
-        self.ui.buttonSecurity.setStyleSheet("background-color: lightgray")
+        self.ui.buttonSecurity.setStyleSheet("background-color: #3d3d3d")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetSecurity)
 
     # ----- Password Dashboard -----
@@ -177,7 +173,7 @@ class MainWindow(QMainWindow):
             )
             self.ui.labelGeneratedPwd.setText(random_pwd)
         except:
-            print("Please pick at lease one.")
+            self.dlg_none_selected.exec()
 
     def copy_generated_pwd(self):
         copy(self.ui.labelGeneratedPwd.text())
