@@ -211,7 +211,7 @@
        <property name="font">
         <font>
          <family>Roboto Medium</family>
-         <pointsize>10</pointsize>
+         <pointsize>14</pointsize>
         </font>
        </property>
        <property name="text">

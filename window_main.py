@@ -87,17 +87,15 @@ class MainWindow(QMainWindow):
             self.ui.editTitle.text(),
             self.ui.editUsername.text(),
             self.ui.editUrl.text(),
-            "".join(["*" for i in self.ui.editPassword.text()]),
+            "".join(["*" for i in range(len(self.ui.editPassword.text()))]),
         ]
 
         total_rows = self.ui.tablePasswords.rowCount()
-
+        self.ui.tablePasswords.setRowCount(total_rows + 1)
         for i in range(3):
             self.ui.tablePasswords.setItem(
                 total_rows, i, QTableWidgetItem(data[i])
             )
-
-        print(f"Total rows: {total_rows}")
 
     # ----- Add New -----
     def update_db(self):
