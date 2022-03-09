@@ -12,6 +12,12 @@ from ui_main_window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
+    db = SqliteCipher(
+        dataBasePath="Password_Manager.db",
+        checkSameThread=True,
+        password=keyring_get_password("Password Manager", "user"),
+    )
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -85,27 +91,19 @@ class MainWindow(QMainWindow):
     def update_table(self):
         """Inserts the data from the database into the passwords table."""
         data = list(
-            db.getDataFromTable(
+            self.db.getDataFromTable(
                 "Password", raiseConversionError=True, omitID=False
             )
         )[1:][0]
-
-        total_rows = self.ui.tablePasswords.rowCount()
-        self.ui.tablePasswords.setRowCount(total_rows + 1)
-        for i in range(3):
-            self.ui.tablePasswords.setItem(
-                total_rows, i, QTableWidgetItem(data[i])
-            )
+        print(data)
+        # for row_number in enumerate(data):
+        #     self.ui.tablePasswords.setItem(
+        #         total_rows, i, QTableWidgetItem(data[i])
+        #     )
 
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
-        self.db = SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
-
         if not self.db.checkTableExist("Password"):
             self.db.createTable(
                 "Password",
