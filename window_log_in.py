@@ -1,5 +1,8 @@
 from os.path import exists
-from keyring import set_password as keyring_set_password
+from keyring import (
+    set_password as keyring_set_password,
+    delete_password as keyring_delete_password,
+)
 from pysqlitecipher.sqlitewrapper import SqliteCipher
 
 from PySide6.QtCore import QRect, Signal
@@ -123,6 +126,7 @@ class MainWindow(QMainWindow):
         ):
             self.dlg_password_short.exec()
         else:
+            keyring_delete_password("Password Manager", "user")
             self.db = SqliteCipher(
                 dataBasePath="Password_Manager.db",
                 checkSameThread=True,

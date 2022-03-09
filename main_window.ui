@@ -369,7 +369,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">

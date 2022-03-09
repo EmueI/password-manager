@@ -527,7 +527,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.buttonTabPasswords.setDefault(False)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

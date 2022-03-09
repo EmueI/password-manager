@@ -15,19 +15,11 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.db = SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
-
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.setFixedWidth(660)
         self.setFixedHeight(500)
-
-        self.update_table()
 
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
@@ -92,6 +84,11 @@ class MainWindow(QMainWindow):
     # ----- Password Dashboard -----
     def update_table(self):
         """Inserts the data from the database into the passwords table."""
+        self.db = SqliteCipher(
+            dataBasePath="Password_Manager.db",
+            checkSameThread=True,
+            password=keyring_get_password("Password Manager", "user"),
+        )
         if not self.db.checkTableExist("Password"):
             self.db.createTable(
                 "Password",
@@ -105,10 +102,9 @@ class MainWindow(QMainWindow):
                 makeSecure=True,
                 commit=True,
             )
-            print("TABLE CREATED")
 
         data = self.db.getDataFromTable(
-            "Password", raiseConversionError=True, omitID=False
+            "Password", raiseConversionError=True, omitID=True
         )[1:][0]
         self.ui.tablePasswords.setRowCount(0)
         for row_number, row_data in enumerate(data):
@@ -121,6 +117,11 @@ class MainWindow(QMainWindow):
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
+        self.db = SqliteCipher(
+            dataBasePath="Password_Manager.db",
+            checkSameThread=True,
+            password=keyring_get_password("Password Manager", "user"),
+        )
         self.db.insertIntoTable(
             tableName="Password",
             insertList=[
