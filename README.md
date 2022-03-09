@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.png" alt="Markdownify" width="200"></a>
+  <a href="https://www.flaticon.com/free-icons/safe-box" title="safe box icons">Safe box icons created by Arkinasi - Flaticon</a>
   <br>
   Markdownify
   <br>
