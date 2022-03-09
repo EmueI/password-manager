@@ -3,7 +3,7 @@
   <br>
   <a href="https://flaticons.net/custom.php?i=RD4s3NtMxqAXhlIyI3IDeCwGpv6uM" title="safe box icons">Safe box icons created by Arkinasi - Flaticon</a>
   <br>
-  Password Vault
+  Password Manager
   <br>
 </h1>
 
