@@ -1,5 +1,8 @@
 from os.path import exists
-from keyring import set_password as keyring_set_password
+from keyring import (
+    set_password as keyring_set_password,
+    delete_password as keyring_delete_password,
+)
 from pysqlitecipher.sqlitewrapper import SqliteCipher
 
 from PySide6.QtCore import QRect, Signal
@@ -11,7 +14,8 @@ from ui_log_in import Ui_MainWindow
 
 class MainWindow(QMainWindow):
     logged_in = Signal()
-    keyring_set_password("Password Vault", "user", "")
+    if not exists("Password_Vault.db"):
+        keyring_delete_password("Password Vault", "user")
 
     def __init__(self):
         super(MainWindow, self).__init__()

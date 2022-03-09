@@ -12,13 +12,6 @@ from ui_main_window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
-    if not exists("Password_Vault.db"):
-        db = SqliteCipher(
-            dataBasePath="Password_Vault.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Vault", "user"),
-        )
-
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -47,6 +40,12 @@ class MainWindow(QMainWindow):
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
 
         # ----- Generate Password -----
+        self.dlg_empty_password = QMessageBox(self)
+        self.dlg_empty_password.setWindowTitle("Password vault")
+        self.dlg_empty_password.setText("Make sure to fill both boxes.")
+        self.dlg_empty_password.setStandardButtons(QMessageBox.Ok)
+        self.dlg_empty_password.setIcon(QMessageBox.Warning)
+
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
         self.ui.spinBox.valueChanged.connect(self.update_slider)
         self.ui.buttonGeneratePwd.clicked.connect(self.generate_pwd)
@@ -107,6 +106,11 @@ class MainWindow(QMainWindow):
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
+        self.db = SqliteCipher(
+            dataBasePath="Password_Vault.db",
+            checkSameThread=True,
+            password=keyring_get_password("Password Vault", "user"),
+        )
         if not self.db.checkTableExist("Password"):
             self.db.createTable(
                 "Password",
@@ -154,9 +158,10 @@ class MainWindow(QMainWindow):
         self.ui.horizontalSlider.setValue(self.ui.spinBox.value())
 
     def generate_pwd(self):
-        self.ui.labelCopiedToClip.setText("")
-        characters = ""
+        self.ui.labelCopiedToClip.clear()
+        len = self.ui.spinBox.value()
 
+        characters = ""
         if self.ui.checkBoxUpper.isChecked():
             characters += ascii_uppercase
         if self.ui.checkBoxLower.isChecked():
@@ -165,8 +170,6 @@ class MainWindow(QMainWindow):
             characters += digits
         if self.ui.checkBoxSymbols.isChecked():
             characters += "!$%@#"
-
-        len = self.ui.spinBox.value()
 
         try:
             random_pwd = "".join(
@@ -178,4 +181,4 @@ class MainWindow(QMainWindow):
 
     def copy_generated_pwd(self):
         copy(self.ui.labelGeneratedPwd.text())
-        self.ui.labelCopiedToClip.setText("Copied to clipboard")
+        self.ui.labelCopiedToClip.setText("Copied to clipboard.")
