@@ -7,7 +7,7 @@
   <br>
 </h1>
 
-<h4 align="center">A simple password manager written in Python using the <a href="http://electron.atom.io" target="_blank">PySide6</a> module.</h4>
+<h4 align="center">A simple password manager written in Python using the <a href="https://pypi.org/project/PySide6/" target="_blank">PySide6</a> module.</h4>
 
 <p align="center">
   <a href="https://badge.fury.io/js/electron-markdownify">
