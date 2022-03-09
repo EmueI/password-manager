@@ -128,6 +128,19 @@ class MainWindow(QMainWindow):
                 checkSameThread=True,
                 password=(self.ui.editPassword1.text()),
             )
+            if not self.db.checkTableExist("Password"):
+                self.db.createTable(
+                    "Password",
+                    [
+                        ["title", "TEXT"],
+                        ["url", "TEXT"],
+                        ["username", "TEXT"],
+                        ["password", "TEXT"],
+                        ["compromised", "INT"],
+                    ],
+                    makeSecure=True,
+                    commit=True,
+                )
             keyring_set_password(
                 "Password Manager",
                 "user",
