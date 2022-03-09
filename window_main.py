@@ -14,25 +14,33 @@ from ui_main_window import Ui_MainWindow
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+
+        self.db = SqliteCipher(
+            dataBasePath="Password_Manager.db",
+            checkSameThread=True,
+            password=keyring_get_password("Password Manager", "user"),
+        )
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.setFixedWidth(660)
         self.setFixedHeight(500)
 
+        self.update_table()
+
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
-        self.ui.buttonPasswords.setStyleSheet("background-color: #3d3d3d")
-        self.ui.buttonPasswords.clicked.connect(self.show_passwords_tab)
-        self.ui.buttonPasswords.clicked.connect(self.update_table)
-        self.ui.buttonAddNew.clicked.connect(self.show_add_new_tab)
-        self.ui.buttonGenerate.clicked.connect(self.show_generate_tab)
-        self.ui.buttonSecurity.clicked.connect(self.show_security_tab)
+        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabPasswords.clicked.connect(self.show_passwords_tab)
+        self.ui.buttonTabPasswords.clicked.connect(self.update_table)
+        self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
+        self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
+        self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
 
         # ----- Password Dashboard -----
 
         # ----- Add New -----
-        self.ui.buttonAddPassword.clicked.connect(self.update_table)
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
 
@@ -51,63 +59,68 @@ class MainWindow(QMainWindow):
     # ----- Side-Menu -----
     def show_passwords_tab(self):
         """Highlights the 'Passwords' tab."""
-        self.ui.buttonPasswords.setStyleSheet("background-color: #3d3d3d")
-        self.ui.buttonAddNew.setStyleSheet("")
-        self.ui.buttonGenerate.setStyleSheet("")
-        self.ui.buttonSecurity.setStyleSheet("")
+        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabAddNew.setStyleSheet("")
+        self.ui.buttonTabGenerate.setStyleSheet("")
+        self.ui.buttonTabSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
 
     def show_add_new_tab(self):
         """Highlights the 'Add New' tab."""
-        self.ui.buttonPasswords.setStyleSheet("")
-        self.ui.buttonAddNew.setStyleSheet("background-color: #3d3d3d")
-        self.ui.buttonGenerate.setStyleSheet("")
-        self.ui.buttonSecurity.setStyleSheet("")
+        self.ui.buttonTabPasswords.setStyleSheet("")
+        self.ui.buttonTabAddNew.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabGenerate.setStyleSheet("")
+        self.ui.buttonTabSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetAdd)
 
     def show_generate_tab(self):
         """Highlights the 'Generate Passwords' tab."""
-        self.ui.buttonPasswords.setStyleSheet("")
-        self.ui.buttonAddNew.setStyleSheet("")
-        self.ui.buttonGenerate.setStyleSheet("background-color: #3d3d3d")
-        self.ui.buttonSecurity.setStyleSheet("")
+        self.ui.buttonTabPasswords.setStyleSheet("")
+        self.ui.buttonTabAddNew.setStyleSheet("")
+        self.ui.buttonTabGenerate.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetGenerate)
 
     def show_security_tab(self):
         """Highlights the 'Security Check' tab."""
-        self.ui.buttonPasswords.setStyleSheet("")
-        self.ui.buttonAddNew.setStyleSheet("")
-        self.ui.buttonGenerate.setStyleSheet("")
-        self.ui.buttonSecurity.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabPasswords.setStyleSheet("")
+        self.ui.buttonTabAddNew.setStyleSheet("")
+        self.ui.buttonTabGenerate.setStyleSheet("")
+        self.ui.buttonTabSecurity.setStyleSheet("background-color: #3d3d3d")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetSecurity)
 
     # ----- Password Dashboard -----
     def update_table(self):
         """Inserts the data from the database into the passwords table."""
-        self.db = SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
-        data = list(
-            self.db.getDataFromTable(
-                "Password", raiseConversionError=True, omitID=False
+        if not self.db.checkTableExist("Password"):
+            self.db.createTable(
+                "Password",
+                [
+                    ["title", "TEXT"],
+                    ["url", "TEXT"],
+                    ["username", "TEXT"],
+                    ["password", "TEXT"],
+                    ["compromised", "INT"],
+                ],
+                makeSecure=True,
+                commit=True,
             )
+            print("TABLE CREATED")
+
+        data = self.db.getDataFromTable(
+            "Password", raiseConversionError=True, omitID=False
         )[1:][0]
-        print(f"Data: {data}")
-        # for row_number in enumerate(data):
-        #     self.ui.tablePasswords.setItem(
-        #         total_rows, i, QTableWidgetItem(data[i])
-        #     )
+        self.ui.tablePasswords.setRowCount(0)
+        for row_number, row_data in enumerate(data):
+            self.ui.tablePasswords.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.ui.tablePasswords.setItem(
+                    row_number, column_number, QTableWidgetItem(str(data))
+                )
 
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
-        self.db = SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
         self.db.insertIntoTable(
             tableName="Password",
             insertList=[

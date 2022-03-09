@@ -146,7 +146,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QPushButton" name="buttonPasswords">
+            <widget class="QPushButton" name="buttonTabPasswords">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -210,7 +210,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="buttonAddNew">
+            <widget class="QPushButton" name="buttonTabAddNew">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -250,7 +250,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="buttonGenerate">
+            <widget class="QPushButton" name="buttonTabGenerate">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -290,7 +290,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="buttonSecurity">
+            <widget class="QPushButton" name="buttonTabSecurity">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
