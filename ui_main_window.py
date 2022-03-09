@@ -534,12 +534,12 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Password Manager", None))
         self.buttonPasswords.setText(QCoreApplication.translate("MainWindow", u"Passwords", None))
         self.buttonAddNew.setText(QCoreApplication.translate("MainWindow", u"Add New", None))
         self.buttonGenerate.setText(QCoreApplication.translate("MainWindow", u"Generate Password", None))
         self.buttonSecurity.setText(QCoreApplication.translate("MainWindow", u"Security Check", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Password Vault", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Password Manager", None))
         self.labelHeading_4.setText(QCoreApplication.translate("MainWindow", u"Password Dashboard", None))
         self.editSearch.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search", None))
         ___qtablewidgetitem = self.tablePasswords.horizontalHeaderItem(0)

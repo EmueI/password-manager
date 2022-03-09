@@ -1,8 +1,5 @@
 from os.path import exists
-from keyring import (
-    set_password as keyring_set_password,
-    delete_password as keyring_delete_password,
-)
+from keyring import set_password as keyring_set_password
 from pysqlitecipher.sqlitewrapper import SqliteCipher
 
 from PySide6.QtCore import QRect, Signal
@@ -14,8 +11,6 @@ from ui_log_in import Ui_MainWindow
 
 class MainWindow(QMainWindow):
     logged_in = Signal()
-    if not exists("Password_Vault.db"):
-        keyring_delete_password("Password Vault", "user")
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -23,13 +18,13 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.setFixedWidth(320)
-        self.setFixedHeight(380)
+        self.setFixedHeight(370)
 
         self.ui.editPassword1.setFocus()
 
         # -------- Creating the error dialogue boxes. --------
         self.dlg_password_short = QMessageBox(self)
-        self.dlg_password_short.setWindowTitle("Password Vault")
+        self.dlg_password_short.setWindowTitle("Password Manager")
         self.dlg_password_short.setText(
             "The master password must contain at least 8 characters."
         )
@@ -37,19 +32,19 @@ class MainWindow(QMainWindow):
         self.dlg_password_short.setIcon(QMessageBox.Warning)
 
         self.dlg_passwords_not_match = QMessageBox(self)
-        self.dlg_passwords_not_match.setWindowTitle("Password Vault")
+        self.dlg_passwords_not_match.setWindowTitle("Password Manager")
         self.dlg_passwords_not_match.setText("Master passwords do not match.")
         self.dlg_passwords_not_match.setStandardButtons(QMessageBox.Ok)
         self.dlg_passwords_not_match.setIcon(QMessageBox.Warning)
 
         self.dlg_empty_password = QMessageBox(self)
-        self.dlg_empty_password.setWindowTitle("Password Vault")
+        self.dlg_empty_password.setWindowTitle("Password Manager")
         self.dlg_empty_password.setText("Make sure to fill both boxes.")
         self.dlg_empty_password.setStandardButtons(QMessageBox.Ok)
         self.dlg_empty_password.setIcon(QMessageBox.Warning)
 
         self.dlg_password_created = QMessageBox(self)
-        self.dlg_password_created.setWindowTitle("Password Vault")
+        self.dlg_password_created.setWindowTitle("Password Manager")
         self.dlg_password_created.setText(
             "Your master password has been created successfully."
         )
@@ -57,7 +52,7 @@ class MainWindow(QMainWindow):
         self.dlg_password_created.setIcon(QMessageBox.Information)
 
         self.dlg_incorrect_password = QMessageBox(self)
-        self.dlg_incorrect_password.setWindowTitle("Password Vault")
+        self.dlg_incorrect_password.setWindowTitle("Password Manager")
         self.dlg_incorrect_password.setText(
             "Incorrect master password. Please try again."
         )
@@ -65,11 +60,11 @@ class MainWindow(QMainWindow):
         self.dlg_incorrect_password.setIcon(QMessageBox.Warning)
         # --------------------------------------------------
 
-        if exists("Password_Vault.db"):
+        if exists("Password_Manager.db"):
             self.setFixedHeight(255)
             self.ui.labelHeading.setText("Enter Master Password")
             self.ui.labelSubHeading.setText(
-                "Enter your master password to gain access to your vault."
+                "Enter the master password to access your password vault."
             )
             self.ui.labelPassword1.hide()
             self.ui.labelPassword1Sub.hide()
@@ -89,7 +84,7 @@ class MainWindow(QMainWindow):
         # -----------------------------------------------------------
 
     def log_in(self):
-        if exists("Password_Vault.db"):
+        if exists("Password_Manager.db"):
             self.enter_master_password()
         else:
             self.create_master_password()
@@ -129,12 +124,12 @@ class MainWindow(QMainWindow):
             self.dlg_password_short.exec()
         else:
             self.db = SqliteCipher(
-                dataBasePath="Password_Vault.db",
+                dataBasePath="Password_Manager.db",
                 checkSameThread=True,
                 password=(self.ui.editPassword1.text()),
             )
             keyring_set_password(
-                "Password Vault",
+                "Password Manager",
                 "user",
                 self.ui.editPassword1.text(),
             )
@@ -147,7 +142,7 @@ class MainWindow(QMainWindow):
         ) == 0 or SqliteCipher.sha512Convertor(
             self.ui.editPassword1.text()
         ) != SqliteCipher.getVerifier(
-            "Password_Vault.db", checkSameThread=True
+            "Password_Manager.db", checkSameThread=True
         ):
             self.dlg_incorrect_password.exec()
         else:

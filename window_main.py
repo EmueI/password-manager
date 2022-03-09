@@ -23,13 +23,14 @@ class MainWindow(QMainWindow):
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
         self.ui.buttonPasswords.setStyleSheet("background-color: #3d3d3d")
-        self.ui.buttonPasswords.clicked.connect(self.show_passwords)
-        self.ui.buttonAddNew.clicked.connect(self.show_add_new)
-        self.ui.buttonGenerate.clicked.connect(self.show_generate)
-        self.ui.buttonSecurity.clicked.connect(self.show_security)
+        self.ui.buttonPasswords.clicked.connect(self.show_passwords_tab)
+        self.ui.buttonPasswords.clicked.connect(self.update_table)
+        self.ui.buttonAddNew.clicked.connect(self.show_add_new_tab)
+        self.ui.buttonGenerate.clicked.connect(self.show_generate_tab)
+        self.ui.buttonSecurity.clicked.connect(self.show_security_tab)
 
         # ----- Password Dashboard -----
-
+        self.update_table()
         # ----- Add New -----
         self.ui.buttonAddPassword.clicked.connect(self.update_table)
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
 
         # ----- Generate Password -----
         self.dlg_none_selected = QMessageBox(self)
-        self.dlg_none_selected.setWindowTitle("Password Vault")
+        self.dlg_none_selected.setWindowTitle("Password Manager")
         self.dlg_none_selected.setText("Choose at least one option.")
         self.dlg_none_selected.setStandardButtons(QMessageBox.Ok)
         self.dlg_none_selected.setIcon(QMessageBox.Warning)
@@ -48,7 +49,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonCopyPwd.clicked.connect(self.copy_generated_pwd)
 
     # ----- Side-Menu -----
-    def show_passwords(self):
+    def show_passwords_tab(self):
         """Highlights the 'Passwords' tab."""
         self.ui.buttonPasswords.setStyleSheet("background-color: #3d3d3d")
         self.ui.buttonAddNew.setStyleSheet("")
@@ -56,7 +57,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
 
-    def show_add_new(self):
+    def show_add_new_tab(self):
         """Highlights the 'Add New' tab."""
         self.ui.buttonPasswords.setStyleSheet("")
         self.ui.buttonAddNew.setStyleSheet("background-color: #3d3d3d")
@@ -64,7 +65,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetAdd)
 
-    def show_generate(self):
+    def show_generate_tab(self):
         """Highlights the 'Generate Passwords' tab."""
         self.ui.buttonPasswords.setStyleSheet("")
         self.ui.buttonAddNew.setStyleSheet("")
@@ -72,7 +73,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetGenerate)
 
-    def show_security(self):
+    def show_security_tab(self):
         """Highlights the 'Security Check' tab."""
         self.ui.buttonPasswords.setStyleSheet("")
         self.ui.buttonAddNew.setStyleSheet("")
@@ -82,7 +83,7 @@ class MainWindow(QMainWindow):
 
     # ----- Password Dashboard -----
     def update_table(self):
-        """Inserts the data from the 'Add New' form into the passwords table."""
+        """Inserts the data from the database into the passwords table."""
         data = [
             self.ui.editTitle.text(),
             self.ui.editUsername.text(),
@@ -101,10 +102,11 @@ class MainWindow(QMainWindow):
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
         self.db = SqliteCipher(
-            dataBasePath="Password_Vault.db",
+            dataBasePath="Password_Manager.db",
             checkSameThread=True,
-            password=keyring_get_password("Password Vault", "user"),
+            password=keyring_get_password("Password Manager", "user"),
         )
+
         if not self.db.checkTableExist("Password"):
             self.db.createTable(
                 "Password",
