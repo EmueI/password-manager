@@ -12,6 +12,25 @@ from ui_main_window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
+    db = SqliteCipher(
+        dataBasePath="Password_Manager.db",
+        checkSameThread=True,
+        password=keyring_get_password("Password Manager", "user"),
+    )
+    if not db.checkTableExist("Password"):
+        db.createTable(
+            "Password",
+            [
+                ["title", "TEXT"],
+                ["url", "TEXT"],
+                ["username", "TEXT"],
+                ["password", "TEXT"],
+                ["compromised", "INT"],
+            ],
+            makeSecure=True,
+            commit=True,
+        )
+
     def __init__(self):
         super(MainWindow, self).__init__()
 
@@ -20,6 +39,8 @@ class MainWindow(QMainWindow):
 
         self.setFixedWidth(660)
         self.setFixedHeight(500)
+
+        self.update_table()
 
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
@@ -88,11 +109,6 @@ class MainWindow(QMainWindow):
     # ----- Password Dashboard -----
     def update_table(self):
         """Inserts the data from the database into the passwords table."""
-        self.db = SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
         data = self.db.getDataFromTable(
             "Password", raiseConversionError=True, omitID=True
         )[1:][0]
@@ -107,24 +123,6 @@ class MainWindow(QMainWindow):
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
-        self.db = SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
-        if not self.db.checkTableExist("Password"):
-            self.db.createTable(
-                "Password",
-                [
-                    ["title", "TEXT"],
-                    ["url", "TEXT"],
-                    ["username", "TEXT"],
-                    ["password", "TEXT"],
-                    ["compromised", "INT"],
-                ],
-                makeSecure=True,
-                commit=True,
-            )
         self.db.insertIntoTable(
             tableName="Password",
             insertList=[
