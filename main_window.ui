@@ -617,6 +617,47 @@
                 <pointsize>9</pointsize>
                </font>
               </property>
+              <property name="autoScroll">
+               <bool>false</bool>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="tabKeyNavigation">
+               <bool>true</bool>
+              </property>
+              <property name="showDropIndicator" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::SingleSelection</enum>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectRows</enum>
+              </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column>
+               <property name="text">
+                <string>Title</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Url</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Username</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Password</string>
+               </property>
+              </column>
              </widget>
             </widget>
            </item>

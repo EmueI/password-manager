@@ -15,11 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
-    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QMainWindow, QPushButton, QSizePolicy,
-    QSlider, QSpinBox, QStackedWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QFrame,
+    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QMainWindow, QPushButton,
+    QSizePolicy, QSlider, QSpinBox, QStackedWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -240,11 +240,28 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.buttonEdit, 0, 1, 1, 1)
 
         self.tablePasswords = QTableWidget(self.framePasswordDashboard)
+        if (self.tablePasswords.columnCount() < 4):
+            self.tablePasswords.setColumnCount(4)
+        __qtablewidgetitem = QTableWidgetItem()
+        self.tablePasswords.setHorizontalHeaderItem(0, __qtablewidgetitem)
+        __qtablewidgetitem1 = QTableWidgetItem()
+        self.tablePasswords.setHorizontalHeaderItem(1, __qtablewidgetitem1)
+        __qtablewidgetitem2 = QTableWidgetItem()
+        self.tablePasswords.setHorizontalHeaderItem(2, __qtablewidgetitem2)
+        __qtablewidgetitem3 = QTableWidgetItem()
+        self.tablePasswords.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         self.tablePasswords.setObjectName(u"tablePasswords")
         self.tablePasswords.setGeometry(QRect(40, 110, 401, 271))
         font3 = QFont()
         font3.setPointSize(9)
         self.tablePasswords.setFont(font3)
+        self.tablePasswords.setAutoScroll(False)
+        self.tablePasswords.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tablePasswords.setTabKeyNavigation(True)
+        self.tablePasswords.setProperty("showDropIndicator", True)
+        self.tablePasswords.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.tablePasswords.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tablePasswords.verticalHeader().setVisible(False)
 
         self.verticalLayout_3.addWidget(self.framePasswordDashboard)
 
@@ -507,6 +524,14 @@ class Ui_MainWindow(object):
         self.buttonDelete.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
         self.buttonCopy.setText(QCoreApplication.translate("MainWindow", u"Copy", None))
         self.buttonEdit.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
+        ___qtablewidgetitem = self.tablePasswords.horizontalHeaderItem(0)
+        ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Title", None));
+        ___qtablewidgetitem1 = self.tablePasswords.horizontalHeaderItem(1)
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Url", None));
+        ___qtablewidgetitem2 = self.tablePasswords.horizontalHeaderItem(2)
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Username", None));
+        ___qtablewidgetitem3 = self.tablePasswords.horizontalHeaderItem(3)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Password", None));
         self.labelTitle.setText(QCoreApplication.translate("MainWindow", u"Title:", None))
         self.labelUsername.setText(QCoreApplication.translate("MainWindow", u"Username:", None))
         self.labelPassword.setText(QCoreApplication.translate("MainWindow", u"Password:", None))
