@@ -259,8 +259,12 @@ class Ui_MainWindow(object):
         self.tablePasswords.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tablePasswords.setTabKeyNavigation(True)
         self.tablePasswords.setProperty("showDropIndicator", True)
+        self.tablePasswords.setAlternatingRowColors(False)
         self.tablePasswords.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tablePasswords.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tablePasswords.horizontalHeader().setCascadingSectionResizes(True)
+        self.tablePasswords.horizontalHeader().setProperty("showSortIndicator", True)
+        self.tablePasswords.horizontalHeader().setStretchLastSection(True)
         self.tablePasswords.verticalHeader().setVisible(False)
 
         self.verticalLayout_3.addWidget(self.framePasswordDashboard)
@@ -506,7 +510,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.buttonTabPasswords.setDefault(False)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

@@ -369,7 +369,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -629,12 +629,24 @@
               <property name="showDropIndicator" stdset="0">
                <bool>true</bool>
               </property>
+              <property name="alternatingRowColors">
+               <bool>false</bool>
+              </property>
               <property name="selectionMode">
                <enum>QAbstractItemView::SingleSelection</enum>
               </property>
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
+              <attribute name="horizontalHeaderCascadingSectionResizes">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
               </attribute>

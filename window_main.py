@@ -50,12 +50,16 @@ class MainWindow(QMainWindow):
         self.dlg_pwd_added.setIcon(QMessageBox.Information)
 
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
+        self.ui.editTitle.returnPressed.connect(self.update_db)
+        self.ui.editUrl.returnPressed.connect(self.update_db)
+        self.ui.editUsername.returnPressed.connect(self.update_db)
+        self.ui.editPassword.returnPressed.connect(self.update_db)
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
 
         # ----- Generate Password -----
         self.dlg_empty_fields = QMessageBox(self)
         self.dlg_empty_fields.setWindowTitle("Password Manager")
-        self.dlg_empty_fields.setText("Please choose at least one option.")
+        self.dlg_empty_fields.setText("All fields are required.")
         self.dlg_empty_fields.setStandardButtons(QMessageBox.Ok)
         self.dlg_empty_fields.setIcon(QMessageBox.Warning)
 
@@ -149,21 +153,18 @@ class MainWindow(QMainWindow):
             self.ui.editPassword.text(),
             self.is_password_compromised(self.ui.editPassword.text()),
         ]
-        # TODO: Check if form is filled.
-        form_filled = False
-        for i in data:
-            if i == "":
+        for row_number, row_data in enumerate(data):
+            if row_data == "":
                 self.dlg_empty_fields.exec()
-                form_filled = False
                 break
-        if form_filled:
-            self.db.insertIntoTable(
-                tableName="Password",
-                insertList=data,
-                commit=True,
-            )
-            self.dlg_pwd_added.exec()
-            self.clear_pwd_form()
+            if row_number == len(data) - 1:
+                self.db.insertIntoTable(
+                    tableName="Password",
+                    insertList=data,
+                    commit=True,
+                )
+                self.dlg_pwd_added.exec()
+                self.clear_pwd_form()
 
     def delete_password(self, id):
         pass
