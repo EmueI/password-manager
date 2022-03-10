@@ -37,13 +37,25 @@ class MainWindow(QMainWindow):
         self.ui.tablePasswords.setColumnCount(4)
 
         # ----- Add New -----
+        self.dlg_form_not_filled = QMessageBox(self)
+        self.dlg_form_not_filled.setWindowTitle("Password Manager")
+        self.dlg_form_not_filled.setText("All fields are required.")
+        self.dlg_form_not_filled.setStandardButtons(QMessageBox.Ok)
+        self.dlg_form_not_filled.setIcon(QMessageBox.Warning)
+
+        self.dlg_pwd_added = QMessageBox(self)
+        self.dlg_pwd_added.setWindowTitle("Password Manager")
+        self.dlg_pwd_added.setText("Password has been added successfully.")
+        self.dlg_pwd_added.setStandardButtons(QMessageBox.Ok)
+        self.dlg_pwd_added.setIcon(QMessageBox.Information)
+
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
 
         # ----- Generate Password -----
         self.dlg_none_selected = QMessageBox(self)
         self.dlg_none_selected.setWindowTitle("Password Manager")
-        self.dlg_none_selected.setText("Choose at least one option.")
+        self.dlg_none_selected.setText("Please choose at least one option.")
         self.dlg_none_selected.setStandardButtons(QMessageBox.Ok)
         self.dlg_none_selected.setIcon(QMessageBox.Warning)
 
@@ -130,18 +142,23 @@ class MainWindow(QMainWindow):
         self.db = self.get_db()
         if not self.db.checkTableExist("Password"):
             self.create_passwords_table()
-        self.db.insertIntoTable(
-            tableName="Password",
-            insertList=[
-                self.ui.editTitle.text(),
-                self.ui.editUrl.text(),
-                self.ui.editUsername.text(),
-                self.ui.editPassword.text(),
-                self.is_password_compromised(self.ui.editPassword.text()),
-            ],
-            commit=True,
-        )
-        self.clear_pwd_form()
+        data_input = [
+            self.ui.editTitle.text(),
+            self.ui.editUrl.text(),
+            self.ui.editUsername.text(),
+            self.ui.editPassword.text(),
+            self.is_password_compromised(self.ui.editPassword.text()),
+        ]
+        if data_input == 1:  # TODO: Check if all fields are full.
+            pass
+        else:
+            self.db.insertIntoTable(
+                tableName="Password",
+                insertList=data_input,
+                commit=True,
+            )
+            self.dlg_pwd_added.exec()
+            self.clear_pwd_form()
 
     def delete_password(self, id):
         pass
