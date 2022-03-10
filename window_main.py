@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
 
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
-        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
         self.ui.buttonTabPasswords.clicked.connect(self.show_passwords_tab)
         self.ui.buttonTabPasswords.clicked.connect(self.update_table)
         self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
@@ -75,7 +75,7 @@ class MainWindow(QMainWindow):
     # ----- Side-Menu -----
     def show_passwords_tab(self):
         """Highlights the 'Passwords' tab."""
-        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
         self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet("")
         self.ui.buttonTabSecurity.setStyleSheet("")
@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
     def show_add_new_tab(self):
         """Highlights the 'Add New' tab."""
         self.ui.buttonTabPasswords.setStyleSheet("")
-        self.ui.buttonTabAddNew.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabAddNew.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
         self.ui.buttonTabGenerate.setStyleSheet("")
         self.ui.buttonTabSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetAdd)
@@ -93,7 +93,7 @@ class MainWindow(QMainWindow):
         """Highlights the 'Generate Passwords' tab."""
         self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet("")
-        self.ui.buttonTabGenerate.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabGenerate.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
         self.ui.buttonTabSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetGenerate)
 
@@ -102,7 +102,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet("")
-        self.ui.buttonTabSecurity.setStyleSheet("background-color: #3d3d3d")
+        self.ui.buttonTabSecurity.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetSecurity)
 
     def get_db(self):
