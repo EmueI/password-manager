@@ -272,6 +272,14 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.buttonEdit, 0, 1, 1, 1)
 
+        self.labelCopiedToClip_2 = QLabel(self.framePasswordDashboard)
+        self.labelCopiedToClip_2.setObjectName(u"labelCopiedToClip_2")
+        self.labelCopiedToClip_2.setGeometry(QRect(40, 440, 116, 31))
+        font5 = QFont()
+        font5.setFamilies([u"Roboto"])
+        font5.setPointSize(8)
+        font5.setItalic(False)
+        self.labelCopiedToClip_2.setFont(font5)
 
         self.verticalLayout_3.addWidget(self.framePasswordDashboard)
 
@@ -342,10 +350,10 @@ class Ui_MainWindow(object):
 
         self.editTitle = QLineEdit(self.frameTitleEntry)
         self.editTitle.setObjectName(u"editTitle")
-        font5 = QFont()
-        font5.setFamilies([u"Roboto"])
-        font5.setPointSize(8)
-        self.editTitle.setFont(font5)
+        font6 = QFont()
+        font6.setFamilies([u"Roboto"])
+        font6.setPointSize(8)
+        self.editTitle.setFont(font6)
 
         self.verticalLayout_6.addWidget(self.editTitle)
 
@@ -369,7 +377,7 @@ class Ui_MainWindow(object):
 
         self.editUrl = QLineEdit(self.frameUrlEntry)
         self.editUrl.setObjectName(u"editUrl")
-        self.editUrl.setFont(font5)
+        self.editUrl.setFont(font6)
 
         self.verticalLayout_7.addWidget(self.editUrl)
 
@@ -393,7 +401,7 @@ class Ui_MainWindow(object):
 
         self.editUsername = QLineEdit(self.frameUsernameEntry)
         self.editUsername.setObjectName(u"editUsername")
-        self.editUsername.setFont(font5)
+        self.editUsername.setFont(font6)
 
         self.verticalLayout_8.addWidget(self.editUsername)
 
@@ -418,7 +426,7 @@ class Ui_MainWindow(object):
         self.editPassword = QLineEdit(self.framePasswordEntry)
         self.editPassword.setObjectName(u"editPassword")
         self.editPassword.setMinimumSize(QSize(0, 25))
-        self.editPassword.setFont(font5)
+        self.editPassword.setFont(font6)
         self.editPassword.setEchoMode(QLineEdit.Password)
 
         self.verticalLayout_9.addWidget(self.editPassword)
@@ -436,9 +444,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.frameGenerate = QFrame(self.widgetGenerate)
         self.frameGenerate.setObjectName(u"frameGenerate")
-        font6 = QFont()
-        font6.setPointSize(10)
-        self.frameGenerate.setFont(font6)
+        font7 = QFont()
+        font7.setPointSize(10)
+        self.frameGenerate.setFont(font7)
         self.frameGenerate.setFrameShape(QFrame.NoFrame)
         self.frameGenerate.setFrameShadow(QFrame.Raised)
         self.labelHeading_2 = QLabel(self.frameGenerate)
@@ -522,7 +530,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.labelGeneratedPwd = QLabel(self.groupBox_3)
         self.labelGeneratedPwd.setObjectName(u"labelGeneratedPwd")
-        self.labelGeneratedPwd.setFont(font5)
+        self.labelGeneratedPwd.setFont(font6)
         self.labelGeneratedPwd.setCursor(QCursor(Qt.IBeamCursor))
         self.labelGeneratedPwd.setFrameShape(QFrame.StyledPanel)
         self.labelGeneratedPwd.setFrameShadow(QFrame.Plain)
@@ -550,11 +558,7 @@ class Ui_MainWindow(object):
         self.labelCopiedToClip = QLabel(self.frameGenerate)
         self.labelCopiedToClip.setObjectName(u"labelCopiedToClip")
         self.labelCopiedToClip.setGeometry(QRect(40, 470, 116, 31))
-        font7 = QFont()
-        font7.setFamilies([u"Roboto"])
-        font7.setPointSize(8)
-        font7.setItalic(False)
-        self.labelCopiedToClip.setFont(font7)
+        self.labelCopiedToClip.setFont(font5)
 
         self.horizontalLayout_6.addWidget(self.frameGenerate)
 
@@ -614,6 +618,7 @@ class Ui_MainWindow(object):
         self.buttonDelete.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
         self.buttonCopyPwd.setText(QCoreApplication.translate("MainWindow", u"Copy Password", None))
         self.buttonEdit.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
+        self.labelCopiedToClip_2.setText("")
         self.labelHeading.setText(QCoreApplication.translate("MainWindow", u"Add a New Password", None))
         self.buttonAddPassword.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.buttonClear.setText(QCoreApplication.translate("MainWindow", u"Clear", None))

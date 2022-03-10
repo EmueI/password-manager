@@ -31,6 +31,11 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
 
         # ----- Password Dashboard -----
+        self.dlg_no_passwords = QMessageBox(self)
+        self.dlg_no_passwords.setWindowTitle("Password Manager")
+        self.dlg_no_passwords.setText("No passwords found.")
+        self.dlg_no_passwords.setStandardButtons(QMessageBox.Ok)
+        self.dlg_no_passwords.setIcon(QMessageBox.Warning)
         self.ui.buttonCopyPwd.clicked.connect(self.copy_pwd)
 
         # ----- Add New -----
@@ -54,11 +59,13 @@ class MainWindow(QMainWindow):
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
 
         # ----- Generate Password -----
-        self.dlg_empty_fields = QMessageBox(self)
-        self.dlg_empty_fields.setWindowTitle("Password Manager")
-        self.dlg_empty_fields.setText("All fields are required.")
-        self.dlg_empty_fields.setStandardButtons(QMessageBox.Ok)
-        self.dlg_empty_fields.setIcon(QMessageBox.Warning)
+        self.dlg_no_type_selected = QMessageBox(self)
+        self.dlg_no_type_selected.setWindowTitle("Password Manager")
+        self.dlg_no_type_selected.setText(
+            "Select at least one character type."
+        )
+        self.dlg_no_type_selected.setStandardButtons(QMessageBox.Ok)
+        self.dlg_no_type_selected.setIcon(QMessageBox.Warning)
 
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
         self.ui.spinBox.valueChanged.connect(self.update_slider)
@@ -144,13 +151,16 @@ class MainWindow(QMainWindow):
 
     def copy_pwd(self):
         self.db = self.get_db()
-        selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
-        selected_col = self.ui.tablePasswords.selectedIndexes()[3].column()
-        copy_to_cb(
-            self.db.getDataFromTable(
-                "Password", raiseConversionError=True, omitID=True
-            )[1:][0][selected_row][selected_col]
-        )
+        try:
+            selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
+            selected_col = self.ui.tablePasswords.selectedIndexes()[3].column()
+            copy_to_cb(
+                self.db.getDataFromTable(
+                    "Password", raiseConversionError=True, omitID=True
+                )[1:][0][selected_row][selected_col]
+            )
+        except IndexError:
+            self.dlg_no_passwords.exec()
 
     # ----- Add New -----
     def update_db(self):
@@ -167,7 +177,7 @@ class MainWindow(QMainWindow):
         ]
         for row_number, row_data in enumerate(data):
             if row_data == "":
-                self.dlg_empty_fields.exec()
+                self.dlg_form_not_filled.exec()
                 break
             if row_number == len(data) - 1:
                 self.db.insertIntoTable(
@@ -219,7 +229,7 @@ class MainWindow(QMainWindow):
             )
             self.ui.labelGeneratedPwd.setText(random_pwd)
         except:
-            self.dlg_empty_fields.exec()
+            self.dlg_no_type_selected.exec()
 
     def copy_generated_pwd(self):
         copy_to_cb(self.ui.labelGeneratedPwd.text())
