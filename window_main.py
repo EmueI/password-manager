@@ -53,11 +53,11 @@ class MainWindow(QMainWindow):
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
 
         # ----- Generate Password -----
-        self.dlg_none_selected = QMessageBox(self)
-        self.dlg_none_selected.setWindowTitle("Password Manager")
-        self.dlg_none_selected.setText("Please choose at least one option.")
-        self.dlg_none_selected.setStandardButtons(QMessageBox.Ok)
-        self.dlg_none_selected.setIcon(QMessageBox.Warning)
+        self.dlg_empty_fields = QMessageBox(self)
+        self.dlg_empty_fields.setWindowTitle("Password Manager")
+        self.dlg_empty_fields.setText("Please choose at least one option.")
+        self.dlg_empty_fields.setStandardButtons(QMessageBox.Ok)
+        self.dlg_empty_fields.setIcon(QMessageBox.Warning)
 
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
         self.ui.spinBox.valueChanged.connect(self.update_slider)
@@ -142,19 +142,24 @@ class MainWindow(QMainWindow):
         self.db = self.get_db()
         if not self.db.checkTableExist("Password"):
             self.create_passwords_table()
-        data_input = [
+        data = [
             self.ui.editTitle.text(),
             self.ui.editUrl.text(),
             self.ui.editUsername.text(),
             self.ui.editPassword.text(),
             self.is_password_compromised(self.ui.editPassword.text()),
         ]
-        if data_input == 1:  # TODO: Check if all fields are full.
-            pass
-        else:
+        # TODO: Check if form is filled.
+        form_filled = False
+        for i in data:
+            if i == "":
+                self.dlg_empty_fields.exec()
+                form_filled = False
+                break
+        if form_filled:
             self.db.insertIntoTable(
                 tableName="Password",
-                insertList=data_input,
+                insertList=data,
                 commit=True,
             )
             self.dlg_pwd_added.exec()
@@ -201,7 +206,7 @@ class MainWindow(QMainWindow):
             )
             self.ui.labelGeneratedPwd.setText(random_pwd)
         except:
-            self.dlg_none_selected.exec()
+            self.dlg_empty_fields.exec()
 
     def copy_generated_pwd(self):
         copy(self.ui.labelGeneratedPwd.text())
