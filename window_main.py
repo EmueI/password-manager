@@ -85,27 +85,34 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabSecurity.setStyleSheet("background-color: #3d3d3d")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetSecurity)
 
-    # ----- Password Dashboard -----
-    def update_table(self):
-        """Inserts the data from the database into the passwords table."""
-        self.db = SqliteCipher(
+    def get_db(self):
+        """Returns the database."""
+        return SqliteCipher(
             dataBasePath="Password_Manager.db",
             checkSameThread=True,
             password=keyring_get_password("Password Manager", "user"),
         )
+
+    def create_passwords_table(self):
+        self.db.createTable(
+            "Password",
+            [
+                ["title", "TEXT"],
+                ["url", "TEXT"],
+                ["username", "TEXT"],
+                ["password", "TEXT"],
+                ["compromised", "INT"],
+            ],
+            makeSecure=True,
+            commit=True,
+        )
+
+    # ----- Password Dashboard -----
+    def update_table(self):
+        """Inserts the data from the database into the passwords table."""
+        self.db = self.get_db()
         if not self.db.checkTableExist("Password"):
-            self.db.createTable(
-                "Password",
-                [
-                    ["title", "TEXT"],
-                    ["url", "TEXT"],
-                    ["username", "TEXT"],
-                    ["password", "TEXT"],
-                    ["compromised", "INT"],
-                ],
-                makeSecure=True,
-                commit=True,
-            )
+            self.create_passwords_table()
         data = self.db.getDataFromTable(
             "Password", raiseConversionError=True, omitID=True
         )[1:][0]
@@ -120,24 +127,9 @@ class MainWindow(QMainWindow):
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
-        self.db = SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
+        self.db = self.get_db()
         if not self.db.checkTableExist("Password"):
-            self.db.createTable(
-                "Password",
-                [
-                    ["title", "TEXT"],
-                    ["url", "TEXT"],
-                    ["username", "TEXT"],
-                    ["password", "TEXT"],
-                    ["compromised", "INT"],
-                ],
-                makeSecure=True,
-                commit=True,
-            )
+            self.create_passwords_table()
         self.db.insertIntoTable(
             tableName="Password",
             insertList=[
