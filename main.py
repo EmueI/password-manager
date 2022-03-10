@@ -4,10 +4,11 @@ from sys import exit as sys_exit
 
 from PySide6.QtWidgets import QApplication, QStackedLayout
 
-system("pyside6-uic main_window.ui > ui_main_window.py")
-from window_log_in import MainWindow as LogInWindow
 
 system("pyside6-uic log_in.ui > ui_log_in.py")
+from window_log_in import MainWindow as LogInWindow
+
+system("pyside6-uic main_window.ui > ui_main_window.py")
 from window_main import MainWindow
 
 
