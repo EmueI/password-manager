@@ -18,11 +18,8 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.setFixedWidth(660)
-        self.setFixedHeight(500)
-
-        # TODO: Stop database from being created when updating the table.
-        # self.update_table()
+        self.setFixedWidth(710)
+        self.setFixedHeight(530)
 
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
@@ -34,7 +31,6 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
 
         # ----- Password Dashboard -----
-        self.ui.tablePasswords.setColumnCount(4)
 
         # ----- Add New -----
         self.dlg_form_not_filled = QMessageBox(self)
@@ -136,9 +132,14 @@ class MainWindow(QMainWindow):
         for row_number, row_data in enumerate(data):
             self.ui.tablePasswords.insertRow(row_number)
             for column_number, data in enumerate(row_data):
+                if column_number == 3:
+                    data = "".join("*" for i in range(len(data)))
                 self.ui.tablePasswords.setItem(
                     row_number, column_number, QTableWidgetItem(str(data))
                 )
+        self.ui.tablePasswords.setColumnWidth(0, 70)
+        self.ui.tablePasswords.setColumnWidth(1, 150)
+        self.ui.tablePasswords.setColumnWidth(2, 100)
 
     # ----- Add New -----
     def update_db(self):

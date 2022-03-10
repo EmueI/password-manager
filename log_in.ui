@@ -175,7 +175,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="frameTop">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -217,6 +217,9 @@
        <property name="text">
         <string>Create a Master Password</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item>
@@ -229,6 +232,9 @@
        </property>
        <property name="text">
         <string>This is the password you must remember in order to access your password vault. </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -317,7 +323,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Must have 8 characters or more</string>
+           <string>Must have at least 8 characters</string>
           </property>
          </widget>
         </item>
