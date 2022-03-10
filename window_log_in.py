@@ -2,6 +2,7 @@ from os.path import exists
 from keyring import (
     set_password as keyring_set_password,
     delete_password as keyring_delete_password,
+    get_password as keyring_get_password,
 )
 from pysqlitecipher.sqlitewrapper import SqliteCipher
 
@@ -75,8 +76,6 @@ class MainWindow(QMainWindow):
             self.ui.frameMainPwd2.hide()
             self.ui.buttonSubmit.setText("Unlock")
             self.ui.buttonSubmit.setGeometry(QRect(40, 185, 250, 27))
-        else:
-            keyring_delete_password("Password Manager", "user")
 
         # ---- Connecting user actions to the appropriate functions.
         self.ui.buttonSubmit.clicked.connect(self.log_in)

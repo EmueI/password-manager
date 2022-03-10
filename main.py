@@ -13,7 +13,7 @@ from window_main import MainWindow
 
 def main():
     app = QApplication([])
-    app.setStyleSheet(load_stylesheet())
+    app.setStyleSheet(load_stylesheet("dark", "rounded"))
 
     layout = QStackedLayout()
 
