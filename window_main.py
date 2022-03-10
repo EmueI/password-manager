@@ -2,7 +2,7 @@ from keyring import get_password as keyring_get_password
 from os.path import exists
 from pwnedpasswords import check as pwned_check
 from pysqlitecipher.sqlitewrapper import SqliteCipher
-from pyperclip import copy
+from pyperclip import copy as copy_to_cb
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
 
@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
 
         # ----- Password Dashboard -----
+        self.ui.buttonCopyPwd.clicked.connect(self.copy_pwd)
 
         # ----- Add New -----
         self.dlg_form_not_filled = QMessageBox(self)
@@ -62,7 +63,7 @@ class MainWindow(QMainWindow):
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
         self.ui.spinBox.valueChanged.connect(self.update_slider)
         self.ui.buttonGeneratePwd.clicked.connect(self.generate_pwd)
-        self.ui.buttonCopyPwd.clicked.connect(self.copy_generated_pwd)
+        self.ui.buttonCopyRandomPwd.clicked.connect(self.copy_generated_pwd)
 
     # ----- Side-Menu -----
     def show_passwords_tab(self):
@@ -141,6 +142,16 @@ class MainWindow(QMainWindow):
         self.ui.tablePasswords.setColumnWidth(1, 150)
         self.ui.tablePasswords.setColumnWidth(2, 100)
 
+    def copy_pwd(self):
+        self.db = self.get_db()
+        selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
+        selected_col = self.ui.tablePasswords.selectedIndexes()[3].column()
+        copy_to_cb(
+            self.db.getDataFromTable(
+                "Password", raiseConversionError=True, omitID=True
+            )[1:][0][selected_row][selected_col]
+        )
+
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
@@ -211,5 +222,5 @@ class MainWindow(QMainWindow):
             self.dlg_empty_fields.exec()
 
     def copy_generated_pwd(self):
-        copy(self.ui.labelGeneratedPwd.text())
+        copy_to_cb(self.ui.labelGeneratedPwd.text())
         self.ui.labelCopiedToClip.setText("Copied to clipboard.")
