@@ -2,22 +2,15 @@
 
 ![linked-banner](https://user-images.githubusercontent.com/5164617/132354376-44ba85f3-bb21-448e-8c12-4e0fe9af2543.png)
 
-# Daily journaling without distraction
+# Store your passwords in a safe place
 An easy, distraction-free way to record your thoughts, declutter your mind and keep the things you want to remember. We all only have so much room in our brains for things. Let Linked be the place to put something you want to remember and let you free up space for deeper thinking.
 
-**[You can download linked here for free!](https://github.com/lostdesign/linked/releases/latest)**
-
-**Join the discord at [https://discord.gg/uNjJzZvccr](https://discord.gg/uNjJzZvccr)**
+**[You can download the password manager here for free!](https://github.com/lostdesign/linked/releases/latest)**
 
 ## Features
 
-- 📅 Write down anything and as much as you want per day
-- 🔍 Search across all days
-- ✍️ Support for various text styles as well as todo, list and code blocks
-- 🖼 Linked comes in dark and light mode
-- 💻 Keyboard navigation for maximum productivity
-- 💾 Files are forever yours, you can find them at `~/Documents/linked`
-- 🌐 Multi language support
+- ✍️ Built-in password manager
+
 
 ### Upcoming
 
