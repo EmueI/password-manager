@@ -14,7 +14,7 @@
    <string>Password Manager</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#buttonTabAddNew, #buttonTabGenerate, #buttonTabPasswords, #buttonTabSecurity {
+   <string notr="true">#buttonTabAddNew, #buttonTabGenerate, #buttonTabPasswords, #buttonTabHealth {
 	text-align: left;
 	padding: 10px;
 }
@@ -300,7 +300,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="buttonTabSecurity">
+            <widget class="QPushButton" name="buttonTabHealth">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -326,7 +326,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>Security Check</string>
+              <string>Password Health</string>
              </property>
              <property name="icon">
               <iconset>
@@ -380,7 +380,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -507,7 +507,7 @@
               </column>
               <column>
                <property name="text">
-                <string>Url</string>
+                <string>URL</string>
                </property>
               </column>
               <column>
@@ -722,7 +722,7 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>400</y>
+                <y>390</y>
                 <width>260</width>
                 <height>40</height>
                </rect>
@@ -804,7 +804,7 @@
                 <x>40</x>
                 <y>70</y>
                 <width>450</width>
-                <height>301</height>
+                <height>291</height>
                </rect>
               </property>
               <property name="frameShape">
@@ -1008,22 +1008,75 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="editPassword">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>25</height>
-                     </size>
+                   <widget class="QFrame" name="frame_2">
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
                     </property>
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>8</pointsize>
-                     </font>
+                    <property name="frameShadow">
+                     <enum>QFrame::Raised</enum>
                     </property>
-                    <property name="echoMode">
-                     <enum>QLineEdit::Password</enum>
-                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_3">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLineEdit" name="editPassword">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>25</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>8</pointsize>
+                        </font>
+                       </property>
+                       <property name="echoMode">
+                        <enum>QLineEdit::Password</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="buttonPasswordToggle">
+                       <property name="minimumSize">
+                        <size>
+                         <width>27</width>
+                         <height>27</height>
+                        </size>
+                       </property>
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>8</pointsize>
+                        </font>
+                       </property>
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
+                       <property name="icon">
+                        <iconset>
+                         <normaloff>icons/eye-crossed.svg</normaloff>icons/eye-crossed.svg</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>14</width>
+                         <height>14</height>
+                        </size>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1383,7 +1436,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="widgetSecurity">
+         <widget class="QWidget" name="widgetHealth">
           <layout class="QHBoxLayout" name="horizontalLayout_7">
            <item>
             <widget class="QFrame" name="frameSecurity">
@@ -1413,6 +1466,19 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_2">
+              <property name="geometry">
+               <rect>
+                <x>60</x>
+                <y>100</y>
+                <width>82</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Compromised</string>
               </property>
              </widget>
             </widget>

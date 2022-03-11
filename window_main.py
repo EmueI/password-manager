@@ -7,8 +7,13 @@ from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
 
 from PySide6.QtCore import QSortFilterProxyModel
-from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
-from PySide6.QtGui import QStandardItemModel, QStandardItem
+from PySide6.QtWidgets import (
+    QMainWindow,
+    QTableWidgetItem,
+    QMessageBox,
+    QLineEdit,
+)
+from PySide6.QtGui import QStandardItemModel, QStandardItem, QIcon
 
 from ui_main_window import Ui_MainWindow
 
@@ -32,15 +37,17 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabPasswords.clicked.connect(self.update_table)
         self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
         self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
-        self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
+        self.ui.buttonTabHealth.clicked.connect(self.show_health_tab)
 
         # ----- Password Dashboard ----------------
-        self.dlg_no_passwords = QMessageBox(self)
-        self.dlg_no_passwords.setWindowTitle("Password Manager")
-        self.dlg_no_passwords.setText("No passwords found.")
-        self.dlg_no_passwords.setStandardButtons(QMessageBox.Ok)
-        self.dlg_no_passwords.setIcon(QMessageBox.Warning)
+        self.dlg_no_password_selected = QMessageBox(self)
+        self.dlg_no_password_selected.setWindowTitle("Password Manager")
+        self.dlg_no_password_selected.setText("No password selected.")
+        self.dlg_no_password_selected.setStandardButtons(QMessageBox.Ok)
+        self.dlg_no_password_selected.setIcon(QMessageBox.Warning)
+
         self.ui.buttonCopyPwd.clicked.connect(self.copy_pwd)
+        self.ui.buttonDelete.clicked.connect(self.delete_password)
 
         # ----- Search Feature -----
         self.ui.editSearch.textChanged.connect(self.table_search)
@@ -65,6 +72,8 @@ class MainWindow(QMainWindow):
         self.ui.editUsername.returnPressed.connect(self.update_db)
         self.ui.editPassword.returnPressed.connect(self.update_db)
         self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
+        self.ui.buttonPasswordToggle.setCheckable(True)
+        self.ui.buttonPasswordToggle.clicked.connect(self.password_toggle)
 
         # ----- Generate Password -----
         self.dlg_no_type_selected = QMessageBox(self)
@@ -84,21 +93,21 @@ class MainWindow(QMainWindow):
     def show_passwords_tab(self):
         """Highlights the 'Passwords' tab."""
         self.ui.buttonTabPasswords.setStyleSheet(
-            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+            "background-color: #3d3d3d; border-left: 4px solid #8ab4f7"
         )
         self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet("")
-        self.ui.buttonTabSecurity.setStyleSheet("")
+        self.ui.buttonTabHealth.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
 
     def show_add_new_tab(self):
         """Highlights the 'Add New' tab."""
         self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet(
-            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+            "background-color: #3d3d3d; border-left: 4px solid #8ab4f7"
         )
         self.ui.buttonTabGenerate.setStyleSheet("")
-        self.ui.buttonTabSecurity.setStyleSheet("")
+        self.ui.buttonTabHealth.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetAdd)
 
     def show_generate_tab(self):
@@ -106,23 +115,23 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet(
-            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+            "background-color: #3d3d3d; border-left: 4px solid #8ab4f7"
         )
-        self.ui.buttonTabSecurity.setStyleSheet("")
+        self.ui.buttonTabHealth.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetGenerate)
 
-    def show_security_tab(self):
-        """Highlights the 'Security Check' tab."""
+    def show_health_tab(self):
+        """Highlights the 'Health Check' tab."""
         self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet("")
-        self.ui.buttonTabSecurity.setStyleSheet(
-            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+        self.ui.buttonTabHealth.setStyleSheet(
+            "background-color: #3d3d3d; border-left: 4px solid #8ab4f7"
         )
-        self.ui.stackedWidget.setCurrentWidget(self.ui.widgetSecurity)
+        self.ui.stackedWidget.setCurrentWidget(self.ui.widgetHealth)
 
     def get_db(self):
-        """Returns the database."""
+        """Returns the password database."""
         return SqliteCipher(
             dataBasePath="Password_Manager.db",
             checkSameThread=True,
@@ -166,6 +175,26 @@ class MainWindow(QMainWindow):
         self.ui.tablePasswords.setColumnWidth(1, 150)
         self.ui.tablePasswords.setColumnWidth(2, 100)
 
+    def delete_password(self):
+        """Removes the entity of the selected row."""
+        db = self.get_db()
+        try:
+            selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
+            db.deleteDataInTable("Password", selected_row)
+            self.update_table()
+        except IndexError:
+            self.dlg_no_password_selected.exec()
+
+    def edit_password(self):
+        """Removes the entity of the selected row."""
+        db = self.get_db()
+        try:
+            selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
+            db.deleteDataInTable("Password", selected_row)
+            self.update_table()
+        except IndexError:
+            self.dlg_no_password_selected.exec()
+
     def copy_pwd(self):
         db = self.get_db()
         try:
@@ -177,7 +206,7 @@ class MainWindow(QMainWindow):
                 )[1:][0][selected_row][selected_col]
             )
         except IndexError:
-            self.dlg_no_passwords.exec()
+            self.dlg_no_password_selected.exec()
 
     def table_search(self):
         data = self.get_table_data()
@@ -197,9 +226,6 @@ class MainWindow(QMainWindow):
             self.is_password_compromised(self.ui.editPassword.text()),
         ]
         for row_number, row_data in enumerate(data):
-            if row_data == "":
-                self.dlg_form_not_filled.exec()
-                break
             if row_number == len(data) - 1:
                 db.insertIntoTable(
                     tableName="Password",
@@ -208,9 +234,19 @@ class MainWindow(QMainWindow):
                 )
                 self.dlg_pwd_added.exec()
                 self.clear_pwd_form()
+            if row_number != 3 and str(row_data).replace(" ", "") == "":
+                self.dlg_form_not_filled.exec()
+                break
 
-    def delete_password(self, id):
-        pass
+    def password_toggle(self, checked):
+        if checked:
+            self.ui.editPassword.setEchoMode(QLineEdit.EchoMode.Normal)
+            self.ui.buttonPasswordToggle.setIcon(QIcon("icons/eye.svg"))
+        else:
+            self.ui.editPassword.setEchoMode(QLineEdit.EchoMode.Password)
+            self.ui.buttonPasswordToggle.setIcon(
+                QIcon("icons/eye-crossed.svg")
+            )
 
     def is_password_compromised(self, password):
         return (

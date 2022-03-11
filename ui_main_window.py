@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(710, 530)
-        MainWindow.setStyleSheet(u"#buttonTabAddNew, #buttonTabGenerate, #buttonTabPasswords, #buttonTabSecurity {\n"
+        MainWindow.setStyleSheet(u"#buttonTabAddNew, #buttonTabGenerate, #buttonTabPasswords, #buttonTabHealth {\n"
 "	text-align: left;\n"
 "	padding: 10px;\n"
 "}\n"
@@ -132,20 +132,20 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.buttonTabGenerate)
 
-        self.buttonTabSecurity = QPushButton(self.frameSidebarButtons)
-        self.buttonTabSecurity.setObjectName(u"buttonTabSecurity")
-        sizePolicy.setHeightForWidth(self.buttonTabSecurity.sizePolicy().hasHeightForWidth())
-        self.buttonTabSecurity.setSizePolicy(sizePolicy)
-        self.buttonTabSecurity.setMinimumSize(QSize(0, 30))
-        self.buttonTabSecurity.setFont(font1)
-        self.buttonTabSecurity.setCursor(QCursor(Qt.PointingHandCursor))
-        self.buttonTabSecurity.setStyleSheet(u"")
+        self.buttonTabHealth = QPushButton(self.frameSidebarButtons)
+        self.buttonTabHealth.setObjectName(u"buttonTabHealth")
+        sizePolicy.setHeightForWidth(self.buttonTabHealth.sizePolicy().hasHeightForWidth())
+        self.buttonTabHealth.setSizePolicy(sizePolicy)
+        self.buttonTabHealth.setMinimumSize(QSize(0, 30))
+        self.buttonTabHealth.setFont(font1)
+        self.buttonTabHealth.setCursor(QCursor(Qt.PointingHandCursor))
+        self.buttonTabHealth.setStyleSheet(u"")
         icon3 = QIcon()
         icon3.addFile(u"icons/security.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.buttonTabSecurity.setIcon(icon3)
-        self.buttonTabSecurity.setIconSize(QSize(14, 14))
+        self.buttonTabHealth.setIcon(icon3)
+        self.buttonTabHealth.setIconSize(QSize(14, 14))
 
-        self.verticalLayout.addWidget(self.buttonTabSecurity)
+        self.verticalLayout.addWidget(self.buttonTabHealth)
 
         self.label = QLabel(self.frameSidebar)
         self.label.setObjectName(u"label")
@@ -292,7 +292,7 @@ class Ui_MainWindow(object):
         self.labelHeading.setAlignment(Qt.AlignCenter)
         self.frameFormButtons = QFrame(self.frameAddPassword)
         self.frameFormButtons.setObjectName(u"frameFormButtons")
-        self.frameFormButtons.setGeometry(QRect(40, 400, 260, 40))
+        self.frameFormButtons.setGeometry(QRect(40, 390, 260, 40))
         self.frameFormButtons.setFont(font)
         self.frameFormButtons.setFrameShape(QFrame.NoFrame)
         self.frameFormButtons.setFrameShadow(QFrame.Raised)
@@ -318,7 +318,7 @@ class Ui_MainWindow(object):
 
         self.framePasswordEntries = QFrame(self.frameAddPassword)
         self.framePasswordEntries.setObjectName(u"framePasswordEntries")
-        self.framePasswordEntries.setGeometry(QRect(40, 70, 450, 301))
+        self.framePasswordEntries.setGeometry(QRect(40, 70, 450, 291))
         self.framePasswordEntries.setFrameShape(QFrame.NoFrame)
         self.framePasswordEntries.setFrameShadow(QFrame.Raised)
         self.verticalLayout_10 = QVBoxLayout(self.framePasswordEntries)
@@ -415,13 +415,35 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_9.addWidget(self.labelPassword)
 
-        self.editPassword = QLineEdit(self.framePasswordEntry)
+        self.frame_2 = QFrame(self.framePasswordEntry)
+        self.frame_2.setObjectName(u"frame_2")
+        self.frame_2.setFrameShape(QFrame.NoFrame)
+        self.frame_2.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_3 = QHBoxLayout(self.frame_2)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.editPassword = QLineEdit(self.frame_2)
         self.editPassword.setObjectName(u"editPassword")
         self.editPassword.setMinimumSize(QSize(0, 25))
         self.editPassword.setFont(font5)
         self.editPassword.setEchoMode(QLineEdit.Password)
 
-        self.verticalLayout_9.addWidget(self.editPassword)
+        self.horizontalLayout_3.addWidget(self.editPassword)
+
+        self.buttonPasswordToggle = QPushButton(self.frame_2)
+        self.buttonPasswordToggle.setObjectName(u"buttonPasswordToggle")
+        self.buttonPasswordToggle.setMinimumSize(QSize(27, 27))
+        self.buttonPasswordToggle.setFont(font5)
+        self.buttonPasswordToggle.setCursor(QCursor(Qt.PointingHandCursor))
+        icon7 = QIcon()
+        icon7.addFile(u"icons/eye-crossed.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.buttonPasswordToggle.setIcon(icon7)
+        self.buttonPasswordToggle.setIconSize(QSize(14, 14))
+
+        self.horizontalLayout_3.addWidget(self.buttonPasswordToggle)
+
+
+        self.verticalLayout_9.addWidget(self.frame_2)
 
 
         self.verticalLayout_10.addWidget(self.framePasswordEntry)
@@ -559,11 +581,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.frameGenerate)
 
         self.stackedWidget.addWidget(self.widgetGenerate)
-        self.widgetSecurity = QWidget()
-        self.widgetSecurity.setObjectName(u"widgetSecurity")
-        self.horizontalLayout_7 = QHBoxLayout(self.widgetSecurity)
+        self.widgetHealth = QWidget()
+        self.widgetHealth.setObjectName(u"widgetHealth")
+        self.horizontalLayout_7 = QHBoxLayout(self.widgetHealth)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.frameSecurity = QFrame(self.widgetSecurity)
+        self.frameSecurity = QFrame(self.widgetHealth)
         self.frameSecurity.setObjectName(u"frameSecurity")
         self.frameSecurity.setFrameShape(QFrame.NoFrame)
         self.frameSecurity.setFrameShadow(QFrame.Raised)
@@ -575,7 +597,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_7.addWidget(self.frameSecurity)
 
-        self.stackedWidget.addWidget(self.widgetSecurity)
+        self.stackedWidget.addWidget(self.widgetHealth)
 
         self.horizontalLayout_2.addWidget(self.stackedWidget)
 
@@ -587,7 +609,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.buttonTabPasswords.setDefault(False)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -598,7 +620,7 @@ class Ui_MainWindow(object):
         self.buttonTabPasswords.setText(QCoreApplication.translate("MainWindow", u"Passwords", None))
         self.buttonTabAddNew.setText(QCoreApplication.translate("MainWindow", u"Add New", None))
         self.buttonTabGenerate.setText(QCoreApplication.translate("MainWindow", u"Generate Password", None))
-        self.buttonTabSecurity.setText(QCoreApplication.translate("MainWindow", u"Security Check", None))
+        self.buttonTabHealth.setText(QCoreApplication.translate("MainWindow", u"Password Health", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Password Manager", None))
         self.labelHeading_5.setText(QCoreApplication.translate("MainWindow", u"Password Dashboard", None))
         self.editSearch.setText("")
@@ -606,7 +628,7 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem = self.tablePasswords.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Title", None));
         ___qtablewidgetitem1 = self.tablePasswords.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Url", None));
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"URL", None));
         ___qtablewidgetitem2 = self.tablePasswords.horizontalHeaderItem(2)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Username", None));
         ___qtablewidgetitem3 = self.tablePasswords.horizontalHeaderItem(3)
