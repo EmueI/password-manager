@@ -73,9 +73,6 @@ class MainWindow(QMainWindow):
         # ----- Password Dashboard ----------------
         self.ui.buttonDelete.clicked.connect(self.delete_password)
         self.ui.buttonCopyPassword.clicked.connect(self.copy_password)
-
-        # ----- Search Feature -----
-        self.ui.editSearch.textChanged.connect(self.table_search)
         # ------------------------------------------
 
         # ----- Add New -----
@@ -169,21 +166,28 @@ class MainWindow(QMainWindow):
     # ----- Password Dashboard -----
     def update_table(self):
         """Inserts the data from the database into the passwords table."""
-        db = self.get_db()
-        if not db.checkTableExist("Password"):
-            self.db_create_passwords_table()
-        data = db.getDataFromTable(
-            "Password", raiseConversionError=True, omitID=True
-        )[1:][0]
-        self.ui.tablePasswords.setRowCount(0)
-        for row_num, row_data in enumerate(data):
-            self.ui.tablePasswords.insertRow(row_num)
-            for column_num, data in enumerate(row_data):
-                if column_num == 3:
-                    data = "".join("*" for i in range(len(data)))
-                self.ui.tablePasswords.setItem(
-                    row_num, column_num, QTableWidgetItem(str(data))
-                )
+        data = self.get_table_data()
+        model = QStandardItemModel(len(data), 3)
+        model.setHorizontalHeaderLabels(
+            ["Title", "URL", "Username", "Password"]
+        )
+
+        for row_num in range(len(data)):
+            for col_num, col_data in enumerate(data[row_num]):
+                if col_num == 3:
+                    col_data = "".join("*" for i in range(len(col_data)))
+                model.setItem(row_num, col_num, QStandardItem(col_data))
+
+        filter_proxy_model = QSortFilterProxyModel()
+        filter_proxy_model.setSourceModel(model)
+        filter_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
+        filter_proxy_model.setFilterKeyColumn(0)
+
+        self.ui.tablePasswords.setModel(filter_proxy_model)
+
+        self.ui.editSearch.textChanged.connect(
+            filter_proxy_model.setFilterRegularExpression
+        )
 
     def delete_password(self):
         """Removes the selected row from the database."""
@@ -220,16 +224,10 @@ class MainWindow(QMainWindow):
         except IndexError:
             self.dlg_no_password_selected()
 
-    def table_search(self):
-        data = self.get_table_data()
-        titles = [data[row][0] for row in range(len(data))]
-
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
         db = self.get_db()
-        if not db.checkTableExist("Password"):
-            self.db_create_passwords_table()
         data = [
             self.ui.editTitle.text(),
             self.ui.editUrl.text(),
@@ -301,6 +299,8 @@ class MainWindow(QMainWindow):
 
     def get_table_data(self):
         db = self.get_db()
+        if not db.checkTableExist("Password"):
+            self.db_create_passwords_table()
         return db.getDataFromTable(
             "Password", raiseConversionError=True, omitID=True
         )[1:][0]

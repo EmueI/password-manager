@@ -352,7 +352,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1653,7 +1653,7 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_16">
                   <item>
-                   <widget class="QLabel" name="labelReusedHeading_2">
+                   <widget class="QLabel" name="labelCompromisedHeading">
                     <property name="font">
                      <font>
                       <family>Roboto Medium</family>
@@ -1669,7 +1669,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="labelReused_2">
+                   <widget class="QLabel" name="labelCompromised">
                     <property name="font">
                      <font>
                       <family>Roboto</family>

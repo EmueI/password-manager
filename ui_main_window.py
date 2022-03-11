@@ -683,20 +683,20 @@ class Ui_MainWindow(object):
         self.frame_11.setFrameShadow(QFrame.Raised)
         self.verticalLayout_16 = QVBoxLayout(self.frame_11)
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
-        self.labelReusedHeading_2 = QLabel(self.frame_11)
-        self.labelReusedHeading_2.setObjectName(u"labelReusedHeading_2")
-        self.labelReusedHeading_2.setFont(font7)
-        self.labelReusedHeading_2.setAlignment(Qt.AlignCenter)
+        self.labelCompromisedHeading = QLabel(self.frame_11)
+        self.labelCompromisedHeading.setObjectName(u"labelCompromisedHeading")
+        self.labelCompromisedHeading.setFont(font7)
+        self.labelCompromisedHeading.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_16.addWidget(self.labelReusedHeading_2)
+        self.verticalLayout_16.addWidget(self.labelCompromisedHeading)
 
-        self.labelReused_2 = QLabel(self.frame_11)
-        self.labelReused_2.setObjectName(u"labelReused_2")
-        self.labelReused_2.setFont(font1)
-        self.labelReused_2.setInputMethodHints(Qt.ImhNone)
-        self.labelReused_2.setAlignment(Qt.AlignCenter)
+        self.labelCompromised = QLabel(self.frame_11)
+        self.labelCompromised.setObjectName(u"labelCompromised")
+        self.labelCompromised.setFont(font1)
+        self.labelCompromised.setInputMethodHints(Qt.ImhNone)
+        self.labelCompromised.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_16.addWidget(self.labelReused_2)
+        self.verticalLayout_16.addWidget(self.labelCompromised)
 
 
         self.horizontalLayout_8.addWidget(self.frame_11)
@@ -815,7 +815,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.buttonTabPasswords.setDefault(False)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -853,8 +853,8 @@ class Ui_MainWindow(object):
         self.labelHeading_6.setText(QCoreApplication.translate("MainWindow", u"Generate a Random Password", None))
         self.labelTotalPasswordsHeading.setText(QCoreApplication.translate("MainWindow", u"Total Passwords", None))
         self.labelTotalPasswords.setText("")
-        self.labelReusedHeading_2.setText(QCoreApplication.translate("MainWindow", u"Compromised", None))
-        self.labelReused_2.setText("")
+        self.labelCompromisedHeading.setText(QCoreApplication.translate("MainWindow", u"Compromised", None))
+        self.labelCompromised.setText("")
         self.labelReusedHeading.setText(QCoreApplication.translate("MainWindow", u"Reused", None))
         self.labelReused.setText("")
         self.labelWeakHeading.setText(QCoreApplication.translate("MainWindow", u"Weak", None))
