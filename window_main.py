@@ -6,7 +6,9 @@ from pyperclip import copy as copy_to_cb
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
 
+from PySide6.QtCore import QSortFilterProxyModel
 from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
+from PySide6.QtGui import QStandardItemModel, QStandardItem
 
 from ui_main_window import Ui_MainWindow
 
@@ -23,20 +25,26 @@ class MainWindow(QMainWindow):
 
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
-        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
+        self.ui.buttonTabPasswords.setStyleSheet(
+            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+        )
         self.ui.buttonTabPasswords.clicked.connect(self.show_passwords_tab)
         self.ui.buttonTabPasswords.clicked.connect(self.update_table)
         self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
         self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
         self.ui.buttonTabSecurity.clicked.connect(self.show_security_tab)
 
-        # ----- Password Dashboard -----
+        # ----- Password Dashboard ----------------
         self.dlg_no_passwords = QMessageBox(self)
         self.dlg_no_passwords.setWindowTitle("Password Manager")
         self.dlg_no_passwords.setText("No passwords found.")
         self.dlg_no_passwords.setStandardButtons(QMessageBox.Ok)
         self.dlg_no_passwords.setIcon(QMessageBox.Warning)
         self.ui.buttonCopyPwd.clicked.connect(self.copy_pwd)
+
+        # ----- Search Feature -----
+        self.ui.editSearch.textChanged.connect(self.table_search)
+        # ------------------------------------------
 
         # ----- Add New -----
         self.dlg_form_not_filled = QMessageBox(self)
@@ -75,7 +83,9 @@ class MainWindow(QMainWindow):
     # ----- Side-Menu -----
     def show_passwords_tab(self):
         """Highlights the 'Passwords' tab."""
-        self.ui.buttonTabPasswords.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
+        self.ui.buttonTabPasswords.setStyleSheet(
+            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+        )
         self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet("")
         self.ui.buttonTabSecurity.setStyleSheet("")
@@ -84,7 +94,9 @@ class MainWindow(QMainWindow):
     def show_add_new_tab(self):
         """Highlights the 'Add New' tab."""
         self.ui.buttonTabPasswords.setStyleSheet("")
-        self.ui.buttonTabAddNew.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
+        self.ui.buttonTabAddNew.setStyleSheet(
+            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+        )
         self.ui.buttonTabGenerate.setStyleSheet("")
         self.ui.buttonTabSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetAdd)
@@ -93,7 +105,9 @@ class MainWindow(QMainWindow):
         """Highlights the 'Generate Passwords' tab."""
         self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet("")
-        self.ui.buttonTabGenerate.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
+        self.ui.buttonTabGenerate.setStyleSheet(
+            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+        )
         self.ui.buttonTabSecurity.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetGenerate)
 
@@ -102,7 +116,9 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet("")
-        self.ui.buttonTabSecurity.setStyleSheet("background-color: #3d3d3d; border-left: 3px solid #8ab4f7")
+        self.ui.buttonTabSecurity.setStyleSheet(
+            "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
+        )
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetSecurity)
 
     def get_db(self):
@@ -114,7 +130,8 @@ class MainWindow(QMainWindow):
         )
 
     def create_passwords_table(self):
-        self.db.createTable(
+        db = self.get_db()
+        db.createTable(
             "Password",
             [
                 ["title", "TEXT"],
@@ -130,10 +147,10 @@ class MainWindow(QMainWindow):
     # ----- Password Dashboard -----
     def update_table(self):
         """Inserts the data from the database into the passwords table."""
-        self.db = self.get_db()
-        if not self.db.checkTableExist("Password"):
+        db = self.get_db()
+        if not db.checkTableExist("Password"):
             self.create_passwords_table()
-        data = self.db.getDataFromTable(
+        data = db.getDataFromTable(
             "Password", raiseConversionError=True, omitID=True
         )[1:][0]
         self.ui.tablePasswords.setRowCount(0)
@@ -150,23 +167,27 @@ class MainWindow(QMainWindow):
         self.ui.tablePasswords.setColumnWidth(2, 100)
 
     def copy_pwd(self):
-        self.db = self.get_db()
+        db = self.get_db()
         try:
             selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
             selected_col = self.ui.tablePasswords.selectedIndexes()[3].column()
             copy_to_cb(
-                self.db.getDataFromTable(
+                db.getDataFromTable(
                     "Password", raiseConversionError=True, omitID=True
                 )[1:][0][selected_row][selected_col]
             )
         except IndexError:
             self.dlg_no_passwords.exec()
 
+    def table_search(self):
+        data = self.get_table_data()
+        titles = [data[row][0] for row in range(len(data))]
+
     # ----- Add New -----
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
-        self.db = self.get_db()
-        if not self.db.checkTableExist("Password"):
+        db = self.get_db()
+        if not db.checkTableExist("Password"):
             self.create_passwords_table()
         data = [
             self.ui.editTitle.text(),
@@ -180,7 +201,7 @@ class MainWindow(QMainWindow):
                 self.dlg_form_not_filled.exec()
                 break
             if row_number == len(data) - 1:
-                self.db.insertIntoTable(
+                db.insertIntoTable(
                     tableName="Password",
                     insertList=data,
                     commit=True,
@@ -234,3 +255,9 @@ class MainWindow(QMainWindow):
     def copy_generated_pwd(self):
         copy_to_cb(self.ui.labelGeneratedPwd.text())
         self.ui.labelCopiedToClip.setText("Copied to clipboard.")
+
+    def get_table_data(self):
+        db = self.get_db()
+        return db.getDataFromTable(
+            "Password", raiseConversionError=True, omitID=True
+        )[1:][0]
