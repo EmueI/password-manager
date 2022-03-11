@@ -1,126 +1,98 @@
+![Project Status](https://img.shields.io/badge/🏷-v1.4.13-green) ![Project downloads](https://img.shields.io/github/downloads/lostdesign/linked/total) ![discord](https://img.shields.io/discord/884747974859702352?label=discord)
 
-<h1 align="center">
-  <br>
-  <a href="https://flaticons.net/custom.php?i=RD4s3NtMxqAXhlIyI3IDeCwGpv6uM" title="safe box icons">Safe box icons created by Arkinasi - Flaticon</a>
-  <br>
-  Password Manager
-  <br>
-</h1>
+![linked-banner](https://user-images.githubusercontent.com/5164617/132354376-44ba85f3-bb21-448e-8c12-4e0fe9af2543.png)
 
-<h4 align="center">A simple password manager written in Python using the <a href="https://pypi.org/project/PySide6/" target="_blank">PySide6</a> module.</h4>
+# Daily journaling without distraction
+An easy, distraction-free way to record your thoughts, declutter your mind and keep the things you want to remember. We all only have so much room in our brains for things. Let Linked be the place to put something you want to remember and let you free up space for deeper thinking.
 
-<p align="center">
-  <a href="https://badge.fury.io/js/electron-markdownify">
-    <img src="https://badge.fury.io/js/electron-markdownify.svg"
-         alt="Gitter">
-  </a>
-  <a href="https://gitter.im/amitmerchant1990/electron-markdownify"><img src="https://badges.gitter.im/amitmerchant1990/electron-markdownify.svg"></a>
-  <a href="https://saythanks.io/to/bullredeyes@gmail.com">
-      <img src="https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg">
-  </a>
-  <a href="https://www.paypal.me/AmitMerchant">
-    <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
-  </a>
-</p>
+**[You can download linked here for free!](https://github.com/lostdesign/linked/releases/latest)**
 
-<p align="center">
-  <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#download">Download</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#related">Related</a> •
-  <a href="#license">License</a>
-</p>
+**Join the discord at [https://discord.gg/uNjJzZvccr](https://discord.gg/uNjJzZvccr)**
 
-![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
+## Features
 
-## Key Features
+- 📅 Write down anything and as much as you want per day
+- 🔍 Search across all days
+- ✍️ Support for various text styles as well as todo, list and code blocks
+- 🖼 Linked comes in dark and light mode
+- 💻 Keyboard navigation for maximum productivity
+- 💾 Files are forever yours, you can find them at `~/Documents/linked`
+- 🌐 Multi language support
 
-* LivePreview - Make changes, See changes
-  - Instantly see what your Markdown documents look like in HTML as you create them.
-* Sync Scrolling
-  - While you type, LivePreview will automatically scroll to the current location you're editing.
-* GitHub Flavored Markdown  
-* Syntax highlighting
-* [KaTeX](https://khan.github.io/KaTeX/) Support
-* Dark/Light mode
-* Toolbar for basic Markdown formatting
-* Supports multiple cursors
-* Save the Markdown preview as PDF
-* Emoji support in preview :tada:
-* App will keep alive in tray for quick usage
-* Full screen mode
-  - Write distraction free.
-* Cross platform
-  - Windows, macOS and Linux ready.
+### Upcoming
 
-## How To Use
+- 🔗 link days together for references
+- 🗓 Month overview
+- ⭐️ Rate your days
+- 📶 sync across devices
+- (📱 phone support?)
 
-To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+## 💖 Sponsor
 
-```bash
-# Clone this repository
-$ git clone https://github.com/amitmerchant1990/electron-markdownify
-
-# Go into the repository
-$ cd electron-markdownify
-
-# Install dependencies
-$ npm install
-
-# Run the app
-$ npm start
-```
-
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+The app will always be opensource and free - if you enjoy the app, please consider [becoming a sponsor or leave a tip](https://github.com/sponsors/lostdesign). 
 
 
-## Download
+## Keyboard Shortcuts
 
-You can [download](https://github.com/amitmerchant1990/electron-markdownify/releases/tag/v1.2.0) the latest installable version of Markdownify for Windows, macOS and Linux.
+<details>
+  <summary>Keyboard Shortcuts</summary>
 
-## Emailware
+  **Search** <kbd>Cmd or Ctrl</kbd> + <kbd>K.</kbd>
 
-Markdownify is an [emailware](https://en.wiktionary.org/wiki/emailware). Meaning, if you liked using this app or it has helped you in any way, I'd like you send me an email at <bullredeyes@gmail.com> about anything you'd want to say about this software. I'd really appreciate it!
+  **Today** <kbd>Cmd or Ctrl</kbd> + <kbd>.</kbd>
 
-## Credits
+  **Next Day** <kbd>Cmd or Ctrl</kbd> + <kbd>N</kbd>
 
-This software uses the following open source packages:
+  **Previous Day** <kbd>Cmd or Ctrl</kbd> + <kbd>P</kbd>
 
-- [Electron](http://electron.atom.io/)
-- [Node.js](https://nodejs.org/)
-- [Marked - a markdown parser](https://github.com/chjj/marked)
-- [showdown](http://showdownjs.github.io/showdown/)
-- [CodeMirror](http://codemirror.net/)
-- Emojis are taken from [here](https://github.com/arvida/emoji-cheat-sheet.com)
-- [highlight.js](https://highlightjs.org/)
+  **Next Week** <kbd>Cmd or Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd>
 
-## Related
+  **Previous Week** <kbd>Cmd or Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>
 
-[markdownify-web](https://github.com/amitmerchant1990/markdownify-web) - Web version of Markdownify
+  **Settings** <kbd>Cmd or Ctrl</kbd> + <kbd>,</kbd>
 
-## Support
+  **Leave Settings** <kbd>Esc</kbd>
+  
+  **Exit Code Block** <kbd>Cmd or Ctrl</kbd> + <kbd>Enter</kbd>
+</details>
 
-<a href="https://www.buymeacoffee.com/5Zn8Xh3l9" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-<p>Or</p> 
+## Contributing
+Please check [Contributing.md](/CONTRIBUTING.md) first before opening a pull request please.
 
-<a href="https://www.patreon.com/amitmerchant">
-	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
+<details>
+  <summary>How to run locally</summary>
 
-## You may also like...
+  
+  1. Check your node version, it must be v15 or newer
+  
+  ```
+  node --version
+  ```
+  
+  2. Clone the repository (make sure you have git installed)
+  
+  ```
+  git clone https://github.com/lostdesign/linked.git
+  ```
+  
+  3. Change to the newly downloaded directory
+  
+  ```
+  cd linked/
+  ```
+  
+  4. Install project dependencies
+  
+  ```
+  yarn
+  ```
+  
+  5. Start the application
+  
+  ```
+  yarn electron:serve
+  ```
+</details>
 
-- [Pomolectron](https://github.com/amitmerchant1990/pomolectron) - A pomodoro app
-- [Correo](https://github.com/amitmerchant1990/correo) - A menubar/taskbar Gmail App for Windows and macOS
-
-## License
-
-GPL
-
----
-
-> [amitmerchant.com](https://www.amitmerchant.com) &nbsp;&middot;&nbsp;
-> GitHub [@amitmerchant1990](https://github.com/amitmerchant1990) &nbsp;&middot;&nbsp;
-> Twitter [@amit_merchant](https://twitter.com/amit_merchant)
-
+Make sure to follow [@uselinked](https://twitter.com/uselinked) on twitter to get the latest news about the project or feel free to check [github discussions](https://github.com/lostdesign/linked/discussions).
