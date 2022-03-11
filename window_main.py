@@ -6,12 +6,15 @@ from pyperclip import copy as copy_to_cb
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
 
-from PySide6.QtCore import QSortFilterProxyModel
+from PySide6.QtCore import Qt, QSortFilterProxyModel
 from PySide6.QtWidgets import (
     QMainWindow,
+    QWidget,
     QTableWidgetItem,
     QMessageBox,
     QLineEdit,
+    QTableView,
+    QHeaderView,
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QIcon
 
@@ -28,6 +31,33 @@ class MainWindow(QMainWindow):
         self.setFixedWidth(710)
         self.setFixedHeight(530)
 
+        # ----- Message Boxes -----
+        self.dlg_no_password_selected = lambda: QMessageBox.warning(
+            self,
+            "Password Manager",
+            "No password selected.",
+            buttons=QMessageBox.Ok,
+        )
+        self.dlg_form_not_filled = lambda: QMessageBox.warning(
+            self,
+            "Password Manager",
+            "All fields are required.",
+            buttons=QMessageBox.Ok,
+        )
+        self.dlg_pwd_added = lambda: QMessageBox.information(
+            self,
+            "Password Manager",
+            "Password has been added successfully.",
+            buttons=QMessageBox.Ok,
+        )
+        self.dlg_delete_confirmation = lambda: QMessageBox.question(
+            self,
+            "Password Manager",
+            "Are you sure you want to delete this password?",
+            buttons=QMessageBox.No | QMessageBox.Yes,
+        )
+        # -------------------------
+
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
         self.ui.buttonTabPasswords.setStyleSheet(
@@ -38,34 +68,17 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
         self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
         self.ui.buttonTabHealth.clicked.connect(self.show_health_tab)
+        self.generate_pwd()
 
         # ----- Password Dashboard ----------------
-        self.dlg_no_password_selected = QMessageBox(self)
-        self.dlg_no_password_selected.setWindowTitle("Password Manager")
-        self.dlg_no_password_selected.setText("No password selected.")
-        self.dlg_no_password_selected.setStandardButtons(QMessageBox.Ok)
-        self.dlg_no_password_selected.setIcon(QMessageBox.Warning)
-
-        self.ui.buttonCopyPwd.clicked.connect(self.copy_pwd)
         self.ui.buttonDelete.clicked.connect(self.delete_password)
+        self.ui.buttonCopyPassword.clicked.connect(self.copy_password)
 
         # ----- Search Feature -----
         self.ui.editSearch.textChanged.connect(self.table_search)
         # ------------------------------------------
 
         # ----- Add New -----
-        self.dlg_form_not_filled = QMessageBox(self)
-        self.dlg_form_not_filled.setWindowTitle("Password Manager")
-        self.dlg_form_not_filled.setText("All fields are required.")
-        self.dlg_form_not_filled.setStandardButtons(QMessageBox.Ok)
-        self.dlg_form_not_filled.setIcon(QMessageBox.Warning)
-
-        self.dlg_pwd_added = QMessageBox(self)
-        self.dlg_pwd_added.setWindowTitle("Password Manager")
-        self.dlg_pwd_added.setText("Password has been added successfully.")
-        self.dlg_pwd_added.setStandardButtons(QMessageBox.Ok)
-        self.dlg_pwd_added.setIcon(QMessageBox.Information)
-
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
         self.ui.editTitle.returnPressed.connect(self.update_db)
         self.ui.editUrl.returnPressed.connect(self.update_db)
@@ -76,18 +89,18 @@ class MainWindow(QMainWindow):
         self.ui.buttonPasswordToggle.clicked.connect(self.password_toggle)
 
         # ----- Generate Password -----
-        self.dlg_no_type_selected = QMessageBox(self)
-        self.dlg_no_type_selected.setWindowTitle("Password Manager")
-        self.dlg_no_type_selected.setText(
-            "Select at least one character type."
-        )
-        self.dlg_no_type_selected.setStandardButtons(QMessageBox.Ok)
-        self.dlg_no_type_selected.setIcon(QMessageBox.Warning)
-
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
         self.ui.spinBox.valueChanged.connect(self.update_slider)
-        self.ui.buttonGeneratePwd.clicked.connect(self.generate_pwd)
-        self.ui.buttonCopyRandomPwd.clicked.connect(self.copy_generated_pwd)
+        self.ui.horizontalSlider.valueChanged.connect(self.generate_pwd)
+        self.ui.spinBox.valueChanged.connect(self.generate_pwd)
+        self.ui.checkBoxUpper.clicked.connect(self.generate_pwd)
+        self.ui.checkBoxLower.clicked.connect(self.generate_pwd)
+        self.ui.checkBoxDigits.clicked.connect(self.generate_pwd)
+        self.ui.checkBoxSymbols.clicked.connect(self.generate_pwd)
+        self.ui.buttonRegenerate.clicked.connect(self.generate_pwd)
+        self.ui.buttonCopyRandomPassword.clicked.connect(
+            self.copy_generated_pwd
+        )
 
     # ----- Side-Menu -----
     def show_passwords_tab(self):
@@ -138,7 +151,7 @@ class MainWindow(QMainWindow):
             password=keyring_get_password("Password Manager", "user"),
         )
 
-    def create_passwords_table(self):
+    def db_create_passwords_table(self):
         db = self.get_db()
         db.createTable(
             "Password",
@@ -158,32 +171,31 @@ class MainWindow(QMainWindow):
         """Inserts the data from the database into the passwords table."""
         db = self.get_db()
         if not db.checkTableExist("Password"):
-            self.create_passwords_table()
+            self.db_create_passwords_table()
         data = db.getDataFromTable(
             "Password", raiseConversionError=True, omitID=True
         )[1:][0]
         self.ui.tablePasswords.setRowCount(0)
-        for row_number, row_data in enumerate(data):
-            self.ui.tablePasswords.insertRow(row_number)
-            for column_number, data in enumerate(row_data):
-                if column_number == 3:
+        for row_num, row_data in enumerate(data):
+            self.ui.tablePasswords.insertRow(row_num)
+            for column_num, data in enumerate(row_data):
+                if column_num == 3:
                     data = "".join("*" for i in range(len(data)))
                 self.ui.tablePasswords.setItem(
-                    row_number, column_number, QTableWidgetItem(str(data))
+                    row_num, column_num, QTableWidgetItem(str(data))
                 )
-        self.ui.tablePasswords.setColumnWidth(0, 70)
-        self.ui.tablePasswords.setColumnWidth(1, 150)
-        self.ui.tablePasswords.setColumnWidth(2, 100)
 
     def delete_password(self):
-        """Removes the entity of the selected row."""
+        """Removes the selected row from the database."""
         db = self.get_db()
         try:
             selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
-            db.deleteDataInTable("Password", selected_row)
-            self.update_table()
+
+            if self.dlg_delete_confirmation() == QMessageBox.Yes:
+                db.deleteDataInTable("Password", selected_row)
+                self.update_table()
         except IndexError:
-            self.dlg_no_password_selected.exec()
+            self.dlg_no_password_selected()
 
     def edit_password(self):
         """Removes the entity of the selected row."""
@@ -193,9 +205,9 @@ class MainWindow(QMainWindow):
             db.deleteDataInTable("Password", selected_row)
             self.update_table()
         except IndexError:
-            self.dlg_no_password_selected.exec()
+            self.dlg_no_password_selected()
 
-    def copy_pwd(self):
+    def copy_password(self):
         db = self.get_db()
         try:
             selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
@@ -206,7 +218,7 @@ class MainWindow(QMainWindow):
                 )[1:][0][selected_row][selected_col]
             )
         except IndexError:
-            self.dlg_no_password_selected.exec()
+            self.dlg_no_password_selected()
 
     def table_search(self):
         data = self.get_table_data()
@@ -217,7 +229,7 @@ class MainWindow(QMainWindow):
         """Inserts the data from the 'Add New' form into the database."""
         db = self.get_db()
         if not db.checkTableExist("Password"):
-            self.create_passwords_table()
+            self.db_create_passwords_table()
         data = [
             self.ui.editTitle.text(),
             self.ui.editUrl.text(),
@@ -225,17 +237,17 @@ class MainWindow(QMainWindow):
             self.ui.editPassword.text(),
             self.is_password_compromised(self.ui.editPassword.text()),
         ]
-        for row_number, row_data in enumerate(data):
-            if row_number == len(data) - 1:
+        for row_num, row_data in enumerate(data):
+            if row_num == len(data) - 1:
                 db.insertIntoTable(
                     tableName="Password",
                     insertList=data,
                     commit=True,
                 )
-                self.dlg_pwd_added.exec()
+                self.dlg_pwd_added()
                 self.clear_pwd_form()
-            if row_number != 3 and str(row_data).replace(" ", "") == "":
-                self.dlg_form_not_filled.exec()
+            if row_num != 3 and str(row_data).replace(" ", "") == "":
+                self.dlg_form_not_filled()
                 break
 
     def password_toggle(self, checked):
@@ -267,10 +279,10 @@ class MainWindow(QMainWindow):
         self.ui.horizontalSlider.setValue(self.ui.spinBox.value())
 
     def generate_pwd(self):
-        self.ui.labelCopiedToClip.clear()
         len = self.ui.spinBox.value()
 
         characters = ""
+        types_checked = 1
         if self.ui.checkBoxUpper.isChecked():
             characters += ascii_uppercase
         if self.ui.checkBoxLower.isChecked():
@@ -278,19 +290,14 @@ class MainWindow(QMainWindow):
         if self.ui.checkBoxDigits.isChecked():
             characters += digits
         if self.ui.checkBoxSymbols.isChecked():
-            characters += "!$%@#"
+            characters += "@%$!&?#"
 
-        try:
-            random_pwd = "".join(
-                secrets_choice(characters) for i in range(len)
-            )
-            self.ui.labelGeneratedPwd.setText(random_pwd)
-        except:
-            self.dlg_no_type_selected.exec()
+        random_pwd = "".join(secrets_choice(characters) for i in range(len))
+
+        self.ui.labelGeneratedPwd.setText(random_pwd)
 
     def copy_generated_pwd(self):
         copy_to_cb(self.ui.labelGeneratedPwd.text())
-        self.ui.labelCopiedToClip.setText("Copied to clipboard.")
 
     def get_table_data(self):
         db = self.get_db()

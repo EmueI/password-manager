@@ -27,41 +27,36 @@ class MainWindow(QMainWindow):
         self.ui.editPassword1.setFocus()
 
         # -------- Creating the error dialogue boxes. --------
-        self.dlg_password_short = QMessageBox(self)
-        self.dlg_password_short.setWindowTitle("Password Manager")
-        self.dlg_password_short.setText(
-            "The master password must contain at least 8 characters."
+        self.dlg_password_short = lambda: QMessageBox.warning(
+            self,
+            "Password Manager",
+            "The master password must contain at least 8 characters.",
+            buttons=QMessageBox.Ok,
         )
-        self.dlg_password_short.setStandardButtons(QMessageBox.Ok)
-        self.dlg_password_short.setIcon(QMessageBox.Warning)
-
-        self.dlg_passwords_not_match = QMessageBox(self)
-        self.dlg_passwords_not_match.setWindowTitle("Password Manager")
-        self.dlg_passwords_not_match.setText("Master passwords do not match.")
-        self.dlg_passwords_not_match.setStandardButtons(QMessageBox.Ok)
-        self.dlg_passwords_not_match.setIcon(QMessageBox.Warning)
-
-        self.dlg_empty_password = QMessageBox(self)
-        self.dlg_empty_password.setWindowTitle("Password Manager")
-        self.dlg_empty_password.setText("Make sure to fill both boxes.")
-        self.dlg_empty_password.setStandardButtons(QMessageBox.Ok)
-        self.dlg_empty_password.setIcon(QMessageBox.Warning)
-
-        self.dlg_password_created = QMessageBox(self)
-        self.dlg_password_created.setWindowTitle("Password Manager")
-        self.dlg_password_created.setText(
-            "Your master password has been created successfully."
+        self.dlg_passwords_not_match = lambda: QMessageBox.warning(
+            self,
+            "Password Manager",
+            "Master passwords do not match.",
+            buttons=QMessageBox.Ok,
         )
-        self.dlg_password_created.setStandardButtons(QMessageBox.Ok)
-        self.dlg_password_created.setIcon(QMessageBox.Information)
-
-        self.dlg_incorrect_password = QMessageBox(self)
-        self.dlg_incorrect_password.setWindowTitle("Password Manager")
-        self.dlg_incorrect_password.setText(
-            "Incorrect master password. Please try again."
+        self.dlg_empty_password = lambda: QMessageBox.warning(
+            self,
+            "Password Manager",
+            "Make sure to fill both fields.",
+            buttons=QMessageBox.Ok,
         )
-        self.dlg_incorrect_password.setStandardButtons(QMessageBox.Ok)
-        self.dlg_incorrect_password.setIcon(QMessageBox.Warning)
+        self.dlg_password_created = lambda: QMessageBox.information(
+            self,
+            "Password Manager",
+            "Your master password has been created successfully.",
+            buttons=QMessageBox.Ok,
+        )
+        self.dlg_incorrect_password = lambda: QMessageBox.warning(
+            self,
+            "Password Manager",
+            "Incorrect master password. Please try again.",
+            buttons=QMessageBox.Ok,
+        )
         # --------------------------------------------------
 
         if exists("Password_Manager.db"):
@@ -118,14 +113,14 @@ class MainWindow(QMainWindow):
             len(self.ui.editPassword1.text()) == 0
             or len(self.ui.editPassword2.text()) == 0
         ):
-            self.dlg_empty_password.exec()
+            self.dlg_empty_password()
         elif self.ui.editPassword1.text() != self.ui.editPassword2.text():
-            self.dlg_passwords_not_match.exec()
+            self.dlg_passwords_not_match()
         elif (
             len(self.ui.editPassword1.text()) < 8
             and len(self.ui.editPassword1.text()) < 8
         ):
-            self.dlg_password_short.exec()
+            self.dlg_password_short()
         else:
             self.db = SqliteCipher(
                 dataBasePath="Password_Manager.db",
@@ -137,7 +132,7 @@ class MainWindow(QMainWindow):
                 "user",
                 self.ui.editPassword1.text(),
             )
-            self.dlg_password_created.exec()
+            self.dlg_password_created()
             self.logged_in.emit()
 
     def enter_master_password(self):
@@ -148,6 +143,6 @@ class MainWindow(QMainWindow):
         ) != SqliteCipher.getVerifier(
             "Password_Manager.db", checkSameThread=True
         ):
-            self.dlg_incorrect_password.exec()
+            self.dlg_incorrect_password()
         else:
             self.logged_in.emit()
