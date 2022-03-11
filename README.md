@@ -13,31 +13,6 @@ A password manager with many features written in Python using the PySide6 module
 - 🛡️ Password health dashboard
 
 
-## Keyboard Shortcuts
-
-<details>
-  <summary>Keyboard Shortcuts</summary>
-
-  **Search** <kbd>Cmd or Ctrl</kbd> + <kbd>K.</kbd>
-
-  **Today** <kbd>Cmd or Ctrl</kbd> + <kbd>.</kbd>
-
-  **Next Day** <kbd>Cmd or Ctrl</kbd> + <kbd>N</kbd>
-
-  **Previous Day** <kbd>Cmd or Ctrl</kbd> + <kbd>P</kbd>
-
-  **Next Week** <kbd>Cmd or Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd>
-
-  **Previous Week** <kbd>Cmd or Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>
-
-  **Settings** <kbd>Cmd or Ctrl</kbd> + <kbd>,</kbd>
-
-  **Leave Settings** <kbd>Esc</kbd>
-  
-  **Exit Code Block** <kbd>Cmd or Ctrl</kbd> + <kbd>Enter</kbd>
-</details>
-
-
 ## Contributing
 Please check [Contributing.md](/CONTRIBUTING.md) first before opening a pull request please.
 
