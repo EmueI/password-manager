@@ -13,9 +13,9 @@ An easy, distraction-free way to record your thoughts, declutter your mind and k
 
 ## Features
 
-- 🔃 Built-in password generator
+- 🔃 Built-in password generator 
 - 🔒 Encrypted database
-- 🛡️ Password health dashboard
+- 🛡️ Dashboard with password health information
 
 
 ### Upcoming
