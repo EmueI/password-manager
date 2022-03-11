@@ -10,6 +10,7 @@ An easy, distraction-free way to record your thoughts, declutter your mind and k
 
 **[You can download the password manager here for free!](https://github.com/lostdesign/linked/releases/latest)**
 
+
 ## Features
 
 - 🔃 Built-in password generator
@@ -24,10 +25,6 @@ An easy, distraction-free way to record your thoughts, declutter your mind and k
 - ⭐️ Rate your days
 - 📶 sync across devices
 - (📱 phone support?)
-
-## 💖 Sponsor
-
-The app will always be opensource and free - if you enjoy the app, please consider [becoming a sponsor or leave a tip](https://github.com/sponsors/lostdesign). 
 
 
 ## Keyboard Shortcuts
