@@ -1,14 +1,9 @@
 # Password Manager
 
-A password manager with a variety of features written in Python with the PySide6 module. 
+A password manager with many features written in Python using the PySide6 module. 
 
 ![Project Status](https://img.shields.io/badge/🏷-v1.0-blue) ![Project downloads](https://img.shields.io/github/downloads/EmueI/password-manager/total)
 ![linked-banner](https://user-images.githubusercontent.com/5164617/132354376-44ba85f3-bb21-448e-8c12-4e0fe9af2543.png)
-
-# Store your passwords in a safe place
-An easy, distraction-free way to record your thoughts, declutter your mind and keep the things you want to remember. We all only have so much room in our brains for things. Let Linked be the place to put something you want to remember and let you free up space for deeper thinking.
-
-**[You can download the password manager here for free!](https://github.com/lostdesign/linked/releases/latest)**
 
 
 ## Features
