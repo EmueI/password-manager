@@ -111,7 +111,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>100</y>
+            <y>110</y>
             <width>160</width>
             <height>160</height>
            </rect>
@@ -342,34 +342,6 @@
            </item>
           </layout>
          </widget>
-         <widget class="QLabel" name="label">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>40</y>
-            <width>161</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="font">
-           <font>
-            <family>Roboto Medium</family>
-            <pointsize>10</pointsize>
-            <italic>false</italic>
-            <underline>false</underline>
-            <strikeout>false</strikeout>
-           </font>
-          </property>
-          <property name="text">
-           <string>Password Manager</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
         </widget>
        </item>
        <item>
@@ -380,7 +352,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -392,33 +364,11 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <widget class="QLabel" name="labelHeading_5">
-              <property name="geometry">
-               <rect>
-                <x>110</x>
-                <y>30</y>
-                <width>310</width>
-                <height>20</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <family>Roboto Medium</family>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Your Passwords</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
              <widget class="QLineEdit" name="editSearch">
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>90</y>
+                <y>100</y>
                 <width>451</width>
                 <height>25</height>
                </rect>
@@ -457,7 +407,7 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>140</y>
+                <y>150</y>
                 <width>450</width>
                 <height>250</height>
                </rect>
@@ -500,7 +450,7 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>410</y>
+                <y>420</y>
                 <width>451</width>
                 <height>40</height>
                </rect>
@@ -649,6 +599,68 @@
                </item>
               </layout>
              </widget>
+             <widget class="QFrame" name="frame_3">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>20</y>
+                <width>450</width>
+                <height>45</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_17">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="labelHeading_4">
+                 <property name="font">
+                  <font>
+                   <family>Roboto</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Passwords</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="Line" name="line">
+                 <property name="frameShadow">
+                  <enum>QFrame::Plain</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>1</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
@@ -668,35 +680,13 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <widget class="QLabel" name="labelHeading">
-              <property name="geometry">
-               <rect>
-                <x>110</x>
-                <y>30</y>
-                <width>310</width>
-                <height>20</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <family>Roboto Medium</family>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Add a New Password</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
              <widget class="QFrame" name="frameFormButtons">
               <property name="geometry">
                <rect>
                 <x>40</x>
                 <y>390</y>
                 <width>260</width>
-                <height>40</height>
+                <height>51</height>
                </rect>
               </property>
               <property name="font">
@@ -771,16 +761,13 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>70</y>
+                <y>83</y>
                 <width>450</width>
                 <height>291</height>
                </rect>
               </property>
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
                <property name="spacing">
@@ -1068,6 +1055,68 @@
                </item>
               </layout>
              </widget>
+             <widget class="QFrame" name="frame_5">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>20</y>
+                <width>450</width>
+                <height>45</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_18">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="labelHeading_5">
+                 <property name="font">
+                  <font>
+                   <family>Roboto</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Add a New Password</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="Line" name="line_2">
+                 <property name="frameShadow">
+                  <enum>QFrame::Plain</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>1</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
@@ -1087,34 +1136,12 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <widget class="QLabel" name="labelHeading_2">
-              <property name="geometry">
-               <rect>
-                <x>110</x>
-                <y>30</y>
-                <width>310</width>
-                <height>20</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <family>Roboto Medium</family>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Generate a Random Password</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
              <widget class="QGroupBox" name="groupBox_2">
               <property name="geometry">
                <rect>
-                <x>40</x>
-                <y>220</y>
-                <width>450</width>
+                <x>39</x>
+                <y>230</y>
+                <width>451</width>
                 <height>71</height>
                </rect>
               </property>
@@ -1206,9 +1233,9 @@
              <widget class="QGroupBox" name="groupBox">
               <property name="geometry">
                <rect>
-                <x>40</x>
-                <y>310</y>
-                <width>450</width>
+                <x>39</x>
+                <y>320</y>
+                <width>451</width>
                 <height>142</height>
                </rect>
               </property>
@@ -1292,7 +1319,7 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>90</y>
+                <y>100</y>
                 <width>451</width>
                 <height>61</height>
                </rect>
@@ -1341,8 +1368,8 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>160</y>
-                <width>251</width>
+                <y>170</y>
+                <width>261</width>
                 <height>31</height>
                </rect>
               </property>
@@ -1355,9 +1382,6 @@
                <enum>QFrame::NoFrame</enum>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_9">
-               <property name="spacing">
-                <number>6</number>
-               </property>
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -1423,13 +1447,13 @@
                  </property>
                  <property name="minimumSize">
                   <size>
-                   <width>120</width>
+                   <width>135</width>
                    <height>27</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>120</width>
+                   <width>135</width>
                    <height>27</height>
                   </size>
                  </property>
@@ -1458,6 +1482,68 @@
                </item>
               </layout>
              </widget>
+             <widget class="QFrame" name="frame_6">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>20</y>
+                <width>450</width>
+                <height>45</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_19">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="labelHeading_6">
+                 <property name="font">
+                  <font>
+                   <family>Roboto</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Generate a Random Password</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="Line" name="line_3">
+                 <property name="frameShadow">
+                  <enum>QFrame::Plain</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>1</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
@@ -1472,33 +1558,11 @@
              <property name="frameShadow">
               <enum>QFrame::Sunken</enum>
              </property>
-             <widget class="QLabel" name="labelHeading_3">
-              <property name="geometry">
-               <rect>
-                <x>110</x>
-                <y>30</y>
-                <width>310</width>
-                <height>20</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <family>Roboto Medium</family>
-                <pointsize>11</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Password Health</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
              <widget class="QFrame" name="frameHealthStatistics">
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>90</y>
+                <y>105</y>
                 <width>450</width>
                 <height>74</height>
                </rect>
@@ -1780,6 +1844,68 @@
                    </widget>
                   </item>
                  </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QFrame" name="frame_12">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>20</y>
+                <width>450</width>
+                <height>45</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_20">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="labelHeading_7">
+                 <property name="font">
+                  <font>
+                   <family>Roboto</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Password Health</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="Line" name="line_4">
+                 <property name="frameShadow">
+                  <enum>QFrame::Plain</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>1</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
                 </widget>
                </item>
               </layout>
