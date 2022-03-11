@@ -10,16 +10,7 @@ A password manager with many features written in Python using the PySide6 module
 
 - 🔃 Built-in password generator 
 - 🔒 Encrypted database
-- 🛡️ Dashboard with password health information
-
-
-### Upcoming
-
-- 🔗 link days together for references
-- 🗓 Month overview
-- ⭐️ Rate your days
-- 📶 sync across devices
-- (📱 phone support?)
+- 🛡️ Password health dashboard
 
 
 ## Keyboard Shortcuts
