@@ -2,7 +2,7 @@
 
 A password manager with many features written in Python using the PySide6 module. 
 
-![Project Status](https://img.shields.io/badge/🏷-v1.0-blue) ![Project downloads](https://img.shields.io/github/downloads/EmueI/password-manager/total)
+![Project downloads](https://img.shields.io/github/downloads/EmueI/password-manager/total)
 ![linked-banner](link)
 
 
