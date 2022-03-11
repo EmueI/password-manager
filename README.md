@@ -9,6 +9,6 @@ A password manager with many features written in Python using the PySide6 module
 
 ## Features
 
-- 🔃 Built-in password generator 
 - 🔒 Encrypted database
-- 🛡️ Password health dashboard
+- 🔃 Built-in password generator 
+- 🛡️ Health and security dashboard
