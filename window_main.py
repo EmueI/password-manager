@@ -1,12 +1,14 @@
 from keyring import get_password as keyring_get_password
 from os.path import exists
-from pwnedpasswords import check as pwned_check
+from pwnedpasswords import check as check_pwned
 from pysqlitecipher.sqlitewrapper import SqliteCipher
 from pyperclip import copy as copy_to_cb
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
+from titlecase import titlecase
+from validators import url as is_url_valid
 
-from PySide6.QtCore import Qt, QSortFilterProxyModel
+from PySide6.QtCore import Qt, QSortFilterProxyModel, QModelIndex
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -28,7 +30,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.setFixedWidth(710)
+        self.setFixedWidth(720)
         self.setFixedHeight(530)
 
         # ----- Message Boxes -----
@@ -54,7 +56,7 @@ class MainWindow(QMainWindow):
             self,
             "Password Manager",
             "Are you sure you want to delete this password?",
-            buttons=QMessageBox.No | QMessageBox.Yes,
+            buttons=QMessageBox.Yes | QMessageBox.No,
         )
         # -------------------------
 
@@ -64,11 +66,11 @@ class MainWindow(QMainWindow):
             "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
         )
         self.ui.buttonTabPasswords.clicked.connect(self.show_passwords_tab)
-        self.ui.buttonTabPasswords.clicked.connect(self.update_table)
+        self.ui.buttonTabPasswords.clicked.connect(self.update_dashboard_table)
         self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
         self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
         self.ui.buttonTabHealth.clicked.connect(self.show_health_tab)
-        self.generate_pwd()
+        self.generate_password()
 
         # ----- Password Dashboard ----------------
         self.ui.buttonDelete.clicked.connect(self.delete_password)
@@ -77,27 +79,33 @@ class MainWindow(QMainWindow):
 
         # ----- Add New -----
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
-        self.ui.editTitle.returnPressed.connect(self.update_db)
         self.ui.editUrl.returnPressed.connect(self.update_db)
         self.ui.editUsername.returnPressed.connect(self.update_db)
         self.ui.editPassword.returnPressed.connect(self.update_db)
-        self.ui.buttonClear.clicked.connect(self.clear_pwd_form)
-        self.ui.buttonPasswordToggle.setCheckable(True)
         self.ui.buttonPasswordToggle.clicked.connect(self.password_toggle)
+        self.ui.comboBoxName.currentTextChanged.connect(self.set_url)
+        self.ui.comboBoxName.currentIndexChanged.connect(self.set_url)
 
         # ----- Generate Password -----
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
         self.ui.spinBox.valueChanged.connect(self.update_slider)
-        self.ui.horizontalSlider.valueChanged.connect(self.generate_pwd)
-        self.ui.spinBox.valueChanged.connect(self.generate_pwd)
-        self.ui.checkBoxUpper.clicked.connect(self.generate_pwd)
-        self.ui.checkBoxLower.clicked.connect(self.generate_pwd)
-        self.ui.checkBoxDigits.clicked.connect(self.generate_pwd)
-        self.ui.checkBoxSymbols.clicked.connect(self.generate_pwd)
-        self.ui.buttonRegenerate.clicked.connect(self.generate_pwd)
+        self.ui.horizontalSlider.valueChanged.connect(self.generate_password)
+        self.ui.spinBox.valueChanged.connect(self.generate_password)
+        self.ui.checkBoxUpper.clicked.connect(self.generate_password)
+        self.ui.checkBoxLower.clicked.connect(self.generate_password)
+        self.ui.checkBoxDigits.clicked.connect(self.generate_password)
+        self.ui.checkBoxSymbols.clicked.connect(self.generate_password)
+        self.ui.buttonRegenerate.clicked.connect(self.generate_password)
         self.ui.buttonCopyRandomPassword.clicked.connect(
             self.copy_generated_pwd
         )
+        self.ui.checkBoxUpper.clicked.connect(self.disable_check_box)
+        self.ui.checkBoxLower.clicked.connect(self.disable_check_box)
+        self.ui.checkBoxDigits.clicked.connect(self.disable_check_box)
+        self.ui.checkBoxSymbols.clicked.connect(self.disable_check_box)
+
+        # ----- Password Health -----
+        self.ui.buttonTabHealth.clicked.connect(self.update_health_stats)
 
     # ----- Side-Menu -----
     def show_passwords_tab(self):
@@ -153,36 +161,37 @@ class MainWindow(QMainWindow):
         db.createTable(
             "Password",
             [
-                ["title", "TEXT"],
+                ["name", "TEXT"],
                 ["url", "TEXT"],
                 ["username", "TEXT"],
                 ["password", "TEXT"],
                 ["compromised", "INT"],
             ],
             makeSecure=True,
-            commit=True,
         )
 
     # ----- Password Dashboard -----
-    def update_table(self):
+    def update_dashboard_table(self):
         """Inserts the data from the database into the passwords table."""
-        data = self.get_table_data()
+        data = self.get_db_data()
+
         model = QStandardItemModel(len(data), 3)
         model.setHorizontalHeaderLabels(
-            ["Title", "URL", "Username", "Password"]
+            ["Name", "URL", "Username", "Password"]
         )
 
         for row_num in range(len(data)):
             for col_num, col_data in enumerate(data[row_num]):
                 if col_num == 3:
                     col_data = "".join("*" for i in range(len(col_data)))
+                elif col_num == 4:
+                    break
                 model.setItem(row_num, col_num, QStandardItem(col_data))
 
         filter_proxy_model = QSortFilterProxyModel()
         filter_proxy_model.setSourceModel(model)
         filter_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         filter_proxy_model.setFilterKeyColumn(0)
-
         self.ui.tablePasswords.setModel(filter_proxy_model)
 
         self.ui.editSearch.textChanged.connect(
@@ -193,11 +202,13 @@ class MainWindow(QMainWindow):
         """Removes the selected row from the database."""
         db = self.get_db()
         try:
-            selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
-
+            selected_name = self.ui.tablePasswords.selectedIndexes()[0].data()
+            db_data = self.get_db_data()
+            db_data_names = list(list(zip(*db_data))[0])
+            print(db_data_names)
             if self.dlg_delete_confirmation() == QMessageBox.Yes:
                 db.deleteDataInTable("Password", selected_row)
-                self.update_table()
+                self.update_dashboard_table()
         except IndexError:
             self.dlg_no_password_selected()
 
@@ -205,9 +216,10 @@ class MainWindow(QMainWindow):
         """Removes the entity of the selected row."""
         db = self.get_db()
         try:
-            selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
+            selected_row = self.ui.tablePasswords.selectedRanges()
+            print(selected_row)
             db.deleteDataInTable("Password", selected_row)
-            self.update_table()
+            self.update_dashboard_table()
         except IndexError:
             self.dlg_no_password_selected()
 
@@ -228,25 +240,31 @@ class MainWindow(QMainWindow):
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
         db = self.get_db()
-        data = [
-            self.ui.editTitle.text(),
-            self.ui.editUrl.text(),
-            self.ui.editUsername.text(),
-            self.ui.editPassword.text(),
-            self.is_password_compromised(self.ui.editPassword.text()),
-        ]
-        for row_num, row_data in enumerate(data):
-            if row_num == len(data) - 1:
-                db.insertIntoTable(
-                    tableName="Password",
-                    insertList=data,
-                    commit=True,
-                )
-                self.dlg_pwd_added()
-                self.clear_pwd_form()
-            if row_num != 3 and str(row_data).replace(" ", "") == "":
-                self.dlg_form_not_filled()
-                break
+        if not is_url_valid(self.ui.editUrl.text().lower()):
+            print("Url invalid")
+        elif (
+            False
+        ):  # TODO: Check if name entered already exists in table/database
+            pass
+        else:
+            data = [
+                titlecase(text=self.ui.comboBoxName.currentText()),
+                self.ui.editUrl.text().lower(),
+                self.ui.editUsername.text(),
+                self.ui.editPassword.text(),
+                self.is_password_compromised(self.ui.editPassword.text()),
+            ]
+            for row_num, row_data in enumerate(data):
+                if row_num == len(data) - 1:
+                    db.insertIntoTable(
+                        tableName="Password",
+                        insertList=data,
+                    )
+                    self.dlg_pwd_added()
+                if row_num != 3 and str(row_data).replace(" ", "") == "":
+                    self.dlg_form_not_filled()
+                    break
+            self.clear_password_form()
 
     def password_toggle(self, checked):
         if checked:
@@ -260,14 +278,8 @@ class MainWindow(QMainWindow):
 
     def is_password_compromised(self, password):
         return (
-            1 if pwned_check(password, plain_text=True, anonymous=True) else 0
+            1 if check_pwned(password, plain_text=True, anonymous=True) else 0
         )
-
-    def clear_pwd_form(self):
-        self.ui.editTitle.clear()
-        self.ui.editUsername.clear()
-        self.ui.editUrl.clear()
-        self.ui.editPassword.clear()
 
     # ----- Generate Password -----
     def update_spin_box(self):
@@ -276,11 +288,10 @@ class MainWindow(QMainWindow):
     def update_slider(self):
         self.ui.horizontalSlider.setValue(self.ui.spinBox.value())
 
-    def generate_pwd(self):
+    def generate_password(self):
         len = self.ui.spinBox.value()
 
         characters = ""
-        types_checked = 1
         if self.ui.checkBoxUpper.isChecked():
             characters += ascii_uppercase
         if self.ui.checkBoxLower.isChecked():
@@ -297,10 +308,93 @@ class MainWindow(QMainWindow):
     def copy_generated_pwd(self):
         copy_to_cb(self.ui.labelGeneratedPwd.text())
 
-    def get_table_data(self):
+    def disable_check_box(self):
+        """
+        Disables the check box that is checked when only one of the boxes are
+        checked.
+        """
+        check_boxes_list = [
+            self.ui.checkBoxUpper,
+            self.ui.checkBoxLower,
+            self.ui.checkBoxDigits,
+            self.ui.checkBoxSymbols,
+        ]
+        boxes_checked = [
+            check_box.isChecked()
+            for check_box_num, check_box in enumerate(check_boxes_list)
+        ]
+
+        if sum(boxes_checked) == 1:
+            check_box_checked = boxes_checked.index(True)
+            check_boxes_list[check_box_checked].setEnabled(False)
+        else:
+            for check_box in check_boxes_list:
+                check_box.setEnabled(True)
+
+    def get_db_data(self):
         db = self.get_db()
         if not db.checkTableExist("Password"):
             self.db_create_passwords_table()
         return db.getDataFromTable(
             "Password", raiseConversionError=True, omitID=True
         )[1:][0]
+
+    def update_health_stats(self):
+        data = self.get_db_data()
+
+        total_passwords = len(data)
+        self.ui.labelTotalPasswords.setText(str(total_passwords))
+
+        total_compromised = len(
+            [i for i in [data[i][4] for i in range(len(data))] if i == 1]
+        )
+        self.ui.labelCompromised.setText(str(total_compromised))
+
+    def set_url(self):
+        url_list = [
+            "",
+            "https://www.alibaba.com",
+            "https://www.aliexpress.com",
+            "https://www.amazon.com",
+            "https://www.bing.com",
+            "https://www.cash.app",
+            "https://www.discord.com",
+            "https://www.ebay.com",
+            "https://www.facebook.com",
+            "https://www.flipkart.com",
+            "https://www.foodpanda.com",
+            "https://www.google.com",
+            "https://www.instagram.com",
+            "https://www.linkedin.com",
+            "https://www.mcdonalds.com",
+            "https://www.netflix.com",
+            "https://www.reddit.com",
+            "https://www.shein.com",
+            "https://www.spotify.com",
+            "https://www.starbucks.com",
+            "https://www.telegram.com",
+            "https://www.tiktok.com",
+            "https://www.twitch.com",
+            "https://www.twitter.com",
+            "https://www.shopee.com",
+            "https://www.snapchat.com",
+            "https://www.uber.com",
+            "https://www.wechat.com",
+            "https://www.whatsapp.com",
+            "https://www.wikipedia.com",
+            "https://www.wish.com",
+            "https://www.wolt.com",
+            "https://www.yahoo.com",
+            "https://www.zoom.com",
+        ]
+        try:
+            name_id_selected = self.ui.comboBoxName.currentIndex()
+            self.ui.editUrl.setText(url_list[name_id_selected])
+        except IndexError:
+            self.ui.editUrl.setText("")
+
+    def clear_password_form(self):
+        self.ui.comboBoxName.setCurrentIndex(0)
+        self.ui.editUsername.clear()
+        self.ui.editUrl.clear()
+        self.ui.editPassword.clear()

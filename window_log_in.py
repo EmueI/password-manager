@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         self.setFixedWidth(330)
         self.setFixedHeight(370)
 
-        self.ui.editPassword1.setFocus()
+        self.ui.editPasswordMain.setFocus()
 
         # -------- Creating the error dialogue boxes. --------
         self.dlg_password_short = lambda: QMessageBox.warning(
@@ -60,24 +60,23 @@ class MainWindow(QMainWindow):
         # --------------------------------------------------
 
         if exists("Password_Manager.db"):
-            self.setFixedHeight(255)
+            self.setFixedHeight(280)
             self.ui.labelHeading.setText("Enter Master Password")
             self.ui.labelSubHeading.setText(
                 "Enter the master password to access your password vault."
             )
-            self.ui.labelPassword1.hide()
-            self.ui.labelPassword1Sub.hide()
-            self.ui.frameMainPwd1.setGeometry(QRect(40, 130, 250, 31))
-            self.ui.frameMainPwd2.hide()
+            self.ui.groupBoxMain.hide()
+            self.ui.groupBoxConfirm.setGeometry(40, 130, 260, 60)
+            self.ui.groupBoxConfirm.setTitle("Master password")
             self.ui.buttonSubmit.setText("Unlock")
-            self.ui.buttonSubmit.setGeometry(QRect(40, 185, 250, 27))
+            self.ui.buttonSubmit.setGeometry(QRect(40, 210, 250, 27))
 
         # ---- Connecting user actions to the appropriate functions.
         self.ui.buttonSubmit.clicked.connect(self.log_in)
-        self.ui.editPassword1.returnPressed.connect(self.log_in)
+        self.ui.editPasswordMain.returnPressed.connect(self.log_in)
         self.ui.buttonPasswordToggle1.setCheckable(True)
         self.ui.buttonPasswordToggle1.clicked.connect(self.password_toggle1)
-        self.ui.editPassword2.returnPressed.connect(self.log_in)
+        self.ui.editPasswordConfirm.returnPressed.connect(self.log_in)
         self.ui.buttonPasswordToggle2.setCheckable(True)
         self.ui.buttonPasswordToggle2.clicked.connect(self.password_toggle2)
         # -----------------------------------------------------------
@@ -90,56 +89,56 @@ class MainWindow(QMainWindow):
 
     def password_toggle1(self, checked):
         if checked:
-            self.ui.editPassword1.setEchoMode(QLineEdit.EchoMode.Normal)
+            self.ui.editPasswordMain.setEchoMode(QLineEdit.EchoMode.Normal)
             self.ui.buttonPasswordToggle1.setIcon(QIcon("icons/eye.svg"))
         else:
-            self.ui.editPassword1.setEchoMode(QLineEdit.EchoMode.Password)
+            self.ui.editPasswordMain.setEchoMode(QLineEdit.EchoMode.Password)
             self.ui.buttonPasswordToggle1.setIcon(
                 QIcon("icons/eye-crossed.svg")
             )
 
     def password_toggle2(self, checked):
         if checked:
-            self.ui.editPassword2.setEchoMode(QLineEdit.EchoMode.Normal)
+            self.ui.editPasswordConfirm.setEchoMode(QLineEdit.EchoMode.Normal)
             self.ui.buttonPasswordToggle2.setIcon(QIcon("icons/eye.svg"))
         else:
-            self.ui.editPassword2.setEchoMode(QLineEdit.EchoMode.Password)
+            self.ui.editPasswordConfirm.setEchoMode(QLineEdit.EchoMode.Password)
             self.ui.buttonPasswordToggle2.setIcon(
                 QIcon("icons/eye-crossed.svg")
             )
 
     def create_master_password(self):
         if (
-            len(self.ui.editPassword1.text()) == 0
-            or len(self.ui.editPassword2.text()) == 0
+            len(self.ui.editPasswordMain.text()) == 0
+            or len(self.ui.editPasswordConfirm.text()) == 0
         ):
             self.dlg_empty_password()
-        elif self.ui.editPassword1.text() != self.ui.editPassword2.text():
+        elif self.ui.editPasswordMain.text() != self.ui.editPasswordConfirm.text():
             self.dlg_passwords_not_match()
         elif (
-            len(self.ui.editPassword1.text()) < 8
-            and len(self.ui.editPassword1.text()) < 8
+            len(self.ui.editPasswordMain.text()) < 8
+            and len(self.ui.editPasswordMain.text()) < 8
         ):
             self.dlg_password_short()
         else:
             self.db = SqliteCipher(
                 dataBasePath="Password_Manager.db",
                 checkSameThread=True,
-                password=(self.ui.editPassword1.text()),
+                password=(self.ui.editPasswordMain.text()),
             )
             keyring_set_password(
                 "Password Manager",
                 "user",
-                self.ui.editPassword1.text(),
+                self.ui.editPasswordMain.text(),
             )
             self.dlg_password_created()
             self.logged_in.emit()
 
     def enter_master_password(self):
         if len(
-            self.ui.editPassword1.text()
+            self.ui.editPasswordConfirm.text()
         ) == 0 or SqliteCipher.sha512Convertor(
-            self.ui.editPassword1.text()
+            self.ui.editPasswordConfirm.text()
         ) != SqliteCipher.getVerifier(
             "Password_Manager.db", checkSameThread=True
         ):

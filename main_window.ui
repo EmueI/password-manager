@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
+    <width>720</width>
     <height>530</height>
    </rect>
   </property>
@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">#buttonTabAddNew, #buttonTabGenerate, #buttonTabPasswords, #buttonTabHealth {
 	text-align: left;
-	padding: 10px;
+	padding-left: 20px;
 }
 </string>
   </property>
@@ -61,7 +61,7 @@
        </font>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -86,7 +86,7 @@
         <widget class="QFrame" name="frameSidebar">
          <property name="minimumSize">
           <size>
-           <width>160</width>
+           <width>170</width>
            <height>0</height>
           </size>
          </property>
@@ -102,30 +102,27 @@
           </font>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
+          <enum>QFrame::Box</enum>
          </property>
          <widget class="QFrame" name="frameSidebarButtons">
           <property name="geometry">
            <rect>
             <x>0</x>
             <y>110</y>
-            <width>160</width>
-            <height>160</height>
+            <width>170</width>
+            <height>170</height>
            </rect>
           </property>
           <property name="minimumSize">
            <size>
-            <width>160</width>
-            <height>160</height>
+            <width>170</width>
+            <height>170</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>160</width>
-            <height>160</height>
+            <width>170</width>
+            <height>170</height>
            </size>
           </property>
           <property name="font">
@@ -342,6 +339,31 @@
            </item>
           </layout>
          </widget>
+         <widget class="QLabel" name="label">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>30</y>
+            <width>111</width>
+            <height>41</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Roboto Medium</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Password Manager</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
         </widget>
        </item>
        <item>
@@ -397,7 +419,7 @@
                <bool>true</bool>
               </property>
               <property name="placeholderText">
-               <string>Search</string>
+               <string>Search Title</string>
               </property>
               <property name="clearButtonEnabled">
                <bool>true</bool>
@@ -500,7 +522,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="cursor">
@@ -538,7 +560,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="cursor">
@@ -576,7 +598,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="cursor">
@@ -635,7 +657,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>11</pointsize>
+                   <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -680,88 +702,11 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <widget class="QFrame" name="frameFormButtons">
-              <property name="geometry">
-               <rect>
-                <x>40</x>
-                <y>390</y>
-                <width>260</width>
-                <height>51</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <family>Roboto</family>
-               </font>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <property name="spacing">
-                <number>6</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QPushButton" name="buttonAddPassword">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="cursor">
-                  <cursorShape>PointingHandCursor</cursorShape>
-                 </property>
-                 <property name="text">
-                  <string>Add</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="buttonClear">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="cursor">
-                  <cursorShape>PointingHandCursor</cursorShape>
-                 </property>
-                 <property name="text">
-                  <string>Clear</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
              <widget class="QFrame" name="framePasswordEntries">
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>83</y>
+                <y>90</y>
                 <width>450</width>
                 <height>291</height>
                </rect>
@@ -804,32 +749,210 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLabel" name="labelTitle">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Title:</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="editTitle">
+                   <widget class="QGroupBox" name="groupBox_4">
                     <property name="font">
                      <font>
                       <family>Roboto</family>
                       <pointsize>8</pointsize>
                      </font>
                     </property>
-                    <property name="clearButtonEnabled">
-                     <bool>true</bool>
+                    <property name="title">
+                     <string>Name</string>
                     </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_15">
+                     <item>
+                      <widget class="QComboBox" name="comboBoxName">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>9</pointsize>
+                        </font>
+                       </property>
+                       <property name="editable">
+                        <bool>true</bool>
+                       </property>
+                       <property name="currentText">
+                        <string/>
+                       </property>
+                       <property name="currentIndex">
+                        <number>0</number>
+                       </property>
+                       <property name="maxVisibleItems">
+                        <number>10</number>
+                       </property>
+                       <item>
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Alibaba</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>AliExpress</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Amazon</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Bing</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Cash App</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Discord</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Ebay</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Facebook</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Flipkart</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Foodpanda</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Google</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Instagram</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Linkedin</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>McDonalds</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Netflix</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Reddit</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Shein</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Spotify</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Starbucks</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Telegram</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Tiktok</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Twitch</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Twitter</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Shopee</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Snapchat</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Uber</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>WeChat</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>WhatsApp</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Wikipedia</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Wish</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Wolt</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Yahoo</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Zoom</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -854,35 +977,37 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLabel" name="labelUrl">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>URL:</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="editUrl">
+                   <widget class="QGroupBox" name="groupBox_5">
                     <property name="font">
                      <font>
                       <family>Roboto</family>
                       <pointsize>8</pointsize>
                      </font>
                     </property>
-                    <property name="inputMethodHints">
-                     <set>Qt::ImhNone</set>
+                    <property name="title">
+                     <string>Url</string>
                     </property>
-                    <property name="clearButtonEnabled">
-                     <bool>true</bool>
-                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_21">
+                     <item>
+                      <widget class="QLineEdit" name="editUrl">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="inputMethodHints">
+                        <set>Qt::ImhNone</set>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="clearButtonEnabled">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -910,32 +1035,31 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLabel" name="labelUsername">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Username:</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="editUsername">
+                   <widget class="QGroupBox" name="groupBox_6">
                     <property name="font">
                      <font>
                       <family>Roboto</family>
                       <pointsize>8</pointsize>
                      </font>
                     </property>
-                    <property name="clearButtonEnabled">
-                     <bool>true</bool>
+                    <property name="title">
+                     <string>Username or email</string>
                     </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_22">
+                     <item>
+                      <widget class="QLineEdit" name="editUsername">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="clearButtonEnabled">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -960,22 +1084,6 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QLabel" name="labelPassword">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Password:</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
                    <widget class="QFrame" name="frame_2">
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
@@ -997,54 +1105,72 @@
                       <number>0</number>
                      </property>
                      <item>
-                      <widget class="QLineEdit" name="editPassword">
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>25</height>
-                        </size>
-                       </property>
+                      <widget class="QGroupBox" name="groupBox_7">
                        <property name="font">
                         <font>
                          <family>Roboto</family>
                          <pointsize>8</pointsize>
                         </font>
                        </property>
-                       <property name="echoMode">
-                        <enum>QLineEdit::Password</enum>
+                       <property name="title">
+                        <string>Password</string>
                        </property>
-                       <property name="clearButtonEnabled">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="buttonPasswordToggle">
-                       <property name="minimumSize">
-                        <size>
-                         <width>27</width>
-                         <height>27</height>
-                        </size>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <family>Roboto</family>
-                         <pointsize>8</pointsize>
-                        </font>
-                       </property>
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="icon">
-                        <iconset>
-                         <normaloff>icons/eye-crossed.svg</normaloff>icons/eye-crossed.svg</iconset>
-                       </property>
-                       <property name="iconSize">
-                        <size>
-                         <width>14</width>
-                         <height>14</height>
-                        </size>
-                       </property>
+                       <layout class="QHBoxLayout" name="horizontalLayout_5">
+                        <item>
+                         <widget class="QLineEdit" name="editPassword">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>25</height>
+                           </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <family>Roboto</family>
+                            <pointsize>10</pointsize>
+                           </font>
+                          </property>
+                          <property name="echoMode">
+                           <enum>QLineEdit::Password</enum>
+                          </property>
+                          <property name="clearButtonEnabled">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="buttonPasswordToggle">
+                          <property name="minimumSize">
+                           <size>
+                            <width>27</width>
+                            <height>27</height>
+                           </size>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <family>Roboto</family>
+                            <pointsize>8</pointsize>
+                           </font>
+                          </property>
+                          <property name="cursor">
+                           <cursorShape>PointingHandCursor</cursorShape>
+                          </property>
+                          <property name="icon">
+                           <iconset>
+                            <normaloff>icons/eye-crossed.svg</normaloff>icons/eye-crossed.svg</iconset>
+                          </property>
+                          <property name="iconSize">
+                           <size>
+                            <width>14</width>
+                            <height>14</height>
+                           </size>
+                          </property>
+                          <property name="checkable">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
                       </widget>
                      </item>
                     </layout>
@@ -1091,7 +1217,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>11</pointsize>
+                   <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1116,6 +1242,34 @@
                 </widget>
                </item>
               </layout>
+             </widget>
+             <widget class="QPushButton" name="buttonAddPassword">
+              <property name="geometry">
+               <rect>
+                <x>350</x>
+                <y>400</y>
+                <width>141</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto</family>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="text">
+               <string>Add</string>
+              </property>
              </widget>
             </widget>
            </item>
@@ -1148,11 +1302,11 @@
               <property name="font">
                <font>
                 <family>Roboto</family>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="title">
-               <string>Password Length:</string>
+               <string>Password length</string>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
                <item>
@@ -1166,7 +1320,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="wrapping">
@@ -1242,11 +1396,11 @@
               <property name="font">
                <font>
                 <family>Roboto</family>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="title">
-               <string>Character Types:</string>
+               <string>Character types</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_5">
                <item>
@@ -1254,7 +1408,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1270,7 +1424,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1286,7 +1440,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1302,7 +1456,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1327,11 +1481,11 @@
               <property name="font">
                <font>
                 <family>Roboto</family>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="title">
-               <string>Random Password:</string>
+               <string>Random password</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_11">
                <item>
@@ -1339,7 +1493,7 @@
                  <property name="font">
                   <font>
                    <family>Consolas</family>
-                   <pointsize>9</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="cursor">
@@ -1518,7 +1672,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>11</pointsize>
+                   <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1563,8 +1717,8 @@
                <rect>
                 <x>40</x>
                 <y>105</y>
-                <width>450</width>
-                <height>74</height>
+                <width>451</width>
+                <height>69</height>
                </rect>
               </property>
               <property name="frameShape">
@@ -1601,38 +1755,42 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_12">
                   <item>
-                   <widget class="QLabel" name="labelTotalPasswordsHeading">
-                    <property name="font">
-                     <font>
-                      <family>Roboto Medium</family>
-                      <pointsize>10</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Total Passwords</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelTotalPasswords">
+                   <widget class="QGroupBox" name="groupBox_8">
                     <property name="font">
                      <font>
                       <family>Roboto</family>
-                      <pointsize>9</pointsize>
                      </font>
                     </property>
-                    <property name="inputMethodHints">
-                     <set>Qt::ImhNone</set>
-                    </property>
-                    <property name="text">
-                     <string/>
+                    <property name="title">
+                     <string>Total passwords</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_24">
+                     <item>
+                      <widget class="QLabel" name="labelTotalPasswords">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="inputMethodHints">
+                        <set>Qt::ImhNone</set>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="text">
+                        <string>0</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1653,38 +1811,54 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_16">
                   <item>
-                   <widget class="QLabel" name="labelCompromisedHeading">
+                   <widget class="QGroupBox" name="groupBox_9">
+                    <property name="minimumSize">
+                     <size>
+                      <width>100</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>100</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
-                      <family>Roboto Medium</family>
-                      <pointsize>10</pointsize>
+                      <family>Roboto</family>
                      </font>
                     </property>
-                    <property name="text">
+                    <property name="title">
                      <string>Compromised</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelCompromised">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="inputMethodHints">
-                     <set>Qt::ImhNone</set>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_25">
+                     <item>
+                      <widget class="QLabel" name="labelCompromised">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="inputMethodHints">
+                        <set>Qt::ImhNone</set>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="text">
+                        <string>0</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1705,38 +1879,42 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_13">
                   <item>
-                   <widget class="QLabel" name="labelReusedHeading">
+                   <widget class="QGroupBox" name="groupBox_10">
                     <property name="font">
                      <font>
-                      <family>Roboto Medium</family>
-                      <pointsize>10</pointsize>
+                      <family>Roboto</family>
                      </font>
                     </property>
-                    <property name="text">
+                    <property name="title">
                      <string>Reused</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelReused">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="inputMethodHints">
-                     <set>Qt::ImhNone</set>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_27">
+                     <item>
+                      <widget class="QLabel" name="labelReused">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="inputMethodHints">
+                        <set>Qt::ImhNone</set>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="text">
+                        <string>0</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1757,38 +1935,42 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_14">
                   <item>
-                   <widget class="QLabel" name="labelWeakHeading">
+                   <widget class="QGroupBox" name="groupBox_11">
                     <property name="font">
                      <font>
-                      <family>Roboto Medium</family>
-                      <pointsize>10</pointsize>
+                      <family>Roboto</family>
                      </font>
                     </property>
-                    <property name="text">
+                    <property name="title">
                      <string>Weak</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelWeak">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="inputMethodHints">
-                     <set>Qt::ImhNone</set>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_26">
+                     <item>
+                      <widget class="QLabel" name="labelWeak">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="inputMethodHints">
+                        <set>Qt::ImhNone</set>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="text">
+                        <string>0</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1804,43 +1986,50 @@
                  <property name="frameShape">
                   <enum>QFrame::NoFrame</enum>
                  </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
-                 </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_15">
+                 <layout class="QVBoxLayout" name="verticalLayout_28">
                   <item>
-                   <widget class="QLabel" name="labelSafeHeading">
+                   <widget class="QGroupBox" name="groupBox_12">
+                    <property name="maximumSize">
+                     <size>
+                      <width>110</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
-                      <family>Roboto Medium</family>
-                      <pointsize>10</pointsize>
+                      <family>Roboto</family>
                      </font>
                     </property>
-                    <property name="text">
+                    <property name="title">
                      <string>Safe</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelSafe">
-                    <property name="font">
-                     <font>
-                      <family>Roboto</family>
-                      <pointsize>9</pointsize>
-                     </font>
-                    </property>
-                    <property name="inputMethodHints">
-                     <set>Qt::ImhNone</set>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_29">
+                     <item>
+                      <widget class="QLabel" name="labelTotalPasswords_2">
+                       <property name="font">
+                        <font>
+                         <family>Roboto</family>
+                         <pointsize>10</pointsize>
+                        </font>
+                       </property>
+                       <property name="inputMethodHints">
+                        <set>Qt::ImhNone</set>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="text">
+                        <string>0</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1884,7 +2073,7 @@
                  <property name="font">
                   <font>
                    <family>Roboto</family>
-                   <pointsize>11</pointsize>
+                   <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1909,6 +2098,31 @@
                 </widget>
                </item>
               </layout>
+             </widget>
+             <widget class="QTableWidget" name="tableWidget">
+              <property name="geometry">
+               <rect>
+                <x>40</x>
+                <y>200</y>
+                <width>451</width>
+                <height>271</height>
+               </rect>
+              </property>
+              <column>
+               <property name="text">
+                <string>Title</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Url</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Password</string>
+               </property>
+              </column>
              </widget>
             </widget>
            </item>
