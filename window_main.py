@@ -1,5 +1,6 @@
 from keyring import get_password as keyring_get_password
 from os.path import exists
+from password_strength import PasswordStats
 from pwnedpasswords import check as check_pwned
 from pysqlitecipher.sqlitewrapper import SqliteCipher
 from pyperclip import copy as copy_to_cb
@@ -30,8 +31,8 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.setFixedWidth(720)
-        self.setFixedHeight(530)
+        self.setFixedWidth(800)
+        self.setFixedHeight(600)
 
         # ----- Message Boxes -----
         self.dlg_no_password_selected = lambda: QMessageBox.warning(
@@ -96,8 +97,8 @@ class MainWindow(QMainWindow):
         self.ui.editUsername.returnPressed.connect(self.update_db)
         self.ui.editPassword.returnPressed.connect(self.update_db)
         self.ui.buttonPasswordToggle.clicked.connect(self.password_toggle)
-        self.ui.comboBoxName.currentTextChanged.connect(self.set_url)
-        self.ui.comboBoxName.currentIndexChanged.connect(self.set_url)
+        self.ui.comboBoxTitle.currentTextChanged.connect(self.set_url)
+        self.ui.comboBoxTitle.currentIndexChanged.connect(self.set_url)
 
         # ----- Generate Password -----
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
@@ -178,7 +179,8 @@ class MainWindow(QMainWindow):
                 ["url", "TEXT"],
                 ["username", "TEXT"],
                 ["password", "TEXT"],
-                ["compromised", "INT"],
+                ["isCompromised", "INT"],
+                ["strength", "TEXT"],
             ],
             makeSecure=True,
         )
@@ -195,7 +197,7 @@ class MainWindow(QMainWindow):
 
         for row_num in range(len(data)):
             for col_num, col_data in enumerate(data[row_num]):
-                if col_num == 3:
+                if col_num == 3:  # Store password in symbol '*'.
                     col_data = "".join("*" for i in range(len(col_data)))
                 elif col_num == 4:
                     break
@@ -243,17 +245,24 @@ class MainWindow(QMainWindow):
 
     # ----- Add New -----
     def update_db(self):
-        """Inserts the data from the 'Add New' form into the database."""
+        """
+        Inserts the data from the 'Add New' form, along with password
+        statistics into the database.
+        """
         db = self.get_db()
         form_data = [
-            self.ui.comboBoxName.currentText(),
+            self.ui.comboBoxTitle.currentText(),
             self.ui.editUrl.text().lower(),
             self.ui.editUsername.text(),
             self.ui.editPassword.text(),
             self.is_password_compromised(self.ui.editPassword.text()),
+            self.get_password_strength(self.ui.editPassword.text()),
         ]
+
+        # Check if all fields in the form are filled.
         if sum(1 if i != "" else 0 for i in form_data) != len(form_data):
             self.dlg_form_not_filled()
+        # Check if URL is valid.
         elif self.ui.editUrl.text().replace(
             " ", ""
         ) != "" and not is_url_valid(self.ui.editUrl.text().lower()):
@@ -263,14 +272,12 @@ class MainWindow(QMainWindow):
         ):  # TODO: Check if name entered already exists in table/database
             pass
         else:
-            for row_num, row_data in enumerate(form_data):
-                if row_num == len(form_data) - 1:
-                    db.insertIntoTable(
-                        tableName="Password",
-                        insertList=form_data,
-                    )
-                    self.dlg_pwd_added()
-                self.clear_password_form()
+            db.insertIntoTable(
+                tableName="Password",
+                insertList=form_data,
+            )
+            self.dlg_pwd_added()
+            self.clear_password_form()
 
     def password_toggle(self, checked):
         if checked:
@@ -348,13 +355,39 @@ class MainWindow(QMainWindow):
     def update_health_stats(self):
         data = self.get_db_data()
 
-        total_passwords = len(data)
-        self.ui.labelTotalPasswords.setText(str(total_passwords))
+        if len(data) > 0:
+            security_score = self.get_security_score(list(list(zip(*data))[3]))
+            self.ui.labelSecurityScore.setText(f"{str(security_score)}%")
 
-        total_compromised = len(
-            [i for i in [data[i][4] for i in range(len(data))] if i == 1]
-        )
-        self.ui.labelCompromised.setText(str(total_compromised))
+            total_unique = len(set(list(list(zip(*data))[3])))
+            total_reused = len(data) - total_unique
+            self.ui.labelReused.setText(str(total_reused))
+
+            total_passwords = len(data)
+            self.ui.labelTotalPasswords.setText(str(total_passwords))
+
+            total_compromised = len(
+                [i for i in [data[i][4] for i in range(len(data))] if i == 1]
+            )
+            self.ui.labelCompromised.setText(str(total_compromised))
+
+            total_weak = len(
+                [
+                    i
+                    for i in [data[i][5] for i in range(len(data))]
+                    if i == "weak" or i == "medium"
+                ]
+            )
+            self.ui.labelWeak.setText(str(total_weak))
+
+            total_safe = len(
+                [
+                    i
+                    for i in [data[i][5] for i in range(len(data))]
+                    if i == "strong"
+                ]
+            )
+            self.ui.labelSafe.setText(str(total_safe))
 
     def set_url(self):
         url_list = [
@@ -386,20 +419,19 @@ class MainWindow(QMainWindow):
             "https://www.uber.com",
             "https://www.wechat.com",
             "https://www.whatsapp.com",
-            "https://www.wikipedia.com",
             "https://www.wish.com",
             "https://www.wolt.com",
             "https://www.yahoo.com",
             "https://www.zoom.com",
         ]
         try:
-            name_id_selected = self.ui.comboBoxName.currentIndex()
-            self.ui.editUrl.setText(url_list[name_id_selected])
+            title_selected = self.ui.comboBoxTitle.currentIndex()
+            self.ui.editUrl.setText(url_list[title_selected])
         except IndexError:
             self.ui.editUrl.setText("")
 
     def clear_password_form(self):
-        self.ui.comboBoxName.setCurrentIndex(0)
+        self.ui.comboBoxTitle.setCurrentIndex(0)
         self.ui.editUsername.clear()
         self.ui.editUrl.clear()
         self.ui.editPassword.clear()
@@ -407,3 +439,19 @@ class MainWindow(QMainWindow):
     def log_out(self):
         if self.dlg_log_out_confirmation() == QMessageBox.Yes:
             exit_window()
+
+    def get_password_strength(self, password):
+        if len(password) > 0:
+            score = PasswordStats(password).strength()
+            if score >= 0 and score < 0.33:
+                return "weak"
+            elif score >= 0.33 and score < 0.66:
+                return "medium"
+            elif score >= 0.66:
+                return "strong"
+
+    def get_security_score(self, password_list):
+        score = [
+            PasswordStats(password).strength() for password in password_list
+        ]
+        return int(sum(score) / len(password_list) * 100)
