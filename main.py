@@ -24,7 +24,7 @@ def main():
     main_window = MainWindow()
     layout.addWidget(main_window)
 
-    layout.setCurrentWidget(log_in_window)
+    layout.setCurrentWidget(main_window)
 
     log_in_window.logged_in.connect(
         lambda w=main_window: layout.setCurrentWidget(w)

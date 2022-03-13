@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.setFixedWidth(330)
+        self.setFixedWidth(340)
         self.setFixedHeight(370)
 
         self.ui.editPasswordMain.setFocus()

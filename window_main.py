@@ -5,7 +5,7 @@ from pysqlitecipher.sqlitewrapper import SqliteCipher
 from pyperclip import copy as copy_to_cb
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
-from titlecase import titlecase
+from sys import exit as exit_window
 from validators import url as is_url_valid
 
 from PySide6.QtCore import Qt, QSortFilterProxyModel, QModelIndex
@@ -58,6 +58,18 @@ class MainWindow(QMainWindow):
             "Are you sure you want to delete this password?",
             buttons=QMessageBox.Yes | QMessageBox.No,
         )
+        self.dlg_invalid_url = lambda: QMessageBox.critical(
+            self,
+            "Password Manager",
+            "Error: URL is invalid.",
+            buttons=QMessageBox.Ok,
+        )
+        self.dlg_log_out_confirmation = lambda: QMessageBox.question(
+            self,
+            "Password Manager",
+            "Are you sure you want to log out?",
+            buttons=QMessageBox.Yes | QMessageBox.Cancel,
+        )
         # -------------------------
 
         # ----- Side-Menu -----
@@ -71,6 +83,7 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
         self.ui.buttonTabHealth.clicked.connect(self.show_health_tab)
         self.generate_password()
+        self.ui.buttonLogOut.clicked.connect(self.log_out)
 
         # ----- Password Dashboard ----------------
         self.ui.buttonDelete.clicked.connect(self.delete_password)
@@ -205,23 +218,15 @@ class MainWindow(QMainWindow):
             selected_name = self.ui.tablePasswords.selectedIndexes()[0].data()
             db_data = self.get_db_data()
             db_data_names = list(list(zip(*db_data))[0])
-            print(db_data_names)
+            id_to_delete = db_data_names.index(selected_name)
             if self.dlg_delete_confirmation() == QMessageBox.Yes:
-                db.deleteDataInTable("Password", selected_row)
+                db.deleteDataInTable("Password", id_to_delete)
                 self.update_dashboard_table()
         except IndexError:
             self.dlg_no_password_selected()
 
     def edit_password(self):
-        """Removes the entity of the selected row."""
-        db = self.get_db()
-        try:
-            selected_row = self.ui.tablePasswords.selectedRanges()
-            print(selected_row)
-            db.deleteDataInTable("Password", selected_row)
-            self.update_dashboard_table()
-        except IndexError:
-            self.dlg_no_password_selected()
+        pass
 
     def copy_password(self):
         db = self.get_db()
@@ -240,31 +245,32 @@ class MainWindow(QMainWindow):
     def update_db(self):
         """Inserts the data from the 'Add New' form into the database."""
         db = self.get_db()
-        if not is_url_valid(self.ui.editUrl.text().lower()):
-            print("Url invalid")
+        form_data = [
+            self.ui.comboBoxName.currentText(),
+            self.ui.editUrl.text().lower(),
+            self.ui.editUsername.text(),
+            self.ui.editPassword.text(),
+            self.is_password_compromised(self.ui.editPassword.text()),
+        ]
+        if sum(1 if i != "" else 0 for i in form_data) != len(form_data):
+            self.dlg_form_not_filled()
+        elif self.ui.editUrl.text().replace(
+            " ", ""
+        ) != "" and not is_url_valid(self.ui.editUrl.text().lower()):
+            self.dlg_invalid_url()
         elif (
             False
         ):  # TODO: Check if name entered already exists in table/database
             pass
         else:
-            data = [
-                titlecase(text=self.ui.comboBoxName.currentText()),
-                self.ui.editUrl.text().lower(),
-                self.ui.editUsername.text(),
-                self.ui.editPassword.text(),
-                self.is_password_compromised(self.ui.editPassword.text()),
-            ]
-            for row_num, row_data in enumerate(data):
-                if row_num == len(data) - 1:
+            for row_num, row_data in enumerate(form_data):
+                if row_num == len(form_data) - 1:
                     db.insertIntoTable(
                         tableName="Password",
-                        insertList=data,
+                        insertList=form_data,
                     )
                     self.dlg_pwd_added()
-                if row_num != 3 and str(row_data).replace(" ", "") == "":
-                    self.dlg_form_not_filled()
-                    break
-            self.clear_password_form()
+                self.clear_password_form()
 
     def password_toggle(self, checked):
         if checked:
@@ -369,15 +375,14 @@ class MainWindow(QMainWindow):
             "https://www.mcdonalds.com",
             "https://www.netflix.com",
             "https://www.reddit.com",
-            "https://www.shein.com",
+            "https://www.shopee.com",
+            "https://www.snapchat.com",
             "https://www.spotify.com",
             "https://www.starbucks.com",
             "https://www.telegram.com",
             "https://www.tiktok.com",
             "https://www.twitch.com",
             "https://www.twitter.com",
-            "https://www.shopee.com",
-            "https://www.snapchat.com",
             "https://www.uber.com",
             "https://www.wechat.com",
             "https://www.whatsapp.com",
@@ -398,3 +403,7 @@ class MainWindow(QMainWindow):
         self.ui.editUsername.clear()
         self.ui.editUrl.clear()
         self.ui.editPassword.clear()
+
+    def log_out(self):
+        if self.dlg_log_out_confirmation() == QMessageBox.Yes:
+            exit_window()
