@@ -82,7 +82,6 @@ class Ui_MainWindow(object):
         icon.addFile(u"icons/eye-crossed.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.buttonPasswordToggle1.setIcon(icon)
         self.buttonPasswordToggle1.setIconSize(QSize(14, 14))
-        self.buttonPasswordToggle1.setCheckable(True)
 
         self.horizontalLayout_2.addWidget(self.buttonPasswordToggle1)
 
@@ -111,7 +110,6 @@ class Ui_MainWindow(object):
         self.buttonPasswordToggle2.setCursor(QCursor(Qt.PointingHandCursor))
         self.buttonPasswordToggle2.setIcon(icon)
         self.buttonPasswordToggle2.setIconSize(QSize(14, 14))
-        self.buttonPasswordToggle2.setCheckable(True)
 
         self.horizontalLayout.addWidget(self.buttonPasswordToggle2)
 
