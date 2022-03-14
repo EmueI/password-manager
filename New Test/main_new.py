@@ -84,8 +84,15 @@ class LogInWindow(QMainWindow):
             buttons=QMessageBox.Ok,
         )
         # -------------------------------------------
-        print(self.db.execute("PRAGMA key;").fetchall())
-        if self.db.execute("PRAGMA key;").fetchall():
+        with self.db:
+            try:
+                self.is_table_created = self.db.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table' AND name='Passwords';"
+                ).fetchall()
+            except db.DatabaseError:
+                self.is_table_created = True
+
+        if self.is_table_created:
             self.setFixedHeight(280)
             self.ui.labelHeading.setText("Enter Master Password")
             self.ui.labelSubHeading.setText(
@@ -106,10 +113,10 @@ class LogInWindow(QMainWindow):
         # ----------------------------------------------------------
 
     def log_in(self):
-        if not self.db.execute("PRAGMA key;").fetchall():
-            self.create_master_password()
-        else:
+        if self.is_table_created:
             self.enter_master_password()
+        else:
+            self.create_master_password()
 
     def create_master_password(self):
         if (
@@ -156,9 +163,11 @@ class LogInWindow(QMainWindow):
                 )
                 try:
                     db.execute("SELECT count(*) FROM sqlite_master;")
+                    self.logged_in.emit()
                 except sqlcipher.DatabaseError:
                     self.dlg_incorrect_password()
-        # self.logged_in.emit()
+        else:
+            self.dlg_incorrect_password()
 
     def toggle_view1(self, checked):
         if checked:
