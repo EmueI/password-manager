@@ -2,11 +2,11 @@ from keyring import get_password as keyring_get_password
 from os.path import exists
 from password_strength import PasswordStats
 from pwnedpasswords import check as check_pwned
-from pysqlitecipher.sqlitewrapper import SqliteCipher
 from pyperclip import copy as copy_to_cb
+from pysqlcipher3 import dbapi2 as sqlcipher
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
-from sys import exit as exit_window
+from sys import exit as sys_window
 from validators import url as is_url_valid
 
 from PySide6.QtCore import Qt, QSortFilterProxyModel, QModelIndex
@@ -163,7 +163,10 @@ class MainWindow(QMainWindow):
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetHealth)
 
     def db_create_passwords_table(self):
-        db.createTable(
+        with db:
+            self.db.execute("""
+            """)
+            createTable(
             "Password",
             [
                 ["name", "TEXT"],

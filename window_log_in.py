@@ -70,16 +70,18 @@ class LogInWindow(QMainWindow):
                 self.is_master_pass_created = True
 
         if self.is_master_pass_created:
-            self.setFixedHeight(310)
+            self.setFixedHeight(290)
             self.ui.labelHeading.setText("Enter Master Password")
             self.ui.labelSubHeading.setText(
                 "Enter the master password to access your password vault."
             )
+            self.ui.label.deleteLater()
+            self.ui.groupBox.setFixedHeight(70)
             self.ui.groupBoxConfirm.hide()
             self.ui.groupBoxConfirm.setGeometry(40, 130, 260, 60)
             self.ui.groupBoxConfirm.setTitle("Master password")
-            self.ui.buttonCreate.setText("Unlock")
-            self.ui.buttonCreate.setGeometry(QRect(40, 245, 260, 27))
+            self.ui.button.setText("Unlock")
+            self.ui.button.setGeometry(QRect(40, 225, 260, 27))
 
         # ---- Connecting user actions to the appropriate functions.
         self.ui.editPassword.returnPressed.connect(self.log_in)
@@ -88,7 +90,7 @@ class LogInWindow(QMainWindow):
         self.ui.buttonPasswordToggle1.clicked.connect(self.toggle_view1)
         self.ui.buttonPasswordToggle2.setCheckable(True)
         self.ui.buttonPasswordToggle2.clicked.connect(self.toggle_view2)
-        self.ui.buttonCreate.clicked.connect(self.log_in)
+        self.ui.button.clicked.connect(self.log_in)
         # ----------------------------------------------------------
 
     def log_in(self):

@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="buttonCreate">
+   <widget class="QPushButton" name="button">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -48,7 +48,7 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBoxMain">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -169,7 +169,7 @@
       <x>40</x>
       <y>230</y>
       <width>260</width>
-      <height>71</height>
+      <height>70</height>
      </rect>
     </property>
     <property name="font">
@@ -260,6 +260,9 @@
     </property>
     <property name="text">
      <string>This is the password you must remember in order to access your password vault. </string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
