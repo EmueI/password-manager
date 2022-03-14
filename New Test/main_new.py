@@ -86,13 +86,13 @@ class LogInWindow(QMainWindow):
         # -------------------------------------------
         with self.db:
             try:
-                self.is_table_created = self.db.execute(
+                self.is_master_pass_created = self.db.execute(
                     "SELECT name FROM sqlite_master WHERE type='table' AND name='Passwords';"
                 ).fetchall()
             except db.DatabaseError:
-                self.is_table_created = True
+                self.is_master_pass_created = True
 
-        if self.is_table_created:
+        if self.is_master_pass_created:
             self.setFixedHeight(280)
             self.ui.labelHeading.setText("Enter Master Password")
             self.ui.labelSubHeading.setText(
@@ -107,16 +107,29 @@ class LogInWindow(QMainWindow):
         # ---- Connecting user actions to the appropriate functions.
         self.ui.editPasswordMain.returnPressed.connect(self.log_in)
         self.ui.editPasswordConfirm.returnPressed.connect(self.log_in)
+        self.ui.buttonPasswordToggle1.setCheckable(True)
         self.ui.buttonPasswordToggle1.clicked.connect(self.toggle_view1)
+        self.ui.buttonPasswordToggle2.setCheckable(True)
         self.ui.buttonPasswordToggle2.clicked.connect(self.toggle_view2)
         self.ui.buttonSubmit.clicked.connect(self.log_in)
         # ----------------------------------------------------------
 
     def log_in(self):
-        if self.is_table_created:
+        if self.is_master_pass_created:
             self.enter_master_password()
         else:
             self.create_master_password()
+
+    def enter_master_password(self):
+        with self.db:
+            try:
+                self.db.execute(
+                    f'PRAGMA key="{self.ui.editPasswordMain.text()}";'
+                )
+                self.db.execute("SELECT count(*) FROM sqlite_master;")
+                self.logged_in.emit()
+            except sqlcipher.DatabaseError:
+                self.dlg_incorrect_password()
 
     def create_master_password(self):
         if (
@@ -136,8 +149,8 @@ class LogInWindow(QMainWindow):
             self.dlg_password_short()
         else:
             with self.db:
-                self.db.execute(
-                    f'PRAGMA key=":{self.ui.editPasswordMain.text()}"'
+                self.db.executescript(
+                    f'PRAGMA key="{self.ui.editPasswordMain.text()}"; pragma kdf_iter=64000;',
                 )
                 self.db.execute(
                     """
@@ -153,21 +166,6 @@ class LogInWindow(QMainWindow):
                 )
                 self.dlg_password_created()
                 self.logged_in.emit()
-                return self.ui.editPasswordMain.text()
-
-    def enter_master_password(self):
-        if len(self.ui.editPasswordMain.text()) > 0:
-            with db:
-                db.execute(
-                    f"PRAGMA key={self.ui.editPasswordMain.text()}",
-                )
-                try:
-                    db.execute("SELECT count(*) FROM sqlite_master;")
-                    self.logged_in.emit()
-                except sqlcipher.DatabaseError:
-                    self.dlg_incorrect_password()
-        else:
-            self.dlg_incorrect_password()
 
     def toggle_view1(self, checked):
         if checked:
