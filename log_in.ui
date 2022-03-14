@@ -14,11 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="buttonSubmit">
+   <widget class="QPushButton" name="buttonCreate">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>310</y>
+      <y>320</y>
       <width>260</width>
       <height>27</height>
      </rect>
@@ -54,7 +54,7 @@
       <x>40</x>
       <y>130</y>
       <width>261</width>
-      <height>81</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
@@ -102,7 +102,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLineEdit" name="editPasswordMain">
+         <widget class="QLineEdit" name="editPassword">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -114,9 +114,6 @@
             <family>Roboto</family>
             <pointsize>10</pointsize>
            </font>
-          </property>
-          <property name="text">
-           <string/>
           </property>
           <property name="echoMode">
            <enum>QLineEdit::Password</enum>
@@ -170,9 +167,9 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>220</y>
+      <y>230</y>
       <width>260</width>
-      <height>60</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="font">

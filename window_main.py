@@ -25,9 +25,9 @@ from ui_main_window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, db):
         super(MainWindow, self).__init__()
-
+        self.db = db
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -93,12 +93,12 @@ class MainWindow(QMainWindow):
 
         # ----- Add New -----
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
-        self.ui.editUrl.returnPressed.connect(self.update_db)
-        self.ui.editUsername.returnPressed.connect(self.update_db)
-        self.ui.editPassword.returnPressed.connect(self.update_db)
+        self.ui.editEntryUrl.returnPressed.connect(self.update_db)
+        self.ui.editEntryUsername.returnPressed.connect(self.update_db)
+        self.ui.editEntryPassword.returnPressed.connect(self.update_db)
         self.ui.buttonPasswordToggle.clicked.connect(self.password_toggle)
-        self.ui.comboBoxTitle.currentTextChanged.connect(self.set_url)
-        self.ui.comboBoxTitle.currentIndexChanged.connect(self.set_url)
+        self.ui.comboBoxEntryTitle.currentTextChanged.connect(self.set_url)
+        self.ui.comboBoxEntryTitle.currentIndexChanged.connect(self.set_url)
 
         # ----- Generate Password -----
         self.ui.horizontalSlider.valueChanged.connect(self.update_spin_box)
@@ -162,16 +162,7 @@ class MainWindow(QMainWindow):
         )
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetHealth)
 
-    def get_db(self):
-        """Returns the password database."""
-        return SqliteCipher(
-            dataBasePath="Password_Manager.db",
-            checkSameThread=True,
-            password=keyring_get_password("Password Manager", "user"),
-        )
-
     def db_create_passwords_table(self):
-        db = self.get_db()
         db.createTable(
             "Password",
             [
@@ -215,10 +206,9 @@ class MainWindow(QMainWindow):
 
     def delete_password(self):
         """Removes the selected row from the database."""
-        db = self.get_db()
         try:
             selected_name = self.ui.tablePasswords.selectedIndexes()[0].data()
-            db_data = self.get_db_data()
+            db_data = db.get_db_data()
             db_data_names = list(list(zip(*db_data))[0])
             id_to_delete = db_data_names.index(selected_name)
             if self.dlg_delete_confirmation() == QMessageBox.Yes:
@@ -231,7 +221,6 @@ class MainWindow(QMainWindow):
         pass
 
     def copy_password(self):
-        db = self.get_db()
         try:
             selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
             selected_col = self.ui.tablePasswords.selectedIndexes()[3].column()
@@ -249,23 +238,22 @@ class MainWindow(QMainWindow):
         Inserts the data from the 'Add New' form, along with password
         statistics into the database.
         """
-        db = self.get_db()
         form_data = [
-            self.ui.comboBoxTitle.currentText(),
-            self.ui.editUrl.text().lower(),
-            self.ui.editUsername.text(),
-            self.ui.editPassword.text(),
-            self.is_password_compromised(self.ui.editPassword.text()),
-            self.get_password_strength(self.ui.editPassword.text()),
+            self.ui.comboBoxEntryTitle.currentText(),
+            self.ui.editEntryUrl.text().lower(),
+            self.ui.editEntryUsername.text(),
+            self.ui.editEntryPassword.text(),
+            self.is_password_compromised(self.ui.editEntryPassword.text()),
+            self.get_password_strength(self.ui.editEntryPassword.text()),
         ]
 
         # Check if all fields in the form are filled.
         if sum(1 if i != "" else 0 for i in form_data) != len(form_data):
             self.dlg_form_not_filled()
         # Check if URL is valid.
-        elif self.ui.editUrl.text().replace(
+        elif self.ui.editEntryUrl.text().replace(
             " ", ""
-        ) != "" and not is_url_valid(self.ui.editUrl.text().lower()):
+        ) != "" and not is_url_valid(self.ui.editEntryUrl.text().lower()):
             self.dlg_invalid_url()
         elif (
             False
@@ -281,10 +269,10 @@ class MainWindow(QMainWindow):
 
     def password_toggle(self, checked):
         if checked:
-            self.ui.editPassword.setEchoMode(QLineEdit.EchoMode.Normal)
+            self.ui.editEntryPassword.setEchoMode(QLineEdit.EchoMode.Normal)
             self.ui.buttonPasswordToggle.setIcon(QIcon("icons/eye.svg"))
         else:
-            self.ui.editPassword.setEchoMode(QLineEdit.EchoMode.Password)
+            self.ui.editEntryPassword.setEchoMode(QLineEdit.EchoMode.Password)
             self.ui.buttonPasswordToggle.setIcon(
                 QIcon("icons/eye-crossed.svg")
             )
@@ -345,7 +333,6 @@ class MainWindow(QMainWindow):
                 check_box.setEnabled(True)
 
     def get_db_data(self):
-        db = self.get_db()
         if not db.checkTableExist("Password"):
             self.db_create_passwords_table()
         return db.getDataFromTable(
@@ -425,20 +412,20 @@ class MainWindow(QMainWindow):
             "https://www.zoom.com",
         ]
         try:
-            title_selected = self.ui.comboBoxTitle.currentIndex()
-            self.ui.editUrl.setText(url_list[title_selected])
+            title_selected = self.ui.comboBoxEntryTitle.currentIndex()
+            self.ui.editEntryUrl.setText(url_list[title_selected])
         except IndexError:
-            self.ui.editUrl.setText("")
+            self.ui.editEntryUrl.setText("")
 
     def clear_password_form(self):
-        self.ui.comboBoxTitle.setCurrentIndex(0)
-        self.ui.editUsername.clear()
-        self.ui.editUrl.clear()
-        self.ui.editPassword.clear()
+        self.ui.comboBoxEntryTitle.setCurrentIndex(0)
+        self.ui.editEntryUsername.clear()
+        self.ui.editEntryUrl.clear()
+        self.ui.editEntryPassword.clear()
 
     def log_out(self):
         if self.dlg_log_out_confirmation() == QMessageBox.Yes:
-            exit_window()
+            sys_exit()
 
     def get_password_strength(self, password):
         if len(password) > 0:

@@ -399,7 +399,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -821,7 +821,7 @@
               <property name="geometry">
                <rect>
                 <x>420</x>
-                <y>470</y>
+                <y>480</y>
                 <width>151</width>
                 <height>27</height>
                </rect>
@@ -851,7 +851,7 @@
                 <x>40</x>
                 <y>100</y>
                 <width>530</width>
-                <height>341</height>
+                <height>371</height>
                </rect>
               </property>
               <property name="frameShape">
@@ -883,7 +883,7 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_15">
                   <item>
-                   <widget class="QComboBox" name="comboBoxTitle">
+                   <widget class="QComboBox" name="comboBoxEntryTitle">
                     <property name="font">
                      <font>
                       <family>Roboto</family>
@@ -1080,7 +1080,7 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_21">
                   <item>
-                   <widget class="QLineEdit" name="editUrl">
+                   <widget class="QLineEdit" name="editEntryUrl">
                     <property name="font">
                      <font>
                       <family>Roboto</family>
@@ -1114,7 +1114,7 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_22">
                   <item>
-                   <widget class="QLineEdit" name="editUsername">
+                   <widget class="QLineEdit" name="editEntryUsername">
                     <property name="font">
                      <font>
                       <family>Roboto</family>
@@ -1142,7 +1142,7 @@
                  </property>
                  <layout class="QHBoxLayout" name="horizontalLayout_5">
                   <item>
-                   <widget class="QLineEdit" name="editPassword">
+                   <widget class="QLineEdit" name="editEntryPassword">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -1211,7 +1211,7 @@
                  </property>
                  <layout class="QHBoxLayout" name="horizontalLayout_3">
                   <item>
-                   <widget class="QLineEdit" name="editPasswordConfirm">
+                   <widget class="QLineEdit" name="editEntryPasswordConfirm">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
