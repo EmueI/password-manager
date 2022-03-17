@@ -1,9 +1,4 @@
 from os.path import exists
-from keyring import (
-    set_password as keyring_set_password,
-    delete_password as keyring_delete_password,
-    get_password as keyring_get_password,
-)
 from pysqlcipher3 import dbapi2 as sqlcipher
 
 from PySide6.QtCore import QRect, Signal
@@ -28,6 +23,7 @@ class LogInWindow(QMainWindow):
 
         self.ui.editPassword.setFocus()
 
+        self.master_password_input = self.ui.editPassword.text()
         # -------- Creating the error dialogue boxes.
         self.dlg_password_short = lambda: QMessageBox.warning(
             self,
@@ -64,7 +60,7 @@ class LogInWindow(QMainWindow):
         with self.db:
             try:
                 self.is_master_pass_created = self.db.execute(
-                    "SELECT name FROM sqlite_master WHERE type='table' AND name='Passwords';"
+                    "SELECT name FROM sqlite_master WHERE type='table' AND name='Password';"
                 ).fetchall()
             except db.DatabaseError:
                 self.is_master_pass_created = True
@@ -106,6 +102,7 @@ class LogInWindow(QMainWindow):
                 self.db.execute(
                     "SELECT count(*) FROM sqlite_master;"
                 ).fetchall()
+                self.master_password_input = self.ui.editPassword.text()
                 self.logged_in.emit()
             except sqlcipher.DatabaseError:
                 self.dlg_incorrect_password()
@@ -130,17 +127,19 @@ class LogInWindow(QMainWindow):
                 )
                 self.db.execute(
                     """
-                    CREATE TABLE Passwords (
-                        id INTEGER PRIMARY KEY,
+                    CREATE TABLE IF NOT EXISTS Password (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT,
+                        url TEXT,
                         username TEXT,
                         password TEXT,
-                        isCompromised BIT,
+                        isCompromised INTEGER,
                         passwordStrength TEXT
                     );
                     """
                 )
                 self.dlg_password_created()
+                self.master_password_input = self.ui.editPassword.text()
                 self.logged_in.emit()
 
     def toggle_view1(self, checked):

@@ -1,12 +1,10 @@
-from keyring import get_password as keyring_get_password
-from os.path import exists
 from password_strength import PasswordStats
 from pwnedpasswords import check as check_pwned
 from pyperclip import copy as copy_to_cb
 from pysqlcipher3 import dbapi2 as sqlcipher
 from secrets import choice as secrets_choice
 from string import ascii_uppercase, ascii_lowercase, digits
-from sys import exit as sys_window
+from sys import exit as sys_exit
 from validators import url as is_url_valid
 
 from PySide6.QtCore import Qt, QSortFilterProxyModel, QModelIndex
@@ -25,9 +23,10 @@ from ui_main_window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, db):
+    def __init__(self, db, master_password_input):
         super(MainWindow, self).__init__()
         self.db = db
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -35,6 +34,18 @@ class MainWindow(QMainWindow):
         self.setFixedHeight(600)
 
         # ----- Message Boxes -----
+        self.dlg_access_denied = lambda: QMessageBox.critical(
+            self,
+            "Password Manager",
+            "Access denied. You need to provide the master password in the log in window.",
+            buttons=QMessageBox.Ok,
+        )
+        self.dlg_invalid_url = lambda: QMessageBox.critical(
+            self,
+            "Password Manager",
+            "Error: URL is invalid.",
+            buttons=QMessageBox.Ok,
+        )
         self.dlg_no_password_selected = lambda: QMessageBox.warning(
             self,
             "Password Manager",
@@ -47,29 +58,23 @@ class MainWindow(QMainWindow):
             "All fields are required.",
             buttons=QMessageBox.Ok,
         )
-        self.dlg_pwd_added = lambda: QMessageBox.information(
-            self,
-            "Password Manager",
-            "Password has been added successfully.",
-            buttons=QMessageBox.Ok,
-        )
         self.dlg_delete_confirmation = lambda: QMessageBox.question(
             self,
             "Password Manager",
             "Are you sure you want to delete this password?",
             buttons=QMessageBox.Yes | QMessageBox.No,
         )
-        self.dlg_invalid_url = lambda: QMessageBox.critical(
-            self,
-            "Password Manager",
-            "Error: URL is invalid.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_log_out_confirmation = lambda: QMessageBox.question(
+        self.dlg_log_out_confirm = lambda: QMessageBox.question(
             self,
             "Password Manager",
             "Are you sure you want to log out?",
             buttons=QMessageBox.Yes | QMessageBox.Cancel,
+        )
+        self.dlg_pwd_added = lambda: QMessageBox.information(
+            self,
+            "Password Manager",
+            "Password has been added successfully.",
+            buttons=QMessageBox.Ok,
         )
         # -------------------------
 
@@ -83,7 +88,6 @@ class MainWindow(QMainWindow):
         self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
         self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
         self.ui.buttonTabHealth.clicked.connect(self.show_health_tab)
-        self.generate_password()
         self.ui.buttonLogOut.clicked.connect(self.log_out)
 
         # ----- Password Dashboard ----------------
@@ -117,6 +121,7 @@ class MainWindow(QMainWindow):
         self.ui.checkBoxLower.clicked.connect(self.disable_check_box)
         self.ui.checkBoxDigits.clicked.connect(self.disable_check_box)
         self.ui.checkBoxSymbols.clicked.connect(self.disable_check_box)
+        self.generate_password()
 
         # ----- Password Health -----
         self.ui.buttonTabHealth.clicked.connect(self.update_health_stats)
@@ -134,55 +139,40 @@ class MainWindow(QMainWindow):
 
     def show_add_new_tab(self):
         """Highlights the 'Add New' tab."""
-        self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabAddNew.setStyleSheet(
             "background-color: #3d3d3d; border-left: 4px solid #8ab4f7"
         )
+        self.ui.buttonTabPasswords.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet("")
         self.ui.buttonTabHealth.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetAdd)
 
     def show_generate_tab(self):
         """Highlights the 'Generate Passwords' tab."""
-        self.ui.buttonTabPasswords.setStyleSheet("")
-        self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabGenerate.setStyleSheet(
             "background-color: #3d3d3d; border-left: 4px solid #8ab4f7"
         )
+        self.ui.buttonTabPasswords.setStyleSheet("")
+        self.ui.buttonTabAddNew.setStyleSheet("")
         self.ui.buttonTabHealth.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetGenerate)
 
     def show_health_tab(self):
         """Highlights the 'Health Check' tab."""
-        self.ui.buttonTabPasswords.setStyleSheet("")
-        self.ui.buttonTabAddNew.setStyleSheet("")
-        self.ui.buttonTabGenerate.setStyleSheet("")
         self.ui.buttonTabHealth.setStyleSheet(
             "background-color: #3d3d3d; border-left: 4px solid #8ab4f7"
         )
+        self.ui.buttonTabPasswords.setStyleSheet("")
+        self.ui.buttonTabAddNew.setStyleSheet("")
+        self.ui.buttonTabGenerate.setStyleSheet("")
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetHealth)
 
-    def db_create_passwords_table(self):
-        with db:
-            self.db.execute("""
-            """)
-            createTable(
-            "Password",
-            [
-                ["name", "TEXT"],
-                ["url", "TEXT"],
-                ["username", "TEXT"],
-                ["password", "TEXT"],
-                ["isCompromised", "INT"],
-                ["strength", "TEXT"],
-            ],
-            makeSecure=True,
-        )
-
-    # ----- Password Dashboard -----
+    # ----- Passwords Dashboard -----
     def update_dashboard_table(self):
-        """Inserts the data from the database into the passwords table."""
-        data = self.get_db_data()
+        """Inserts the data from the database into the dashboard's passwords table."""
+        data = self.db.execute(
+            "SELECT name, url, username, password FROM Password"
+        ).fetchall()
 
         model = QStandardItemModel(len(data), 3)
         model.setHorizontalHeaderLabels(
@@ -191,12 +181,11 @@ class MainWindow(QMainWindow):
 
         for row_num in range(len(data)):
             for col_num, col_data in enumerate(data[row_num]):
-                if col_num == 3:  # Store password in symbol '*'.
+                if col_num == 4:
                     col_data = "".join("*" for i in range(len(col_data)))
-                elif col_num == 4:
-                    break
                 model.setItem(row_num, col_num, QStandardItem(col_data))
 
+        # Creating the filter model for the search feature of the table.
         filter_proxy_model = QSortFilterProxyModel()
         filter_proxy_model.setSourceModel(model)
         filter_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
@@ -211,11 +200,8 @@ class MainWindow(QMainWindow):
         """Removes the selected row from the database."""
         try:
             selected_name = self.ui.tablePasswords.selectedIndexes()[0].data()
-            db_data = db.get_db_data()
-            db_data_names = list(list(zip(*db_data))[0])
-            id_to_delete = db_data_names.index(selected_name)
             if self.dlg_delete_confirmation() == QMessageBox.Yes:
-                db.deleteDataInTable("Password", id_to_delete)
+                self.db.execute(f"DELETE FROM Password WHERE name='{selected_name}'")
                 self.update_dashboard_table()
         except IndexError:
             self.dlg_no_password_selected()
@@ -228,9 +214,8 @@ class MainWindow(QMainWindow):
             selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
             selected_col = self.ui.tablePasswords.selectedIndexes()[3].column()
             copy_to_cb(
-                db.getDataFromTable(
-                    "Password", raiseConversionError=True, omitID=True
-                )[1:][0][selected_row][selected_col]
+                # TODO: Get the password from the selected row
+                self.get_db_data()[1:][0][selected_row][selected_col]
             )
         except IndexError:
             self.dlg_no_password_selected()
@@ -238,7 +223,7 @@ class MainWindow(QMainWindow):
     # ----- Add New -----
     def update_db(self):
         """
-        Inserts the data from the 'Add New' form, along with password
+        Inserts the data from the 'Add New' form along with password
         statistics into the database.
         """
         form_data = [
@@ -263,9 +248,19 @@ class MainWindow(QMainWindow):
         ):  # TODO: Check if name entered already exists in table/database
             pass
         else:
-            db.insertIntoTable(
-                tableName="Password",
-                insertList=form_data,
+            self.db.execute(
+                """INSERT INTO Password (name, url, username, password, isCompromised, passwordStrength)
+            VALUES
+            (:name, :url, :username, :password, :isCompromised, :passwordStrength)
+            """,
+                {
+                    "name": form_data[0],
+                    "url": form_data[1],
+                    "username": form_data[2],
+                    "password": form_data[3],
+                    "isCompromised": form_data[4],
+                    "passwordStrength": form_data[5],
+                },
             )
             self.dlg_pwd_added()
             self.clear_password_form()
@@ -336,11 +331,12 @@ class MainWindow(QMainWindow):
                 check_box.setEnabled(True)
 
     def get_db_data(self):
-        if not db.checkTableExist("Password"):
-            self.db_create_passwords_table()
-        return db.getDataFromTable(
-            "Password", raiseConversionError=True, omitID=True
-        )[1:][0]
+        """Returns a list of the database's data."""
+        try:
+            return self.db.execute("SELECT * FROM Password").fetchall()
+        except sqlcipher.DatabaseError:
+            self.dlg_access_denied()
+            sys_exit()
 
     def update_health_stats(self):
         data = self.get_db_data()
@@ -427,7 +423,7 @@ class MainWindow(QMainWindow):
         self.ui.editEntryPassword.clear()
 
     def log_out(self):
-        if self.dlg_log_out_confirmation() == QMessageBox.Yes:
+        if self.dlg_log_out_confirm() == QMessageBox.Yes:
             sys_exit()
 
     def get_password_strength(self, password):
