@@ -1,3 +1,5 @@
+import urllib.request
+
 from password_strength import PasswordStats
 from pwnedpasswords import check as check_pwned
 from pyperclip import copy as copy_to_cb
@@ -46,6 +48,12 @@ class MainWindow(QMainWindow):
             "Error: URL is invalid.",
             buttons=QMessageBox.Ok,
         )
+        self.dlg_no_network = lambda: QMessageBox.critical(
+            self,
+            "Password Manager",
+            "Check you network connection and try again.",
+            buttons=QMessageBox.Ok,
+        )
         self.dlg_no_password_selected = lambda: QMessageBox.warning(
             self,
             "Password Manager",
@@ -56,6 +64,12 @@ class MainWindow(QMainWindow):
             self,
             "Password Manager",
             "All fields are required.",
+            buttons=QMessageBox.Ok,
+        )
+        self.dlg_duplicate_names = lambda: QMessageBox.warning(
+            self,
+            "Password Manager",
+            "Error: Name entered already exists in saved passwords.",
             buttons=QMessageBox.Ok,
         )
         self.dlg_delete_confirmation = lambda: QMessageBox.question(
@@ -170,20 +184,19 @@ class MainWindow(QMainWindow):
     # ----- Passwords Dashboard -----
     def update_dashboard_table(self):
         """Inserts the data from the database into the dashboard's passwords table."""
-        data = self.db.execute(
-            "SELECT name, url, username, password FROM Password"
-        ).fetchall()
-
+        with self.db:
+            data = self.db.execute(
+                "SELECT name, url, username, password FROM Password"
+            ).fetchall()
         model = QStandardItemModel(len(data), 3)
         model.setHorizontalHeaderLabels(
             ["Name", "URL", "Username", "Password"]
         )
-
-        for row_num in range(len(data)):
-            for col_num, col_data in enumerate(data[row_num]):
-                if col_num == 4:
-                    col_data = "".join("*" for i in range(len(col_data)))
-                model.setItem(row_num, col_num, QStandardItem(col_data))
+        for row_index, row in enumerate(data):
+            for col_index, col_data in enumerate(row):
+                if col_index == 3:
+                    col_data = "*" * len(col_data)
+                model.setItem(row_index, col_index, QStandardItem(col_data))
 
         # Creating the filter model for the search feature of the table.
         filter_proxy_model = QSortFilterProxyModel()
@@ -200,9 +213,12 @@ class MainWindow(QMainWindow):
         """Removes the selected row from the database."""
         try:
             selected_name = self.ui.tablePasswords.selectedIndexes()[0].data()
-            if self.dlg_delete_confirmation() == QMessageBox.Yes:
-                self.db.execute(f"DELETE FROM Password WHERE name='{selected_name}'")
-                self.update_dashboard_table()
+            with self.db:
+                if self.dlg_delete_confirmation() == QMessageBox.Yes:
+                    self.db.execute(
+                        f"DELETE FROM Password WHERE name='{selected_name}'"
+                    )
+                    self.update_dashboard_table()
         except IndexError:
             self.dlg_no_password_selected()
 
@@ -210,13 +226,17 @@ class MainWindow(QMainWindow):
         pass
 
     def copy_password(self):
+        """Inserts the password of the row selected into the clipboard."""
         try:
-            selected_row = self.ui.tablePasswords.selectedIndexes()[3].row()
-            selected_col = self.ui.tablePasswords.selectedIndexes()[3].column()
-            copy_to_cb(
-                # TODO: Get the password from the selected row
-                self.get_db_data()[1:][0][selected_row][selected_col]
-            )
+            selected_row_name = self.ui.tablePasswords.selectedIndexes()[
+                0
+            ].data()
+            with self.db:
+                copy_to_cb(
+                    self.db.execute(
+                        f"SELECT password FROM Password WHERE name='{selected_row_name}'"
+                    ).fetchall()[0][0]
+                )
         except IndexError:
             self.dlg_no_password_selected()
 
@@ -226,54 +246,61 @@ class MainWindow(QMainWindow):
         Inserts the data from the 'Add New' form along with password
         statistics into the database.
         """
-        form_data = [
-            self.ui.comboBoxEntryTitle.currentText(),
-            self.ui.editEntryUrl.text().lower(),
-            self.ui.editEntryUsername.text(),
-            self.ui.editEntryPassword.text(),
-            self.is_password_compromised(self.ui.editEntryPassword.text()),
-            self.get_password_strength(self.ui.editEntryPassword.text()),
-        ]
+        try:
+            form_data = [
+                self.ui.comboBoxEntryTitle.currentText().replace(" ", ""),
+                self.ui.editEntryUrl.text().lower().replace(" ", ""),
+                self.ui.editEntryUsername.text().replace(" ", ""),
+                self.ui.editEntryPassword.text(),
+                self.is_password_compromised(self.ui.editEntryPassword.text()),
+                self.get_password_strength(self.ui.editEntryPassword.text()),
+            ]
 
-        # Check if all fields in the form are filled.
-        if sum(1 if i != "" else 0 for i in form_data) != len(form_data):
-            self.dlg_form_not_filled()
-        # Check if URL is valid.
-        elif self.ui.editEntryUrl.text().replace(
-            " ", ""
-        ) != "" and not is_url_valid(self.ui.editEntryUrl.text().lower()):
-            self.dlg_invalid_url()
-        elif (
-            False
-        ):  # TODO: Check if name entered already exists in table/database
-            pass
-        else:
-            self.db.execute(
-                """INSERT INTO Password (name, url, username, password, isCompromised, passwordStrength)
-            VALUES
-            (:name, :url, :username, :password, :isCompromised, :passwordStrength)
-            """,
-                {
-                    "name": form_data[0],
-                    "url": form_data[1],
-                    "username": form_data[2],
-                    "password": form_data[3],
-                    "isCompromised": form_data[4],
-                    "passwordStrength": form_data[5],
-                },
-            )
-            self.dlg_pwd_added()
-            self.clear_password_form()
+            if not (  # Check if each box is full in form.
+                sum(1 if i != "" else 0 for i in form_data) == len(form_data)
+            ):
+                self.dlg_form_not_filled()
+            elif not is_url_valid(form_data[1]):  # Check if url is valid.
+                self.dlg_invalid_url()
+            elif (  # Check if name in entry is found in database.
+                not self.is_name_unique(form_data[0])
+            ):
+                self.dlg_duplicate_names()
+            else:
+                with self.db:
+                    self.db.execute(
+                        """
+                        INSERT INTO 
+                            Password (name, url, username, password, isCompromised, passwordStrength)
+                        VALUES
+                            (:name, :url, :username, :password, :isCompromised, :passwordStrength)
+                        """,
+                        {
+                            "name": form_data[0],
+                            "url": form_data[1],
+                            "username": form_data[2],
+                            "password": form_data[3],
+                            "isCompromised": form_data[4],
+                            "passwordStrength": form_data[5],
+                        },
+                    )
+                self.dlg_pwd_added()
+                self.clear_password_form()
+
+        except urllib.error.URLError:
+            self.dlg_no_network()
 
     def password_toggle(self, checked):
-        if checked:
-            self.ui.editEntryPassword.setEchoMode(QLineEdit.EchoMode.Normal)
-            self.ui.buttonPasswordToggle.setIcon(QIcon("icons/eye.svg"))
-        else:
-            self.ui.editEntryPassword.setEchoMode(QLineEdit.EchoMode.Password)
-            self.ui.buttonPasswordToggle.setIcon(
-                QIcon("icons/eye-crossed.svg")
-            )
+        self.ui.editEntryPassword.setEchoMode(
+            QLineEdit.EchoMode.Normal
+            if checked
+            else QLineEdit.EchoMode.Password
+        )
+        self.ui.buttonPasswordToggle.setIcon(
+            QIcon("icons/eye.svg")
+            if checked
+            else QIcon("icons/eye-crossed.svg")
+        )
 
     def is_password_compromised(self, password):
         return (
@@ -332,11 +359,12 @@ class MainWindow(QMainWindow):
 
     def get_db_data(self):
         """Returns a list of the database's data."""
-        try:
-            return self.db.execute("SELECT * FROM Password").fetchall()
-        except sqlcipher.DatabaseError:
-            self.dlg_access_denied()
-            sys_exit()
+        with self.db:
+            try:
+                return self.db.execute("SELECT * FROM Password").fetchall()
+            except sqlcipher.DatabaseError:
+                self.dlg_access_denied()
+                sys_exit()
 
     def update_health_stats(self):
         data = self.get_db_data()
@@ -427,17 +455,25 @@ class MainWindow(QMainWindow):
             sys_exit()
 
     def get_password_strength(self, password):
-        if len(password) > 0:
-            score = PasswordStats(password).strength()
-            if score >= 0 and score < 0.33:
-                return "weak"
-            elif score >= 0.33 and score < 0.66:
-                return "medium"
-            elif score >= 0.66:
-                return "strong"
+        score = PasswordStats(password).strength()
+        if score >= 0 and score < 0.33:
+            return "weak"
+        elif score >= 0.33 and score < 0.66:
+            return "medium"
+        elif score >= 0.66:
+            return "strong"
 
     def get_security_score(self, password_list):
         score = [
             PasswordStats(password).strength() for password in password_list
         ]
         return int(sum(score) / len(password_list) * 100)
+
+    def is_name_unique(self, name):
+        with self.db:
+            return not name in [
+                i[0]
+                for i in self.db.execute(
+                    "SELECT name FROM Password"
+                ).fetchall()
+            ]

@@ -143,23 +143,25 @@ class LogInWindow(QMainWindow):
                 self.logged_in.emit()
 
     def toggle_view1(self, checked):
-        if checked:
-            self.ui.editPassword.setEchoMode(QLineEdit.EchoMode.Normal)
-            self.ui.buttonPasswordToggle1.setIcon(QIcon("icons/eye.svg"))
-        else:
-            self.ui.editPassword.setEchoMode(QLineEdit.EchoMode.Password)
-            self.ui.buttonPasswordToggle1.setIcon(
-                QIcon("icons/eye-crossed.svg")
-            )
+        self.ui.editPassword.setEchoMode(
+            QLineEdit.EchoMode.Normal
+            if checked
+            else QLineEdit.EchoMode.Password
+        )
+        self.ui.buttonPasswordToggle1.setIcon(
+            QIcon("icons/eye.svg")
+            if checked
+            else QIcon("icons/eye-crossed.svg")
+        )
 
     def toggle_view2(self, checked):
-        if checked:
-            self.ui.editPasswordConfirm.setEchoMode(QLineEdit.EchoMode.Normal)
-            self.ui.buttonPasswordToggle2.setIcon(QIcon("icons/eye.svg"))
-        else:
-            self.ui.editPasswordConfirm.setEchoMode(
-                QLineEdit.EchoMode.Password
-            )
-            self.ui.buttonPasswordToggle2.setIcon(
-                QIcon("icons/eye-crossed.svg")
-            )
+        self.ui.editPasswordConfirm.setEchoMode(
+            QLineEdit.EchoMode.Normal
+            if checked
+            else QLineEdit.EchoMode.Password
+        )
+        self.ui.buttonPasswordToggle2.setIcon(
+            QIcon("icons/eye.svg")
+            if checked
+            else QIcon("icons/eye-crossed.svg")
+        )

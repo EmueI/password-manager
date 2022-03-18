@@ -19,14 +19,12 @@ def main():
 
     db = sqlcipher.connect("passwordManager.db")
 
-    layout = QStackedLayout()
-
     log_in_window = LogInWindow(db)
-    layout.addWidget(log_in_window)
-
     main_window = MainWindow(db, log_in_window.master_password_input)
-    layout.addWidget(main_window)
 
+    layout = QStackedLayout()
+    layout.addWidget(log_in_window)
+    layout.addWidget(main_window)
     layout.setCurrentWidget(log_in_window)
 
     log_in_window.logged_in.connect(
