@@ -8,6 +8,6 @@
 
 ## Features
 
-- 🔒 Encrypted database
+- 🔒 Encrypted database with SQLCipher
 - 🔃 Built-in password generator 
-- 🛡️ Health and security dashboard
+- 🛡️ Password health dashboard
