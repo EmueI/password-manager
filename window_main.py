@@ -372,40 +372,34 @@ class MainWindow(QMainWindow):
                 return False
 
     def update_health_stats(self):
-        data = self.get_db_data()
-
+        with self.db:
+            data = self.db.execute(
+                "SELECT name, password, isCompromised, passwordStrength FROM Password"
+            ).fetchall()
         if len(data) > 0:
-            security_score = self.get_security_score(list(list(zip(*data))[3]))
+            security_score = self.get_security_score(list(zip(*data))[3])
             self.ui.labelSecurityScore.setText(f"{str(security_score)}%")
 
-            total_unique = len(set(list(list(zip(*data))[3])))
+            total_unique = len(set(list(zip(*data))[1]))
             total_reused = len(data) - total_unique
             self.ui.labelReused.setText(str(total_reused))
 
             total_passwords = len(data)
             self.ui.labelTotalPasswords.setText(str(total_passwords))
 
-            total_compromised = len(
-                [i for i in [data[i][4] for i in range(len(data))] if i == 1]
-            )
+            total_compromised = len([i for i in list(zip(*data))[2] if i == 1])
             self.ui.labelCompromised.setText(str(total_compromised))
 
             total_weak = len(
                 [
                     i
-                    for i in [data[i][5] for i in range(len(data))]
+                    for i in list(zip(*data))[3]
                     if i == "weak" or i == "medium"
                 ]
             )
             self.ui.labelWeak.setText(str(total_weak))
 
-            total_safe = len(
-                [
-                    i
-                    for i in [data[i][5] for i in range(len(data))]
-                    if i == "strong"
-                ]
-            )
+            total_safe = len([i for i in list(zip(*data))[3] if i == "strong"])
             self.ui.labelSafe.setText(str(total_safe))
 
     def set_url(self):
