@@ -1,4 +1,3 @@
-from os.path import exists
 from pysqlcipher3 import dbapi2 as sqlcipher
 
 from PySide6.QtCore import QRect, Signal
@@ -23,46 +22,12 @@ class LogInWindow(QMainWindow):
 
         self.ui.editPassword.setFocus()
 
-        self.master_password_input = self.ui.editPassword.text()
-        # -------- Creating the error dialogue boxes.
-        self.dlg_password_short = lambda: QMessageBox.warning(
-            self,
-            "Password Manager",
-            "The master password must contain at least 8 characters.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_passwords_not_match = lambda: QMessageBox.warning(
-            self,
-            "Password Manager",
-            "Master passwords do not match.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_empty_password = lambda: QMessageBox.warning(
-            self,
-            "Password Manager",
-            "Make sure to fill both fields.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_password_created = lambda: QMessageBox.information(
-            self,
-            "Password Manager",
-            "Your master password has been created successfully.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_incorrect_password = lambda: QMessageBox.warning(
-            self,
-            "Password Manager",
-            "Incorrect master password. Please try again.",
-            buttons=QMessageBox.Ok,
-        )
-        # -------------------------------------------
-
         with self.db:
             try:
                 self.is_master_pass_created = self.db.execute(
                     "SELECT name FROM sqlite_master WHERE type='table' AND name='Password';"
                 ).fetchall()
-            except db.DatabaseError:
+            except sqlcipher.DatabaseError:
                 self.is_master_pass_created = True
 
         if self.is_master_pass_created:
@@ -91,35 +56,48 @@ class LogInWindow(QMainWindow):
 
     def log_in(self):
         if self.is_master_pass_created:
-            self.is_master_password_correct()
+            self.check_master_pass_input()
         else:
             self.create_master_password()
 
-    def is_master_password_correct(self):
+    def check_master_pass_input(self):
         with self.db:
             try:
                 self.db.execute(f"PRAGMA key='{self.ui.editPassword.text()}';")
-                self.db.execute(
-                    "SELECT count(*) FROM sqlite_master;"
-                ).fetchall()
-                self.master_password_input = self.ui.editPassword.text()
+                self.db.execute("SELECT count(*) FROM sqlite_master;")
                 self.logged_in.emit()
             except sqlcipher.DatabaseError:
-                self.dlg_incorrect_password()
+                QMessageBox.warning(
+                    self,
+                    "Password Manager",
+                    "Incorrect master password. Please try again.",
+                )
 
     def create_master_password(self):
         if (
             len(self.ui.editPassword.text()) == 0
             or len(self.ui.editPasswordConfirm.text()) == 0
         ):
-            self.dlg_empty_password()
+            QMessageBox.warning(
+                self,
+                "Password Manager",
+                "Confirmation does not match or is empty.",
+            )
         elif self.ui.editPassword.text() != self.ui.editPasswordConfirm.text():
-            self.dlg_passwords_not_match()
+            QMessageBox.warning(
+                self,
+                "Password Manager",
+                "Master passwords do not match.",
+            )
         elif (
             len(self.ui.editPassword.text()) < 8
             and len(self.ui.editPasswordConfirm.text()) < 8
         ):
-            self.dlg_password_short()
+            QMessageBox.warning(
+                self,
+                "Password Manager",
+                "Your master password must contain at least 8 characters.",
+            )
         else:
             with self.db:
                 self.db.execute(
@@ -138,8 +116,11 @@ class LogInWindow(QMainWindow):
                     );
                     """
                 )
-                self.dlg_password_created()
-                self.master_password_input = self.ui.editPassword.text()
+                QMessageBox.information(
+                    self,
+                    "Password Manager",
+                    "Your master password has been created successfully.",
+                )
                 self.logged_in.emit()
 
     def toggle_view1(self, checked):

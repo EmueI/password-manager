@@ -471,16 +471,16 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.editEntryPasswordConfirm)
 
-        self.buttonPasswordToggle_3 = QPushButton(self.groupBox_12)
-        self.buttonPasswordToggle_3.setObjectName(u"buttonPasswordToggle_3")
-        self.buttonPasswordToggle_3.setMinimumSize(QSize(27, 27))
-        self.buttonPasswordToggle_3.setFont(font3)
-        self.buttonPasswordToggle_3.setCursor(QCursor(Qt.PointingHandCursor))
-        self.buttonPasswordToggle_3.setIcon(icon8)
-        self.buttonPasswordToggle_3.setIconSize(QSize(14, 14))
-        self.buttonPasswordToggle_3.setCheckable(True)
+        self.buttonPasswordToggle2 = QPushButton(self.groupBox_12)
+        self.buttonPasswordToggle2.setObjectName(u"buttonPasswordToggle2")
+        self.buttonPasswordToggle2.setMinimumSize(QSize(27, 27))
+        self.buttonPasswordToggle2.setFont(font3)
+        self.buttonPasswordToggle2.setCursor(QCursor(Qt.PointingHandCursor))
+        self.buttonPasswordToggle2.setIcon(icon8)
+        self.buttonPasswordToggle2.setIconSize(QSize(14, 14))
+        self.buttonPasswordToggle2.setCheckable(True)
 
-        self.horizontalLayout_3.addWidget(self.buttonPasswordToggle_3)
+        self.horizontalLayout_3.addWidget(self.buttonPasswordToggle2)
 
 
         self.verticalLayout_7.addWidget(self.groupBox_12)
@@ -952,7 +952,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.buttonTabPasswords.setDefault(False)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         self.comboBoxEntryTitle.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
 

@@ -9,15 +9,11 @@ from string import ascii_uppercase, ascii_lowercase, digits
 from sys import exit as sys_exit
 from validators import url as is_url_valid
 
-from PySide6.QtCore import Qt, QSortFilterProxyModel, QModelIndex
+from PySide6.QtCore import Qt, QSortFilterProxyModel
 from PySide6.QtWidgets import (
     QMainWindow,
-    QWidget,
-    QTableWidgetItem,
     QMessageBox,
     QLineEdit,
-    QTableView,
-    QHeaderView,
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QIcon
 
@@ -25,10 +21,16 @@ from ui_main_window import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, db, master_password_input):
+    def __init__(self, db):
         super(MainWindow, self).__init__()
         self.db = db
-
+        if not self.is_access_granted():
+            QMessageBox.critical(
+                self,
+                "Password Manager",
+                "Access denied.",
+            )
+            sys_exit()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -36,41 +38,10 @@ class MainWindow(QMainWindow):
         self.setFixedHeight(600)
 
         # ----- Message Boxes -----
-        self.dlg_access_denied = lambda: QMessageBox.critical(
-            self,
-            "Password Manager",
-            "Access denied. You need to provide the master password in the log in window.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_invalid_url = lambda: QMessageBox.critical(
-            self,
-            "Password Manager",
-            "Error: URL is invalid.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_no_network = lambda: QMessageBox.critical(
-            self,
-            "Password Manager",
-            "Check you network connection and try again.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_no_password_selected = lambda: QMessageBox.warning(
+        self.dlg_no_row_selected = lambda: QMessageBox.warning(
             self,
             "Password Manager",
             "No password selected.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_form_not_filled = lambda: QMessageBox.warning(
-            self,
-            "Password Manager",
-            "All fields are required.",
-            buttons=QMessageBox.Ok,
-        )
-        self.dlg_duplicate_names = lambda: QMessageBox.warning(
-            self,
-            "Password Manager",
-            "Error: Name entered already exists in saved passwords.",
-            buttons=QMessageBox.Ok,
         )
         self.dlg_delete_confirmation = lambda: QMessageBox.question(
             self,
@@ -84,13 +55,16 @@ class MainWindow(QMainWindow):
             "Are you sure you want to log out?",
             buttons=QMessageBox.Yes | QMessageBox.Cancel,
         )
-        self.dlg_pwd_added = lambda: QMessageBox.information(
-            self,
-            "Password Manager",
-            "Password has been added successfully.",
-            buttons=QMessageBox.Ok,
-        )
         # -------------------------
+
+        self.filter_proxy_model = QSortFilterProxyModel()
+        self.filter_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
+        self.filter_proxy_model.setFilterKeyColumn(0)
+
+        self.ui.tablePasswords.setModel(self.filter_proxy_model)
+        self.ui.editSearch.textChanged.connect(
+            self.filter_proxy_model.setFilterRegularExpression
+        )
 
         # ----- Side-Menu -----
         self.ui.stackedWidget.setCurrentWidget(self.ui.widgetPasswords)
@@ -98,7 +72,7 @@ class MainWindow(QMainWindow):
             "background-color: #3d3d3d; border-left: 3px solid #8ab4f7"
         )
         self.ui.buttonTabPasswords.clicked.connect(self.show_passwords_tab)
-        self.ui.buttonTabPasswords.clicked.connect(self.update_dashboard_table)
+        self.update_dashboard_table()
         self.ui.buttonTabAddNew.clicked.connect(self.show_add_new_tab)
         self.ui.buttonTabGenerate.clicked.connect(self.show_generate_tab)
         self.ui.buttonTabHealth.clicked.connect(self.show_health_tab)
@@ -107,14 +81,18 @@ class MainWindow(QMainWindow):
         # ----- Password Dashboard ----------------
         self.ui.buttonDelete.clicked.connect(self.delete_password)
         self.ui.buttonCopyPassword.clicked.connect(self.copy_password)
-        # ------------------------------------------
 
         # ----- Add New -----
+        self.ui.buttonTabPasswords.clicked.connect(self.update_dashboard_table)
         self.ui.buttonAddPassword.clicked.connect(self.update_db)
         self.ui.editEntryUrl.returnPressed.connect(self.update_db)
         self.ui.editEntryUsername.returnPressed.connect(self.update_db)
         self.ui.editEntryPassword.returnPressed.connect(self.update_db)
+        self.ui.editEntryPasswordConfirm.returnPressed.connect(self.update_db)
         self.ui.buttonPasswordToggle.clicked.connect(self.password_toggle)
+        self.ui.buttonPasswordToggle2.clicked.connect(
+            self.password_confirm_toggle
+        )
         self.ui.comboBoxEntryTitle.currentTextChanged.connect(self.set_url)
         self.ui.comboBoxEntryTitle.currentIndexChanged.connect(self.set_url)
 
@@ -184,10 +162,10 @@ class MainWindow(QMainWindow):
     # ----- Passwords Dashboard -----
     def update_dashboard_table(self):
         """Inserts the data from the database into the dashboard's passwords table."""
-        with self.db:
-            data = self.db.execute(
-                "SELECT name, url, username, password FROM Password"
-            ).fetchall()
+        data = self.db.execute(
+            "SELECT name, url, username, password FROM Password"
+        ).fetchall()
+
         model = QStandardItemModel(len(data), 3)
         model.setHorizontalHeaderLabels(
             ["Name", "URL", "Username", "Password"]
@@ -197,17 +175,7 @@ class MainWindow(QMainWindow):
                 if col_index == 3:
                     col_data = "*" * len(col_data)
                 model.setItem(row_index, col_index, QStandardItem(col_data))
-
-        # Creating the filter model for the search feature of the table.
-        filter_proxy_model = QSortFilterProxyModel()
-        filter_proxy_model.setSourceModel(model)
-        filter_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
-        filter_proxy_model.setFilterKeyColumn(0)
-        self.ui.tablePasswords.setModel(filter_proxy_model)
-
-        self.ui.editSearch.textChanged.connect(
-            filter_proxy_model.setFilterRegularExpression
-        )
+        self.filter_proxy_model.setSourceModel(model)
 
     def delete_password(self):
         """Removes the selected row from the database."""
@@ -220,7 +188,7 @@ class MainWindow(QMainWindow):
                     )
                     self.update_dashboard_table()
         except IndexError:
-            self.dlg_no_password_selected()
+            self.dlg_no_row_selected()
 
     def edit_password(self):
         pass
@@ -238,7 +206,7 @@ class MainWindow(QMainWindow):
                     ).fetchall()[0][0]
                 )
         except IndexError:
-            self.dlg_no_password_selected()
+            self.dlg_no_row_selected()
 
     # ----- Add New -----
     def update_db(self):
@@ -252,20 +220,38 @@ class MainWindow(QMainWindow):
                 self.ui.editEntryUrl.text().lower().replace(" ", ""),
                 self.ui.editEntryUsername.text().replace(" ", ""),
                 self.ui.editEntryPassword.text(),
+                self.ui.editEntryPasswordConfirm.text(),
                 self.is_password_compromised(self.ui.editEntryPassword.text()),
                 self.get_password_strength(self.ui.editEntryPassword.text()),
             ]
-
-            if not (  # Check if each box is full in form.
+            if not (form_data[3] == form_data[4]):
+                QMessageBox.warning(
+                    self,
+                    "Password Manager",
+                    "Password confirmation does not match or is empty.",
+                )
+            elif not (  # Check if each box is full in form.
                 sum(1 if i != "" else 0 for i in form_data) == len(form_data)
             ):
-                self.dlg_form_not_filled()
+                QMessageBox.warning(
+                    self,
+                    "Password Manager",
+                    "All fields are required.",
+                )
             elif not is_url_valid(form_data[1]):  # Check if url is valid.
-                self.dlg_invalid_url()
+                QMessageBox.critical(
+                    self,
+                    "Password Manager",
+                    "Error: URL is invalid.",
+                )
             elif (  # Check if name in entry is found in database.
                 not self.is_name_unique(form_data[0])
             ):
-                self.dlg_duplicate_names()
+                QMessageBox.warning(
+                    self,
+                    "Password Manager",
+                    f"Error: A password for {form_data[0]} already exists.",
+                )
             else:
                 with self.db:
                     self.db.execute(
@@ -280,13 +266,16 @@ class MainWindow(QMainWindow):
                             "url": form_data[1],
                             "username": form_data[2],
                             "password": form_data[3],
-                            "isCompromised": form_data[4],
-                            "passwordStrength": form_data[5],
+                            "isCompromised": form_data[5],
+                            "passwordStrength": form_data[6],
                         },
                     )
-                self.dlg_pwd_added()
+                QMessageBox.information(
+                    self,
+                    "Password Manager",
+                    "Password has been added successfully.",
+                )
                 self.clear_password_form()
-
         except urllib.error.URLError:
             self.dlg_no_network()
 
@@ -297,6 +286,18 @@ class MainWindow(QMainWindow):
             else QLineEdit.EchoMode.Password
         )
         self.ui.buttonPasswordToggle.setIcon(
+            QIcon("icons/eye.svg")
+            if checked
+            else QIcon("icons/eye-crossed.svg")
+        )
+
+    def password_confirm_toggle(self, checked):
+        self.ui.editEntryPasswordConfirm.setEchoMode(
+            QLineEdit.EchoMode.Normal
+            if checked
+            else QLineEdit.EchoMode.Password
+        )
+        self.ui.buttonPasswordToggle2.setIcon(
             QIcon("icons/eye.svg")
             if checked
             else QIcon("icons/eye-crossed.svg")
@@ -360,11 +361,15 @@ class MainWindow(QMainWindow):
     def get_db_data(self):
         """Returns a list of the database's data."""
         with self.db:
+            return self.db.execute("SELECT * FROM Password").fetchall()
+
+    def is_access_granted(self):
+        with self.db:
             try:
-                return self.db.execute("SELECT * FROM Password").fetchall()
-            except sqlcipher.DatabaseError:
-                self.dlg_access_denied()
-                sys_exit()
+                self.db.execute("SELECT count(*) FROM sqlite_master;")
+                return True
+            except self.db.DatabaseError:
+                return False
 
     def update_health_stats(self):
         data = self.get_db_data()
@@ -449,19 +454,21 @@ class MainWindow(QMainWindow):
         self.ui.editEntryUsername.clear()
         self.ui.editEntryUrl.clear()
         self.ui.editEntryPassword.clear()
+        self.ui.editEntryPasswordConfirm.clear()
 
     def log_out(self):
         if self.dlg_log_out_confirm() == QMessageBox.Yes:
             sys_exit()
 
     def get_password_strength(self, password):
-        score = PasswordStats(password).strength()
-        if score >= 0 and score < 0.33:
-            return "weak"
-        elif score >= 0.33 and score < 0.66:
-            return "medium"
-        elif score >= 0.66:
-            return "strong"
+        if len(password) > 0:
+            score = PasswordStats(password).strength()
+            if score >= 0 and score < 0.33:
+                return "weak"
+            elif score >= 0.33 and score < 0.66:
+                return "medium"
+            elif score >= 0.66:
+                return "strong"
 
     def get_security_score(self, password_list):
         score = [
@@ -471,9 +478,12 @@ class MainWindow(QMainWindow):
 
     def is_name_unique(self, name):
         with self.db:
-            return not name in [
-                i[0]
-                for i in self.db.execute(
-                    "SELECT name FROM Password"
-                ).fetchall()
-            ]
+            try:
+                return not name in [
+                    i[0]
+                    for i in self.db.execute(
+                        "SELECT name FROM Password"
+                    ).fetchall()
+                ]
+            except sqlcipher.DatabaseError:
+                return True

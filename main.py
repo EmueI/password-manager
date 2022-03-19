@@ -14,22 +14,23 @@ from window_main import MainWindow
 
 
 def main():
+    def create_main_window():
+        main_window = MainWindow(db)
+        layout.addWidget(main_window)
+        layout.setCurrentWidget(main_window)
+
     app = QApplication([])
-    app.setStyleSheet(load_stylesheet("dark", "rounded"))
+    app.setStyleSheet(load_stylesheet())
 
-    db = sqlcipher.connect("passwordManager.db")
-
-    log_in_window = LogInWindow(db)
-    main_window = MainWindow(db, log_in_window.master_password_input)
+    db = sqlcipher.connect("password_manager.db")
 
     layout = QStackedLayout()
-    layout.addWidget(log_in_window)
-    layout.addWidget(main_window)
-    layout.setCurrentWidget(log_in_window)
 
-    log_in_window.logged_in.connect(
-        lambda w=main_window: layout.setCurrentWidget(w)
-    )
+    log_in_window = LogInWindow(db)
+    layout.addWidget(log_in_window)
+
+    log_in_window.logged_in.connect(create_main_window)
+
     sys_exit(app.exec())
 
 

@@ -399,7 +399,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1233,7 +1233,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="buttonPasswordToggle_3">
+                   <widget class="QPushButton" name="buttonPasswordToggle2">
                     <property name="minimumSize">
                      <size>
                       <width>27</width>
