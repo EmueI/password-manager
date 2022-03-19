@@ -1,5 +1,6 @@
 from pysqlcipher3 import dbapi2 as sqlcipher
 
+from PySide6 import QtSvg, QtXml
 from PySide6.QtCore import QRect, Signal
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QMessageBox, QLineEdit

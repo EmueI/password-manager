@@ -277,7 +277,9 @@ class MainWindow(QMainWindow):
                 )
                 self.clear_password_form()
         except urllib.error.URLError:
-            self.dlg_no_network()
+            QMessageBox.critical(
+                self, "Password Manager", "Couldn't connect to the network."
+            )
 
     def password_toggle(self, checked):
         self.ui.editEntryPassword.setEchoMode(
@@ -380,8 +382,19 @@ class MainWindow(QMainWindow):
             security_score = self.get_security_score(list(zip(*data))[3])
             self.ui.labelSecurityScore.setText(f"{str(security_score)}%")
 
-            total_unique = len(set(list(zip(*data))[1]))
-            total_reused = len(data) - total_unique
+            reused_list = self.db.execute(
+                """
+                SELECT
+                    password,
+                    COUNT(*) AS "Count"
+                FROM Password
+                GROUP BY
+                    password
+                HAVING COUNT(*) > 1
+                ORDER BY id;
+                """
+            ).fetchall()
+            total_reused = sum(list(zip(*reused_list))[1])
             self.ui.labelReused.setText(str(total_reused))
 
             total_passwords = len(data)
