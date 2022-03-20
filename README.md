@@ -11,7 +11,7 @@
 
 ### - 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
 
-### - 🔃 Built-in password generator 
+### - 🔃 Random password generator 
 ![linked-image](https://i.ibb.co/HzkNBSB/Screenshot-from-2022-03-20-12-43-03.png)
 
 ### - 🛡️ Password health dashboard
