@@ -13,9 +13,9 @@
 - 🛡️ Password health dashboard
 
 ## 🍔 Built With
-- ![PySide6](https://pypi.org/project/PySide6/)
-- ![Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html)
-- ![SQLCipher](https://www.zetetic.net/sqlcipher/)
+- [PySide6](https://pypi.org/project/PySide6/)
+- [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html)
+- [SQLCipher](https://www.zetetic.net/sqlcipher/)
 
 
 # ⚠️ Disclaimer
