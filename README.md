@@ -16,9 +16,10 @@
 ### 🛡️ Password health dashboard
 
 ## 🍔 Built With
-- [PySide6](https://pypi.org/project/PySide6/)
-- [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html)
-- [SQLCipher](https://www.zetetic.net/sqlcipher/)
+- [PySide6](https://pypi.org/project/PySide6/) - The official Python module from the Qt for Python project, which provides access to the complete Qt 6.0+ framework.
+- [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html) - The Qt tool for designing and building graphical user interfaces (GUIs) with Qt Widgets.
+- [SQLCipher](https://www.zetetic.net/sqlcipher/) - Open-source extension to SQLite, Transparent, 256-bit AES encryption, Tamper-resistant design, Cross-platform and zero configuration
+
 
 
 # ⚠️ Disclaimer
