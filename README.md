@@ -11,3 +11,7 @@
 - 🔒 Encrypted database with SQLCipher
 - 🔃 Built-in password generator 
 - 🛡️ Password health dashboard
+
+# Disclaimer
+
+This application has not been tested thoroughly for any security flaws. It is not advisable to enter any of your personal passwords.
