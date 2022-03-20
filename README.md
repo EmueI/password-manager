@@ -12,6 +12,7 @@
 - 🔃 Built-in password generator 
 - 🛡️ Password health dashboard
 
+
 # ⚠️ Disclaimer
 
 This program has not been extensively tested for any security issues.
