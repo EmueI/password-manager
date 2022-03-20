@@ -8,11 +8,11 @@
 
 # 🔥 Features
 
-## 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
+### 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
 
-## 🔃 Built-in password generator 
+### 🔃 Built-in password generator 
 
-## 🛡️ Password health dashboard
+### 🛡️ Password health dashboard
 
 ## 🍔 Built With
 - [PySide6](https://pypi.org/project/PySide6/)
