@@ -399,7 +399,7 @@
           </font>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="widgetPasswords">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -457,9 +457,9 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>150</y>
+                <y>169</y>
                 <width>530</width>
-                <height>242</height>
+                <height>281</height>
                </rect>
               </property>
               <property name="font">
@@ -495,6 +495,12 @@
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
+              <property name="showGrid">
+               <bool>true</bool>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
               <attribute name="horizontalHeaderMinimumSectionSize">
                <number>111</number>
               </attribute>
@@ -509,7 +515,7 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>530</y>
+                <y>470</y>
                 <width>530</width>
                 <height>40</height>
                </rect>
@@ -719,22 +725,6 @@
                 </widget>
                </item>
               </layout>
-             </widget>
-             <widget class="QFrame" name="frame_2">
-              <property name="geometry">
-               <rect>
-                <x>40</x>
-                <y>410</y>
-                <width>531</width>
-                <height>101</height>
-               </rect>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
              </widget>
             </widget>
            </item>
@@ -1110,7 +1100,7 @@
                   </font>
                  </property>
                  <property name="title">
-                  <string>Username/Email</string>
+                  <string>Username</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_22">
                   <item>
@@ -1776,9 +1766,9 @@
               <property name="geometry">
                <rect>
                 <x>40</x>
-                <y>230</y>
+                <y>240</y>
                 <width>530</width>
-                <height>331</height>
+                <height>321</height>
                </rect>
               </property>
               <property name="font">
@@ -1837,11 +1827,17 @@
                   <property name="sortingEnabled">
                    <bool>false</bool>
                   </property>
+                  <property name="cornerButtonEnabled">
+                   <bool>false</bool>
+                  </property>
                   <attribute name="horizontalHeaderMinimumSectionSize">
                    <number>141</number>
                   </attribute>
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>141</number>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
                   </attribute>
                   <column>
                    <property name="text">
@@ -1889,11 +1885,17 @@
                   <property name="sortingEnabled">
                    <bool>false</bool>
                   </property>
+                  <property name="cornerButtonEnabled">
+                   <bool>false</bool>
+                  </property>
                   <attribute name="horizontalHeaderMinimumSectionSize">
                    <number>141</number>
                   </attribute>
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>141</number>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
                   </attribute>
                   <column>
                    <property name="text">
@@ -1941,11 +1943,17 @@
                   <property name="sortingEnabled">
                    <bool>false</bool>
                   </property>
+                  <property name="cornerButtonEnabled">
+                   <bool>false</bool>
+                  </property>
                   <attribute name="horizontalHeaderMinimumSectionSize">
                    <number>141</number>
                   </attribute>
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>141</number>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
                   </attribute>
                   <column>
                    <property name="text">
@@ -1993,11 +2001,17 @@
                   <property name="sortingEnabled">
                    <bool>false</bool>
                   </property>
+                  <property name="cornerButtonEnabled">
+                   <bool>false</bool>
+                  </property>
                   <attribute name="horizontalHeaderMinimumSectionSize">
                    <number>141</number>
                   </attribute>
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>141</number>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
                   </attribute>
                   <column>
                    <property name="text">
@@ -2025,7 +2039,7 @@
                 <x>40</x>
                 <y>150</y>
                 <width>531</width>
-                <height>61</height>
+                <height>71</height>
                </rect>
               </property>
               <property name="frameShape">
@@ -2342,8 +2356,8 @@
                <rect>
                 <x>40</x>
                 <y>90</y>
-                <width>131</width>
-                <height>41</height>
+                <width>141</width>
+                <height>51</height>
                </rect>
               </property>
               <property name="font">

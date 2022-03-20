@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox,
     QLineEdit,
+    QTableWidgetItem,
 )
 from PySide6.QtGui import QStandardItemModel, QStandardItem, QIcon
 
@@ -170,12 +171,15 @@ class MainWindow(QMainWindow):
         model.setHorizontalHeaderLabels(
             ["Name", "URL", "Username", "Password"]
         )
+
         for row_index, row in enumerate(data):
             for col_index, col_data in enumerate(row):
                 if col_index == 3:
                     col_data = "*" * len(col_data)
                 model.setItem(row_index, col_index, QStandardItem(col_data))
         self.filter_proxy_model.setSourceModel(model)
+        self.ui.tablePasswords.setColumnWidth(1, 150)
+        self.ui.tablePasswords.setColumnWidth(3, 152)
 
     def delete_password(self):
         """Removes the selected row from the database."""
@@ -218,7 +222,7 @@ class MainWindow(QMainWindow):
             form_data = [
                 self.ui.comboBoxEntryTitle.currentText().replace(" ", ""),
                 self.ui.editEntryUrl.text().lower().replace(" ", ""),
-                self.ui.editEntryUsername.text().replace(" ", ""),
+                self.ui.editEntryUsername.text(),
                 self.ui.editEntryPassword.text(),
                 self.ui.editEntryPasswordConfirm.text(),
                 self.is_password_compromised(self.ui.editEntryPassword.text()),
@@ -374,12 +378,17 @@ class MainWindow(QMainWindow):
                 return False
 
     def update_health_stats(self):
+        self.update_compromised_table()
+        self.update_reused_table()
+        self.update_weak_table()
+        self.update_safe_table()
         with self.db:
             data = self.db.execute(
                 "SELECT name, password, isCompromised, passwordStrength FROM Password"
             ).fetchall()
+
         if len(data) > 0:
-            security_score = self.get_security_score(list(zip(*data))[3])
+            security_score = int(sum(list(zip(*data))[3]) * 100 / len(data))
             self.ui.labelSecurityScore.setText(f"{str(security_score)}%")
 
             reused_list = self.db.execute(
@@ -394,8 +403,9 @@ class MainWindow(QMainWindow):
                 ORDER BY id;
                 """
             ).fetchall()
-            total_reused = sum(list(zip(*reused_list))[1])
-            self.ui.labelReused.setText(str(total_reused))
+            if len(reused_list) > 1:
+                total_reused = sum(list(zip(*reused_list))[1])
+                self.ui.labelReused.setText(str(total_reused))
 
             total_passwords = len(data)
             self.ui.labelTotalPasswords.setText(str(total_passwords))
@@ -403,17 +413,113 @@ class MainWindow(QMainWindow):
             total_compromised = len([i for i in list(zip(*data))[2] if i == 1])
             self.ui.labelCompromised.setText(str(total_compromised))
 
-            total_weak = len(
-                [
-                    i
-                    for i in list(zip(*data))[3]
-                    if i == "weak" or i == "medium"
-                ]
-            )
+            total_weak = len([i for i in list(zip(*data))[3] if i < 0.66])
             self.ui.labelWeak.setText(str(total_weak))
 
             total_safe = len([i for i in list(zip(*data))[3] if i == "strong"])
             self.ui.labelSafe.setText(str(total_safe))
+
+    def update_compromised_table(self):
+        """Inserts the compromised accounts into the compromised table."""
+        compromised_list = self.db.execute(
+            """
+                SELECT
+                    name,
+                    username,
+                    password
+                FROM Password
+                WHERE isCompromised=1
+                """
+        ).fetchall()
+        self.ui.tableCompromised.setRowCount(len(compromised_list))
+        for row_index, row in enumerate(compromised_list):
+            for col_index, col_data in enumerate(row):
+                if col_index == 2:
+                    col_data = "*" * len(col_data)
+                self.ui.tableCompromised.setItem(
+                    row_index, col_index, QTableWidgetItem(col_data)
+                )
+        self.ui.tableCompromised.setColumnWidth(1, 180)
+        self.ui.tableCompromised.setColumnWidth(2, 181)
+        self.ui.tableCompromised.setColumnWidth(3, 181)
+
+    def update_reused_table(self):
+        """Inserts the accounts with reused passwords into the reused table."""
+        reused_list = self.db.execute(
+            """
+            SELECT
+                name,
+                username,
+                password,
+                COUNT(*) AS "Count"
+            FROM Password
+            GROUP BY
+                password
+            HAVING COUNT(*) > 1
+            ORDER BY id;
+            """
+        ).fetchall()
+
+        print(reused_list)
+        self.ui.tableReused.setRowCount(len(reused_list))
+        for row_index, row in enumerate(reused_list):
+            for col_index, col_data in enumerate(row):
+                if col_index == 2:
+                    col_data = "*" * len(col_data)
+                self.ui.tableReused.setItem(
+                    row_index, col_index, QTableWidgetItem(col_data)
+                )
+        self.ui.tableReused.setColumnWidth(1, 180)
+        self.ui.tableReused.setColumnWidth(2, 181)
+        self.ui.tableReused.setColumnWidth(3, 181)
+
+    def update_weak_table(self):
+        """Inserts the accounts with weak passwords into the weak table."""
+        weak_list = self.db.execute(
+            """
+                SELECT
+                    name,
+                    username,
+                    password
+                FROM Password
+                WHERE passwordStrength < 0.66
+                """
+        ).fetchall()
+        self.ui.tableWeak.setRowCount(len(weak_list))
+        for row_index, row in enumerate(weak_list):
+            for col_index, col_data in enumerate(row):
+                if col_index == 2:
+                    col_data = "*" * len(col_data)
+                self.ui.tableWeak.setItem(
+                    row_index, col_index, QTableWidgetItem(col_data)
+                )
+        self.ui.tableWeak.setColumnWidth(1, 180)
+        self.ui.tableWeak.setColumnWidth(2, 181)
+        self.ui.tableWeak.setColumnWidth(3, 181)
+
+    def update_safe_table(self):
+        """Inserts the accounts with safe passwords into the safe table."""
+        safe_list = self.db.execute(
+            """
+                SELECT
+                    name,
+                    username,
+                    password
+                FROM Password
+                WHERE passwordStrength >= 0.66
+                """
+        ).fetchall()
+        self.ui.tableSafe.setRowCount(len(safe_list))
+        for row_index, row in enumerate(safe_list):
+            for col_index, col_data in enumerate(row):
+                if col_index == 2:
+                    col_data = "*" * len(col_data)
+                self.ui.tableSafe.setItem(
+                    row_index, col_index, QTableWidgetItem(col_data)
+                )
+        self.ui.tableSafe.setColumnWidth(1, 180)
+        self.ui.tableSafe.setColumnWidth(2, 181)
+        self.ui.tableSafe.setColumnWidth(3, 181)
 
     def set_url(self):
         url_list = [
@@ -469,19 +575,7 @@ class MainWindow(QMainWindow):
 
     def get_password_strength(self, password):
         if len(password) > 0:
-            score = PasswordStats(password).strength()
-            if score >= 0 and score < 0.33:
-                return "weak"
-            elif score >= 0.33 and score < 0.66:
-                return "medium"
-            elif score >= 0.66:
-                return "strong"
-
-    def get_security_score(self, password_list):
-        score = [
-            PasswordStats(password).strength() for password in password_list
-        ]
-        return int(sum(score) / len(password_list) * 100)
+            return PasswordStats(password).strength()
 
     def is_name_unique(self, name):
         with self.db:

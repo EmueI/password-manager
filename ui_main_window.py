@@ -189,7 +189,7 @@ class Ui_MainWindow(object):
         self.editSearch.setClearButtonEnabled(True)
         self.tablePasswords = QTableView(self.framePasswordDashboard)
         self.tablePasswords.setObjectName(u"tablePasswords")
-        self.tablePasswords.setGeometry(QRect(40, 150, 530, 242))
+        self.tablePasswords.setGeometry(QRect(40, 169, 530, 281))
         self.tablePasswords.setFont(font1)
         self.tablePasswords.setFrameShape(QFrame.StyledPanel)
         self.tablePasswords.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -200,12 +200,14 @@ class Ui_MainWindow(object):
         self.tablePasswords.setAlternatingRowColors(False)
         self.tablePasswords.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tablePasswords.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tablePasswords.setShowGrid(True)
+        self.tablePasswords.setWordWrap(False)
         self.tablePasswords.horizontalHeader().setMinimumSectionSize(111)
         self.tablePasswords.horizontalHeader().setDefaultSectionSize(111)
         self.tablePasswords.verticalHeader().setVisible(False)
         self.frame_4 = QFrame(self.framePasswordDashboard)
         self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setGeometry(QRect(40, 530, 530, 40))
+        self.frame_4.setGeometry(QRect(40, 470, 530, 40))
         self.frame_4.setFont(font1)
         self.frame_4.setFrameShape(QFrame.NoFrame)
         self.gridLayout = QGridLayout(self.frame_4)
@@ -288,11 +290,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_17.addWidget(self.line)
 
-        self.frame_2 = QFrame(self.framePasswordDashboard)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setGeometry(QRect(40, 410, 531, 101))
-        self.frame_2.setFrameShape(QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Raised)
 
         self.verticalLayout_3.addWidget(self.framePasswordDashboard)
 
@@ -687,7 +684,7 @@ class Ui_MainWindow(object):
 
         self.tabWidget = QTabWidget(self.frameSecurity)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setGeometry(QRect(40, 230, 530, 331))
+        self.tabWidget.setGeometry(QRect(40, 240, 530, 321))
         font8 = QFont()
         font8.setFamilies([u"Roboto Medium"])
         self.tabWidget.setFont(font8)
@@ -718,8 +715,10 @@ class Ui_MainWindow(object):
         self.tableCompromised.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tableCompromised.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableCompromised.setSortingEnabled(False)
+        self.tableCompromised.setCornerButtonEnabled(False)
         self.tableCompromised.horizontalHeader().setMinimumSectionSize(141)
         self.tableCompromised.horizontalHeader().setDefaultSectionSize(141)
+        self.tableCompromised.verticalHeader().setVisible(False)
 
         self.verticalLayout_23.addWidget(self.tableCompromised)
 
@@ -744,8 +743,10 @@ class Ui_MainWindow(object):
         self.tableReused.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tableReused.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableReused.setSortingEnabled(False)
+        self.tableReused.setCornerButtonEnabled(False)
         self.tableReused.horizontalHeader().setMinimumSectionSize(141)
         self.tableReused.horizontalHeader().setDefaultSectionSize(141)
+        self.tableReused.verticalHeader().setVisible(False)
 
         self.verticalLayout_30.addWidget(self.tableReused)
 
@@ -770,8 +771,10 @@ class Ui_MainWindow(object):
         self.tableWeak.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tableWeak.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableWeak.setSortingEnabled(False)
+        self.tableWeak.setCornerButtonEnabled(False)
         self.tableWeak.horizontalHeader().setMinimumSectionSize(141)
         self.tableWeak.horizontalHeader().setDefaultSectionSize(141)
+        self.tableWeak.verticalHeader().setVisible(False)
 
         self.verticalLayout_31.addWidget(self.tableWeak)
 
@@ -796,15 +799,17 @@ class Ui_MainWindow(object):
         self.tableSafe.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tableSafe.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableSafe.setSortingEnabled(False)
+        self.tableSafe.setCornerButtonEnabled(False)
         self.tableSafe.horizontalHeader().setMinimumSectionSize(141)
         self.tableSafe.horizontalHeader().setDefaultSectionSize(141)
+        self.tableSafe.verticalHeader().setVisible(False)
 
         self.verticalLayout_32.addWidget(self.tableSafe)
 
         self.tabWidget.addTab(self.tabSafe, "")
         self.frame_7 = QFrame(self.frameSecurity)
         self.frame_7.setObjectName(u"frame_7")
-        self.frame_7.setGeometry(QRect(40, 150, 531, 61))
+        self.frame_7.setGeometry(QRect(40, 150, 531, 71))
         self.frame_7.setFrameShape(QFrame.StyledPanel)
         self.frame_7.setFrameShadow(QFrame.Plain)
         self.horizontalLayout = QHBoxLayout(self.frame_7)
@@ -921,7 +926,7 @@ class Ui_MainWindow(object):
 
         self.groupBoxSecurityScore = QGroupBox(self.frameSecurity)
         self.groupBoxSecurityScore.setObjectName(u"groupBoxSecurityScore")
-        self.groupBoxSecurityScore.setGeometry(QRect(40, 90, 131, 41))
+        self.groupBoxSecurityScore.setGeometry(QRect(40, 90, 141, 51))
         self.groupBoxSecurityScore.setFont(font)
         self.groupBoxSecurityScore.setAlignment(Qt.AlignCenter)
         self.groupBoxSecurityScore.setFlat(False)
@@ -952,7 +957,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.buttonTabPasswords.setDefault(False)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(3)
         self.comboBoxEntryTitle.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
 
@@ -1013,7 +1018,7 @@ class Ui_MainWindow(object):
         self.comboBoxEntryTitle.setCurrentText("")
         self.groupBox_5.setTitle(QCoreApplication.translate("MainWindow", u"URL", None))
         self.editEntryUrl.setText("")
-        self.groupBox_6.setTitle(QCoreApplication.translate("MainWindow", u"Username/Email", None))
+        self.groupBox_6.setTitle(QCoreApplication.translate("MainWindow", u"Username", None))
         self.groupBox_7.setTitle(QCoreApplication.translate("MainWindow", u"Password", None))
         self.groupBox_12.setTitle(QCoreApplication.translate("MainWindow", u"Confirm password", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Password length", None))

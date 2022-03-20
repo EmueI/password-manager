@@ -113,7 +113,7 @@ class LogInWindow(QMainWindow):
                         username TEXT,
                         password TEXT,
                         isCompromised INTEGER,
-                        passwordStrength TEXT
+                        passwordStrength INTEGER 
                     );
                     """
                 )
