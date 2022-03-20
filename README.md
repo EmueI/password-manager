@@ -9,12 +9,12 @@
 
 # 🔥 Features
 
-### 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
+### - 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
 
-### 🔃 Built-in password generator 
+### - 🔃 Built-in password generator 
 ![linked-image](https://i.ibb.co/HzkNBSB/Screenshot-from-2022-03-20-12-43-03.png)
 
-### 🛡️ Password health dashboard
+### - 🛡️ Password health dashboard
 
 ## 🍔 Built With
 - [PySide6](https://pypi.org/project/PySide6/) - The official Python module from the Qt for Python project, which provides access to the complete Qt 6.0+ framework.
