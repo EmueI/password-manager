@@ -6,11 +6,13 @@
 ![linked-banner](https://i.ibb.co/4JBRMt7/Screenshot-2022-03-11-162837.png)
 
 
-## 🔥 Features
+# 🔥 Features
 
-- 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
-- 🔃 Built-in password generator 
-- 🛡️ Password health dashboard
+## 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
+
+## 🔃 Built-in password generator 
+
+## 🛡️ Password health dashboard
 
 ## 🍔 Built With
 - [PySide6](https://pypi.org/project/PySide6/)
