@@ -118,6 +118,10 @@ class MainWindow(QMainWindow):
 
         # ----- Password Health -----
         self.ui.buttonTabHealth.clicked.connect(self.update_health_stats)
+        self.ui.buttonTabHealth.clicked.connect(self.update_compromised_table)
+        self.ui.buttonTabHealth.clicked.connect(self.update_reused_table)
+        self.ui.buttonTabHealth.clicked.connect(self.update_weak_table)
+        self.ui.buttonTabHealth.clicked.connect(self.update_safe_table)
 
     # ----- Side-Menu -----
     def show_passwords_tab(self):
@@ -378,55 +382,52 @@ class MainWindow(QMainWindow):
                 return False
 
     def update_health_stats(self):
-        self.update_compromised_table()
-        self.update_reused_table()
-        self.update_weak_table()
-        self.update_safe_table()
         with self.db:
             data = self.db.execute(
-                "SELECT name, password, isCompromised, passwordStrength FROM Password"
-            ).fetchall()
-
-        if len(data) > 0:
-            security_score = int(sum(list(zip(*data))[3]) * 100 / len(data))
-            self.ui.labelSecurityScore.setText(f"{str(security_score)}%")
-
-            reused_list = self.db.execute(
                 """
-                SELECT
-                    password,
-                    COUNT(*) AS "Count"
+                SELECT name, password, isCompromised, passwordStrength
                 FROM Password
-                GROUP BY
-                    password
-                HAVING COUNT(*) > 1
-                ORDER BY id;
                 """
             ).fetchall()
-            if len(reused_list) > 1:
-                total_reused = sum(list(zip(*reused_list))[1])
-                self.ui.labelReused.setText(str(total_reused))
 
-            total_passwords = len(data)
-            self.ui.labelTotalPasswords.setText(str(total_passwords))
+            if data:
+                security_score = int(
+                    sum(list(zip(*data))[3]) * 100 / len(data)
+                )
+                self.ui.labelSecurityScore.setText(f"{str(security_score)}%")
 
-            total_compromised = len([i for i in list(zip(*data))[2] if i == 1])
-            self.ui.labelCompromised.setText(str(total_compromised))
+                reused_list = self.db.execute(
+                    """
+                    SELECT password, COUNT(*) AS "Count"
+                    FROM Password
+                    GROUP BY password
+                    HAVING COUNT(*) > 1
+                    """
+                ).fetchall()
 
-            total_weak = len([i for i in list(zip(*data))[3] if i < 0.66])
-            self.ui.labelWeak.setText(str(total_weak))
+                if reused_list:
+                    total_reused = sum(list(zip(*reused_list))[1])
+                    self.ui.labelReused.setText(str(total_reused))
 
-            total_safe = len([i for i in list(zip(*data))[3] if i == "strong"])
-            self.ui.labelSafe.setText(str(total_safe))
+                total_passwords = len(data)
+                self.ui.labelTotalPasswords.setText(str(total_passwords))
+
+                total_compromised = len(
+                    [i for i in list(zip(*data))[2] if i == 1]
+                )
+                self.ui.labelCompromised.setText(str(total_compromised))
+
+                total_weak = len([i for i in list(zip(*data))[3] if i < 0.66])
+                self.ui.labelWeak.setText(str(total_weak))
+
+                total_safe = len([i for i in list(zip(*data))[3] if i >= 0.66])
+                self.ui.labelSafe.setText(str(total_safe))
 
     def update_compromised_table(self):
         """Inserts the compromised accounts into the compromised table."""
         compromised_list = self.db.execute(
             """
-                SELECT
-                    name,
-                    username,
-                    password
+                SELECT name, url, password
                 FROM Password
                 WHERE isCompromised=1
                 """
@@ -448,27 +449,27 @@ class MainWindow(QMainWindow):
         reused_list = self.db.execute(
             """
             SELECT
-                name,
-                username,
-                password,
-                COUNT(*) AS "Count"
-            FROM Password
-            GROUP BY
-                password
-            HAVING COUNT(*) > 1
-            ORDER BY id;
+                y.id, y.name, y.url, y.password
+                FROM Password y
+                    INNER JOIN (
+                        SELECT name, url, password, COUNT(*) AS CountOf
+                        FROM Password
+                        GROUP BY password 
+                        HAVING COUNT(*) > 1
+                    )
+                    dt ON y.password=dt.password
             """
         ).fetchall()
 
-        print(reused_list)
         self.ui.tableReused.setRowCount(len(reused_list))
         for row_index, row in enumerate(reused_list):
             for col_index, col_data in enumerate(row):
-                if col_index == 2:
-                    col_data = "*" * len(col_data)
-                self.ui.tableReused.setItem(
-                    row_index, col_index, QTableWidgetItem(col_data)
-                )
+                if col_index > 0:
+                    if col_index == 3:
+                        col_data = "*" * len(col_data)
+                    self.ui.tableReused.setItem(
+                        row_index, col_index - 1, QTableWidgetItem(col_data)
+                    )
         self.ui.tableReused.setColumnWidth(1, 180)
         self.ui.tableReused.setColumnWidth(2, 181)
         self.ui.tableReused.setColumnWidth(3, 181)
@@ -477,10 +478,7 @@ class MainWindow(QMainWindow):
         """Inserts the accounts with weak passwords into the weak table."""
         weak_list = self.db.execute(
             """
-                SELECT
-                    name,
-                    username,
-                    password
+                SELECT name, url, password
                 FROM Password
                 WHERE passwordStrength < 0.66
                 """
@@ -501,10 +499,7 @@ class MainWindow(QMainWindow):
         """Inserts the accounts with safe passwords into the safe table."""
         safe_list = self.db.execute(
             """
-                SELECT
-                    name,
-                    username,
-                    password
+                SELECT name, url, password
                 FROM Password
                 WHERE passwordStrength >= 0.66
                 """
