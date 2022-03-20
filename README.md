@@ -12,7 +12,7 @@
 ### 🔒 Encrypted database with [pysqlcipher](https://pypi.org/project/pysqlcipher/)
 
 ### 🔃 Built-in password generator 
-![linked-banner](https://ibb.co/9TCwcDc)
+![linked-banner](https://ibb.co/9TCwcDc.png)
 
 ### 🛡️ Password health dashboard
 
