@@ -14,4 +14,5 @@
 
 # ⚠️ Disclaimer
 
-This application has not been tested thoroughly for any security flaws. It is not advisable to enter any personal account information.
+This program has not been extensively tested for any security issues.
+It is not recommended to enter any personal account information. 
