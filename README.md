@@ -8,11 +8,14 @@ Here is a quick demo of adding a password with the application.
 ![linked-banner](https://i.ibb.co/4JBRMt7/Screenshot-2022-03-11-162837.png)
 
 
-# Features
-
+## Features
 * Encrypted Database
 * Random Password Generator 
 * Password Health Dashboard
+
+
+## Technologies
+* SQLCipher
 
 ## Built With
 * [PySide6](https://pypi.org/project/PySide6/): The official Python module from the Qt for Python project, which provides access to the complete Qt 6.0+ framework.
