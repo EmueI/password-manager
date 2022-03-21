@@ -20,7 +20,7 @@ Here is a quick demo of adding a password with the application.
 
 
 
-### Built With
+### Built with
 * [PySide6](https://pypi.org/project/PySide6/)
 * [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html)
 * [SQLCipher](https://github.com/sqlcipher/sqlcipher)
