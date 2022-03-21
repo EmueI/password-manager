@@ -3,21 +3,21 @@
 
  A password manager written entirely in Python with the PySide6 module. 
 
-# 🚀 Demo
+# Demo
 Here is a quick demo of adding a password with the application. 
 ![linked-banner](https://i.ibb.co/4JBRMt7/Screenshot-2022-03-11-162837.png)
 
 
-# 🔥 Features
+# Features
 
-#### 🔒 Encrypted Database
+#### Encrypted Database
 
-#### 🔃 Random Password Generator 
+#### Random Password Generator 
 ![linked-image](https://i.ibb.co/HzkNBSB/Screenshot-from-2022-03-20-12-43-03.png)
 
-#### 🛡️ Password Health Dashboard
+#### Password Health Dashboard
 
-## 🍔 Built With
+## Built With
 * [PySide6](https://pypi.org/project/PySide6/): The official Python module from the Qt for Python project, which provides access to the complete Qt 6.0+ framework.
 * [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html): The Qt tool for designing and building graphical user interfaces (GUIs) with Qt Widgets.
 * [SQLCipher](https://github.com/sqlcipher/sqlcipher): A standalone fork of SQLite that adds 256 bit AES encryption of database files and other security features. 
