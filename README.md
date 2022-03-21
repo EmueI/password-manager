@@ -22,5 +22,5 @@ Here is a quick demo of adding a password with the application.
 
 ## ⚠️ Disclaimer
 
-This program has not been extensively tested for any security issues.
-It is not recommended to enter any personal account information. 
+This project has not been extensively tested for any security issues.
+It is not recommended to enter any personal account information if used. 
