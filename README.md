@@ -1,26 +1,26 @@
 ![Project downloads](https://img.shields.io/github/downloads/EmueI/password-manager/total)
 
-## About the project
+# About the project
  A password manager written entirely in Python with the PySide6 module. 
 
 
 
-## Demo
+# Demo
 Here is a quick demo of adding a password with the application. 
 
 
 ![linked-banner](https://i.ibb.co/4JBRMt7/Screenshot-2022-03-11-162837.png)
 
 
-## Setup
+# Setup
 
-Install the required Python libraries:
+## Install the required Python libraries:
 
 ```sh
 pip -r install requirements.txt
 ```
 
-Install OpenSSL (Reference: https://devdojo.com/howtoubuntu/how-to-install-openssl-on-ubuntu):
+### Install OpenSSL (Reference: https://devdojo.com/howtoubuntu/how-to-install-openssl-on-ubuntu):
 
 1. Make sure that all system packages are up-to-date:
 ```sh
@@ -43,28 +43,28 @@ sudo make test
 sudo make install
 ```
 
-Install SQLCipher:
+### Install SQLCipher:
 ```sh 
 sudo apt install sqlcipher libsqlcipher0 libsqlcipher-dev
 sudo -H pip3 install pysqlcipher3
 ```
 
 
-## Features
+# Features
 * Encrypted Database
 * Random Password Generator 
 * Password Health Dashboard
 
 
 
-## Built with
+# Built with
 * [PySide6](https://pypi.org/project/PySide6/)
 * [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html)
 * [SQLCipher](https://github.com/sqlcipher/sqlcipher)
 
 
 
-## ⚠️ Disclaimer
+# ⚠️ Disclaimer
 
 This project has not been extensively tested for any security issues.
 
