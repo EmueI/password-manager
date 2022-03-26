@@ -1,11 +1,11 @@
 ![Project downloads](https://img.shields.io/github/downloads/EmueI/password-manager/total)
 
-### About the project
+## About the project
  A password manager written entirely in Python with the PySide6 module. 
 
 
 
-### Demo
+## Demo
 Here is a quick demo of adding a password with the application. 
 
 
