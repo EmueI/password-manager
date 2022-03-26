@@ -22,20 +22,20 @@ pip -r install requirements.txt
 
 Install OpenSSL (Reference: https://devdojo.com/howtoubuntu/how-to-install-openssl-on-ubuntu):
 
-1. Make sure that all system packages are up-to-date.
+1. Make sure that all system packages are up-to-date:
 ```sh
 sudo apt update
 sudo apt upgrade
 ```
 
-2. Install OpenSSL 3.0.2 on Ubuntu 20.04.
+2. Install OpenSSL 3.0.2 on Ubuntu 20.04:
 ```sh
 cd /usr/local/src/
 wget https://www.openssl.org/source/openssl-3.0.2k.tar.gz
 sudo tar -xf openssl-3.0.2k.tar.gz
 cd openssl-3.0.2k
 ```
-3. Configure and compile OpenSSL.
+3. Configure and compile OpenSSL:
 ```sh
 sudo ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib
 sudo make
@@ -43,7 +43,7 @@ sudo make test
 sudo make install
 ```
 
-Install SQLCipher.
+Install SQLCipher:
 ```sh 
 sudo apt install sqlcipher libsqlcipher0 libsqlcipher-dev
 sudo -H pip3 install pysqlcipher3
