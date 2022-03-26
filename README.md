@@ -14,9 +14,17 @@ Here is a quick demo of adding a password with the application.
 
 ## Setup
 
- ```sh
- pip -r install requirements.txt
- ```
+Install the required Python libraries:
+
+```sh
+pip -r install requirements.txt
+```
+
+Install SQLCipher:
+```sh 
+$ sudo apt install sqlcipher libsqlcipher0 libsqlcipher-dev
+$ sudo -H pip3 install pysqlcipher3
+```
 
 ## Features
 * Encrypted Database
