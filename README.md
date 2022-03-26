@@ -21,7 +21,7 @@ Here is a quick demo of adding a password with the application.
 pip -r install requirements.txt
 ```
 
-### Install FindBin and IPC-Cmd
+### Install Perl Modules
 ```sh
 sudo apt install perl-FindBin
 sudo apt install perl-IPC-Cmd
