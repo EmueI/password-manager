@@ -21,15 +21,10 @@ Here is a quick demo of adding a password with the application.
 pip -r install requirements.txt
 ```
 
+
 ### Install OpenSSL:
 
-1. Make sure that all system packages are up-to-date:
-```sh
-sudo apt update
-sudo apt upgrade
-```
-
-2. Install OpenSSL 3.0.2 on Ubuntu 20.04:
+1. Install OpenSSL 3.0.2:
 ```sh
 cd /usr/local/src/
 wget https://www.openssl.org/source/openssl-3.0.2k.tar.gz
