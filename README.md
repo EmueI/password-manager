@@ -22,7 +22,7 @@ pip -r install requirements.txt
 ```
 
 
-### Install and Configure OpenSSL:
+### Install and Configure OpenSSL
 
 Download OpenSSL 3.0.2 using wget:
 ```sh
@@ -39,7 +39,7 @@ sudo make test
 sudo make install
 ```
 
-### Install SQLCipher and pysqlcipher3:
+### Install SQLCipher and pysqlcipher3
 ```sh 
 sudo apt install sqlcipher libsqlcipher0 libsqlcipher-dev
 sudo -H pip3 install pysqlcipher3
