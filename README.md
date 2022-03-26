@@ -21,15 +21,22 @@ Here is a quick demo of adding a password with the application.
 pip -r install requirements.txt
 ```
 
+### Install FindBin and IPC-Cmd
+```sh
+sudo apt install perl-FindBin
+sudo apt install perl-IPC-Cmd
+sudo apt install perl-File-Copy
+sudo apt install perl-File-Compare
+```
 
 ### Install and Configure OpenSSL
 
 Download OpenSSL 3.0.2 using wget:
 ```sh
 cd /usr/local/src/
-wget https://www.openssl.org/source/openssl-3.0.2k.tar.gz
-sudo tar -xf openssl-3.0.2k.tar.gz
-cd openssl-3.0.2k
+sudo wget https://www.openssl.org/source/openssl-3.0.2.tar.gz
+sudo tar -xf openssl-3.0.2.tar.gz
+cd openssl-3.0.2
 ```
 Configure and compile OpenSSL:
 ```sh
