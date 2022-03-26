@@ -20,11 +20,35 @@ Install the required Python libraries:
 pip -r install requirements.txt
 ```
 
+Install OpenSSL (Reference: https://devdojo.com/howtoubuntu/how-to-install-openssl-on-ubuntu):
+
+1. First, make sure that all your system packages are up-to-date by running the following apt commands in the terminal.
+```sh
+sudo apt update
+sudo apt upgrade
+```
+
+2. Install OpenSSL 3.0.2 on Ubuntu 20.04.
+```sh
+cd /usr/local/src/
+wget https://www.openssl.org/source/openssl-3.0.2k.tar.gz
+sudo tar -xf openssl-3.0.2k.tar.gz
+cd openssl-3.0.2k
+```
+3. Configure and compile OpenSSL:
+```sh
+sudo ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared zlib
+sudo make
+sudo make test
+sudo make install
+```
+
 Install SQLCipher:
 ```sh 
-$ sudo apt install sqlcipher libsqlcipher0 libsqlcipher-dev
-$ sudo -H pip3 install pysqlcipher3
+sudo apt install sqlcipher libsqlcipher0 libsqlcipher-dev
+sudo -H pip3 install pysqlcipher3
 ```
+
 
 ## Features
 * Encrypted Database
