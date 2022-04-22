@@ -3,7 +3,7 @@
 # 🚧 WORK IN PROGRESS 🚧
 
 # About the project
- A password manager written entirely in Python with the PySide6 module. (Work in progress)
+ A password manager written entirely in Python with the PySide6 module.
 
 
 
@@ -21,14 +21,6 @@ Here is a quick demo of adding a password with the application.
 
 ```sh
 pip -r install requirements.txt
-```
-
-### Install Perl Modules
-```sh
-sudo apt install perl-FindBin
-sudo apt install perl-IPC-Cmd
-sudo apt install perl-File-Copy
-sudo apt install perl-File-Compare
 ```
 
 ### Install and Configure OpenSSL
